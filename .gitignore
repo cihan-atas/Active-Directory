@@ -1,0 +1,12 @@
+# Dahili çalışma sözleşmesi ve ilerleme takibi — repoya gönderilmez
+CLAUDE.md
+YAPILACAKLAR.md
+ilerleme.md
+
+# OS / editör artıkları
+.DS_Store
+Thumbs.db
+*.swp
+*~
+.vscode/
+.idea/
