@@ -1,0 +1,227 @@
+site_name: 'Active Directory Ustalık Programı'
+site_description: 'Active Directory Altyapıları, Savunma ve Tehdit Analizi Kapsamlı Dokümantasyon Deposu'
+site_author: 'Active Directory Ustalık Programı'
+repo_name: 'Active-Directory'
+theme:
+  name: material
+  language: tr
+  features:
+    - navigation.tabs
+    - navigation.sections
+    - navigation.top
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Karanlık moda geç
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Aydınlık moda geç
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - tables
+nav:
+  - Ana Sayfa: README.md
+  - Lab Kurulum Rehberi: LAB_KURULUMU.md
+  - Kaynaklar Kütüphanesi: KAYNAKLAR.md
+  - '1 · Sistem Yöneticisi':
+      - 'M01 Mimari ve Temeller':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/README.md
+          - '01.1 Mantiksal Hiyerarsi': 1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.1_Mantiksal_Hiyerarsi.md
+          - '01.2 Schema Global Catalog Partitionlar': 1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.2_Schema_Global_Catalog_Partitionlar.md
+          - '01.3 Fonksiyon Seviyeleri': 1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.3_Fonksiyon_Seviyeleri.md
+          - '01.4 Trust Iliskileri': 1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.4_Trust_Iliskileri.md
+      - 'M02 Fiziksel Altyapi ve Replikasyon':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/README.md
+          - '02.1 Domain Controller ve Site Topolojisi': 1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.1_Domain_Controller_ve_Site_Topolojisi.md
+          - '02.2 Replikasyon KCC ve Bridgehead': 1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.2_Replikasyon_KCC_ve_Bridgehead.md
+          - '02.3 FSMO Rolleri': 1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.3_FSMO_Rolleri.md
+          - '02.4 RODC USN Rollback ve Saglik': 1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.4_RODC_USN_Rollback_ve_Saglik.md
+      - 'M03 Nesne ve Kimlik Yonetimi':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/README.md
+          - '03.1 OU Tasarimi ve Yetki Devri': 1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.1_OU_Tasarimi_ve_Yetki_Devri.md
+          - '03.2 Hesap Yonetimi': 1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.2_Hesap_Yonetimi.md
+          - '03.3 Grup Ustaligi AGDLP': 1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.3_Grup_Ustaligi_AGDLP.md
+          - '03.4 gMSA ve FGPP': 1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.4_gMSA_ve_FGPP.md
+      - 'M04 Grup Ilkeleri GPO':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/README.md
+          - '04.1 GPO Mimarisi ve Isleyis': 1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.1_GPO_Mimarisi_ve_Isleyis.md
+          - '04.2 Hedefleme ve Filtreleme': 1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.2_Hedefleme_ve_Filtreleme.md
+          - '04.3 Pratik Uygulamalar ADMX GPP': 1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.3_Pratik_Uygulamalar_ADMX_GPP.md
+          - '04.4 Sorun Giderme ve Analiz': 1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.4_Sorun_Giderme_ve_Analiz.md
+      - 'M05 DNS ve Ad Cozumleme':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/README.md
+          - '05.1 AD Integrated Zones ve SRV': 1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.1_AD_Integrated_Zones_ve_SRV.md
+          - '05.2 Aging ve Scavenging': 1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.2_Aging_ve_Scavenging.md
+          - '05.3 DNSSEC ve Secure Updates': 1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.3_DNSSEC_ve_Secure_Updates.md
+          - '05.4 Sorun Giderme': 1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.4_Sorun_Giderme.md
+      - 'M06 Depolama ve Dosya Servisleri':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/README.md
+          - '06.1 DFS Namespaces': 1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.1_DFS_Namespaces.md
+          - '06.2 DFS R Replikasyon': 1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.2_DFS_R_Replikasyon.md
+          - '06.3 FSRM Kota ve Dosya Engelleme': 1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.3_FSRM_Kota_ve_Dosya_Engelleme.md
+          - '06.4 SYSVOL ve GPO Dagitimi': 1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.4_SYSVOL_ve_GPO_Dagitimi.md
+      - 'M07 PKI ve Sertifika Servisleri':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/README.md
+          - '07.1 PKI Mimarisi ve CA Hiyerarsisi': 1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.1_PKI_Mimarisi_ve_CA_Hiyerarsisi.md
+          - '07.2 Sertifika Sablonlari ve Izinler': 1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.2_Sertifika_Sablonlari_ve_Izinler.md
+          - '07.3 Autoenrollment CRL OCSP': 1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.3_Autoenrollment_CRL_OCSP.md
+          - '07.4 Sertifika Yasam Dongusu': 1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.4_Sertifika_Yasam_Dongusu.md
+      - 'M08 Hibrit Kimlik ve Federasyon':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/README.md
+          - '08.1 Entra Connect Senkronizasyon': 1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.1_Entra_Connect_Senkronizasyon.md
+          - '08.2 Kimlik Dogrulama PHS PTA Federation': 1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.2_Kimlik_Dogrulama_PHS_PTA_Federation.md
+          - '08.3 AD FS Mimarisi': 1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.3_AD_FS_Mimarisi.md
+          - '08.4 Hibrit ve Seamless SSO': 1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.4_Hibrit_ve_Seamless_SSO.md
+      - 'M09 Otomasyon ve Arayuzler':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/README.md
+          - '09.1 LDAP Mimarisi ve Sorgulama': 1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.1_LDAP_Mimarisi_ve_Sorgulama.md
+          - '09.2 PowerShell AD Modulu': 1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.2_PowerShell_AD_Modulu.md
+          - '09.3 Configuration as Code DSC': 1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.3_Configuration_as_Code_DSC.md
+          - '09.4 REST API ve WAC': 1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.4_REST_API_ve_WAC.md
+      - 'M10 Guvenlik Yedekleme ve Kurtarma':
+          - 'Genel Bakış': 1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/README.md
+          - '10.1 NTDS ve ntdsutil': 1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.1_NTDS_ve_ntdsutil.md
+          - '10.2 Yedekleme ve Kurtarma': 1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.2_Yedekleme_ve_Kurtarma.md
+          - '10.3 Hardening Temelleri': 1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.3_Hardening_Temelleri.md
+          - '10.4 Denetim ve Uyumluluk': 1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.4_Denetim_ve_Uyumluluk.md
+  - '2 · Blue Team (Savunma)':
+      - 'M01 Gorunurluk ve Log Yonetimi':
+          - 'Genel Bakış': 2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/README.md
+          - '01.1 Windows Event Forwarding WEF': 2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.1_Windows_Event_Forwarding_WEF.md
+          - '01.2 Advanced Audit Policy': 2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.2_Advanced_Audit_Policy.md
+          - '01.3 Sysmon ile Derin Telemetri': 2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.3_Sysmon_ile_Derin_Telemetri.md
+          - '01.4 Log Toplama Saklama Normalizasyon': 2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.4_Log_Toplama_Saklama_Normalizasyon.md
+      - 'M02 SIEM ve Tespit Muhendisligi':
+          - 'Genel Bakış': 2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/README.md
+          - '02.1 Kritik Event ID Katalogu': 2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.1_Kritik_Event_ID_Katalogu.md
+          - '02.2 Sigma Elastic Splunk Kural Yazimi': 2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.2_Sigma_Elastic_Splunk_Kural_Yazimi.md
+          - '02.3 Kerberoasting AS REP Tespiti': 2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.3_Kerberoasting_AS_REP_Tespiti.md
+          - '02.4 Atomic Red Team ile Dogrulama': 2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.4_Atomic_Red_Team_ile_Dogrulama.md
+      - 'M03 Kimlik Bilgisi Korumasi':
+          - 'Genel Bakış': 2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/README.md
+          - '03.1 Credential Guard ve LSASS Korumasi': 2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.1_Credential_Guard_ve_LSASS_Korumasi.md
+          - '03.2 LAPS ile Yerel Admin Parola Yonetimi': 2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.2_LAPS_ile_Yerel_Admin_Parola_Yonetimi.md
+          - '03.3 Protected Users ve Authentication Policies': 2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.3_Protected_Users_ve_Authentication_Policies.md
+          - '03.4 DPAPI ve Onbelleklenmis Kimlik': 2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.4_DPAPI_ve_Onbelleklenmis_Kimlik.md
+      - 'M04 Yanal Hareket Tespiti':
+          - 'Genel Bakış': 2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/README.md
+          - '04.1 Anormal Oturum Acma Analizi': 2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.1_Anormal_Oturum_Acma_Analizi.md
+          - '04.2 Pass the Hash Ticket Tespiti': 2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.2_Pass_the_Hash_Ticket_Tespiti.md
+          - '04.3 Uzak Yurutme Izleri': 2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.3_Uzak_Yurutme_Izleri.md
+          - '04.4 Honeytoken ve Honey Account': 2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.4_Honeytoken_ve_Honey_Account.md
+      - 'M05 Yetki ve ACL Sikilastirma':
+          - 'Genel Bakış': 2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/README.md
+          - '05.1 Admin Tier Model': 2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.1_Admin_Tier_Model.md
+          - '05.2 Tehlikeli DACL Denetimi ve Temizligi': 2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.2_Tehlikeli_DACL_Denetimi_ve_Temizligi.md
+          - '05.3 GPO Guvenligi ve Yetki Devri Hijyeni': 2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.3_GPO_Guvenligi_ve_Yetki_Devri_Hijyeni.md
+          - '05.4 AdminSDHolder ve SDProp Izleme': 2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.4_AdminSDHolder_ve_SDProp_Izleme.md
+      - 'M06 Kerberos ve Delegation Sertlestirme':
+          - 'Genel Bakış': 2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/README.md
+          - '06.1 Delegation Envanteri ve Temizligi': 2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.1_Delegation_Envanteri_ve_Temizligi.md
+          - '06.2 Unconstrained Delegation Riskleri ve Onlemi': 2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.2_Unconstrained_Delegation_Riskleri_ve_Onlemi.md
+          - '06.3 AES Zorlama RC4 ve PAC': 2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.3_AES_Zorlama_RC4_ve_PAC.md
+          - '06.4 Kerberos Anomali Izleme': 2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.4_Kerberos_Anomali_Izleme.md
+      - 'M07 AD CS PKI Guvenligi':
+          - 'Genel Bakış': 2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/README.md
+          - '07.1 Sertifika Sablonu Izin Denetimi ESC': 2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.1_Sertifika_Sablonu_Izin_Denetimi_ESC.md
+          - '07.2 CA Hardening ve ESC6': 2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.2_CA_Hardening_ve_ESC6.md
+          - '07.3 Sertifika Tabanli Kalicilik Tespiti': 2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.3_Sertifika_Tabanli_Kalicilik_Tespiti.md
+          - '07.4 PKI Izleme ve Olay Kayitlari': 2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.4_PKI_Izleme_ve_Olay_Kayitlari.md
+      - 'M08 Protokol Sertlestirme ve Relay Onleme':
+          - 'Genel Bakış': 2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/README.md
+          - '08.1 LDAP Signing ve Channel Binding': 2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.1_LDAP_Signing_ve_Channel_Binding.md
+          - '08.2 SMB Signing Zorlama': 2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.2_SMB_Signing_Zorlama.md
+          - '08.3 NTLM Kisitlama ve NTLMv2': 2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.3_NTLM_Kisitlama_ve_NTLMv2.md
+          - '08.4 Koersiyon Onleme PetitPotam PrinterBug': 2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.4_Koersiyon_Onleme_PetitPotam_PrinterBug.md
+      - 'M09 Tehdit Avciligi ve Degerlendirme':
+          - 'Genel Bakış': 2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/README.md
+          - '09.1 BloodHound ile Savunma Analizi': 2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.1_BloodHound_ile_Savunma_Analizi.md
+          - '09.2 PingCastle ile Risk Skorlama': 2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.2_PingCastle_ile_Risk_Skorlama.md
+          - '09.3 Purple Knight ve Forest Druid': 2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.3_Purple_Knight_ve_Forest_Druid.md
+          - '09.4 Duzenli Proaktif Degerlendirme': 2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.4_Duzenli_Proaktif_Degerlendirme.md
+      - 'M10 Olay Mudahalesi DFIR ve Kurtarma':
+          - 'Genel Bakış': 2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/README.md
+          - '10.1 IR Playbook Tespitten Containment': 2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.1_IR_Playbook_Tespitten_Containment.md
+          - '10.2 KRBTGT Cift Reset ve Ticket Gecersizlestirme': 2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.2_KRBTGT_Cift_Reset_ve_Ticket_Gecersizlestirme.md
+          - '10.3 NTDS Adli Analiz ve Timeline': 2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.3_NTDS_Adli_Analiz_ve_Timeline.md
+          - '10.4 Forest Recovery Sureci': 2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.4_Forest_Recovery_Sureci.md
+  - '3 · Red Team (Saldırı)':
+      - 'Operasyonel Oyun Kitabı (Playbook)': 3-Red_Team/PLAYBOOK.md
+      - 'M01 Kesif ve Numaralandirma':
+          - 'Genel Bakış': 3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/README.md
+          - '01.1 LDAP Enumerasyonu': 3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.1_LDAP_Enumerasyonu.md
+          - '01.2 SharpHound ve BloodHound': 3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.2_SharpHound_ve_BloodHound.md
+          - '01.3 Kullanici Grup ACL SPN Kesfi': 3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.3_Kullanici_Grup_ACL_SPN_Kesfi.md
+          - '01.4 Trust ve Forest Enumerasyonu': 3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.4_Trust_ve_Forest_Enumerasyonu.md
+      - 'M02 Ilk Erisim ve Yerlesme':
+          - 'Genel Bakış': 3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/README.md
+          - '02.1 LLMNR NBTNS mDNS Poisoning': 3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.1_LLMNR_NBTNS_mDNS_Poisoning.md
+          - '02.2 Password Spraying': 3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.2_Password_Spraying.md
+          - '02.3 Kerbrute ile Enum ve Spray': 3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.3_Kerbrute_ile_Enum_ve_Spray.md
+          - '02.4 Ilk Foothold ve Durum Tespiti': 3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.4_Ilk_Foothold_ve_Durum_Tespiti.md
+      - 'M03 Kimlik Bilgisi Erisimi':
+          - 'Genel Bakış': 3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/README.md
+          - '03.1 Kerberoasting ve AS REP Roasting': 3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.1_Kerberoasting_ve_AS_REP_Roasting.md
+          - '03.2 LSASS Bellek Dokumu': 3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.2_LSASS_Bellek_Dokumu.md
+          - '03.3 DPAPI ve Credential Vault': 3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.3_DPAPI_ve_Credential_Vault.md
+          - '03.4 Offline Hash Kirma': 3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.4_Offline_Hash_Kirma.md
+      - 'M04 Yanal Hareket':
+          - 'Genel Bakış': 3-Red_Team/Modul_04_Yanal_Hareket/README.md
+          - '04.1 Pass the Hash ve Overpass the Hash': 3-Red_Team/Modul_04_Yanal_Hareket/04.1_Pass_the_Hash_ve_Overpass_the_Hash.md
+          - '04.2 Pass the Ticket': 3-Red_Team/Modul_04_Yanal_Hareket/04.2_Pass_the_Ticket.md
+          - '04.3 PsExec WMI WinRM': 3-Red_Team/Modul_04_Yanal_Hareket/04.3_PsExec_WMI_WinRM.md
+          - '04.4 NetExec Otomasyon': 3-Red_Team/Modul_04_Yanal_Hareket/04.4_NetExec_Otomasyon.md
+      - 'M05 Yetki Yukseltme ACL ve GPO':
+          - 'Genel Bakış': 3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/README.md
+          - '05.1 DACL Abuse': 3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.1_DACL_Abuse.md
+          - '05.2 WriteOwner AddMember GPLink': 3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.2_WriteOwner_AddMember_GPLink.md
+          - '05.3 GPO Abuse SharpGPOAbuse': 3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.3_GPO_Abuse_SharpGPOAbuse.md
+          - '05.4 Shadow Credentials': 3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.4_Shadow_Credentials.md
+      - 'M06 Kerberos Delegation Saldirilari':
+          - 'Genel Bakış': 3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/README.md
+          - '06.1 Unconstrained Delegation Abuse': 3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.1_Unconstrained_Delegation_Abuse.md
+          - '06.2 Constrained Delegation S4U': 3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.2_Constrained_Delegation_S4U.md
+          - '06.3 Resource Based Constrained Delegation': 3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.3_Resource_Based_Constrained_Delegation.md
+          - '06.4 Bronze Bit': 3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.4_Bronze_Bit.md
+      - 'M07 AD CS PKI Saldirilari':
+          - 'Genel Bakış': 3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/README.md
+          - '07.1 ESC1 ESC8 Somuru Teknikleri': 3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.1_ESC1_ESC8_Somuru_Teknikleri.md
+          - '07.2 Certifried CVE 2022 26923': 3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.2_Certifried_CVE_2022_26923.md
+          - '07.3 Certipy ile Otomasyon': 3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.3_Certipy_ile_Otomasyon.md
+          - '07.4 ForgeCert ve Sertifika Kaliciligi': 3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.4_ForgeCert_ve_Sertifika_Kaliciligi.md
+      - 'M08 Koersiyon ve NTLM Relay':
+          - 'Genel Bakış': 3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/README.md
+          - '08.1 NTLM Relay Senaryolari': 3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.1_NTLM_Relay_Senaryolari.md
+          - '08.2 PetitPotam PrinterBug DFSCoerce': 3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.2_PetitPotam_PrinterBug_DFSCoerce.md
+          - '08.3 Relay AD CS ESC8 Zinciri': 3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.3_Relay_AD_CS_ESC8_Zinciri.md
+          - '08.4 KrbRelayUp ile Yerel Yukseltme': 3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.4_KrbRelayUp_ile_Yerel_Yukseltme.md
+      - 'M09 Domain Hakimiyeti ve Kalicilik':
+          - 'Genel Bakış': 3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/README.md
+          - '09.1 DCSync ile Hash Cikarma': 3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.1_DCSync_ile_Hash_Cikarma.md
+          - '09.2 Golden Silver Diamond Sapphire Ticket': 3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.2_Golden_Silver_Diamond_Sapphire_Ticket.md
+          - '09.3 AdminSDHolder DCShadow DSRM': 3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.3_AdminSDHolder_DCShadow_DSRM.md
+          - '09.4 Skeleton Key ve NTDS Exfiltration': 3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.4_Skeleton_Key_ve_NTDS_Exfiltration.md
+      - 'M10 Trust Forest ve Hibrit Saldirilar':
+          - 'Genel Bakış': 3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/README.md
+          - '10.1 SID History Injection': 3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.1_SID_History_Injection.md
+          - '10.2 Cross Forest Trust Abuse': 3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.2_Cross_Forest_Trust_Abuse.md
+          - '10.3 Entra ID ve Bulut Pivot': 3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.3_Entra_ID_ve_Bulut_Pivot.md
+          - '10.4 Savunma Atlatma AMSI ETW OPSEC': 3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.4_Savunma_Atlatma_AMSI_ETW_OPSEC.md

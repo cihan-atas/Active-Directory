@@ -1,0 +1,28 @@
+title: Potansiyel Kerberoasting Hizmet Bileti Talebi (RC4 Downgrade)
+id: 5b6c7d8e-1234-4567-89ab-kerberoast01
+status: production
+description: Active Directory ortamında AES şifreleme desteklenmesine rağmen RC4 (0x17) şifreleme türü ile Kerberos TGS (Event 4769) bileti talep edilmesini tespit eder.
+references:
+  - https://attack.mitre.org/techniques/T1558/003/
+author: Active Directory Ustalık Programı
+date: 2026-10-13
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4769
+    TicketEncryptionType: '0x17' # RC4-HMAC
+    TicketOptions|contains: '0x40810000'
+  filter_machine_accounts:
+    ServiceName|endswith: '$'
+  filter_krbtgt:
+    ServiceName|startswith: 'krbtgt'
+  condition: selection and not filter_machine_accounts and not filter_krbtgt
+falsepositives:
+  - Eski işletim sistemlerinde çalışan meşru servisler
+  - RC4 zorunlu kılınmış 3. parti miras uygulamalar
+level: high
+tags:
+  - attack.credential_access
+  - attack.t1558.003

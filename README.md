@@ -43,6 +43,8 @@ Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eş
 10. [Güvenlik, Yedekleme ve Kurtarma](1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/) — NTDS, `ntdsutil`, Restore, hardening
 
 ### 🔴 Red Team — Saldırı Yaşam Döngüsü (Kill Chain)
+> ⚔️ **Uçtan Uca Senaryolar:** [Operasyonel Oyun Kitabı (Playbook)](3-Red_Team/PLAYBOOK.md) — Attack Chain zincirleri, Kerberos hata çözümü ve OPSEC ilkeleri.
+
 1. [Keşif ve Numaralandırma](3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/) — LDAP/BloodHound, ACL/SPN keşfi
 2. [İlk Erişim ve Yerleşme](3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/) — LLMNR/NBT-NS Poisoning, Password Spraying
 3. [Kimlik Bilgisi Erişimi](3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/) — Kerberoasting, AS-REP, LSASS, DPAPI

@@ -1,0 +1,31 @@
+title: Yetkisiz Dizin Replikasyonu (DCSync Tespiti)
+id: 7c8d9e0f-2345-6789-01cd-dcsyncalert01
+status: production
+description: Domain Controller olmayan bir hesaptan dizin replikasyon hakları (DS-Replication-Get-Changes-All) kullanılarak hesap karmalarının çekilmesini tespit eder.
+references:
+  - https://attack.mitre.org/techniques/T1003/006/
+author: Active Directory Ustalık Programı
+date: 2026-10-13
+logsource:
+  product: windows
+  service: security
+detection:
+  selection:
+    EventID: 4662
+    ObjectServer: 'DS'
+    Properties|contains:
+      - '{1131f6aa-9c07-11d1-f79f-00c04fc2dcd2}' # DS-Replication-Get-Changes
+      - '{1131f6ad-9c07-11d1-f79f-00c04fc2dcd2}' # DS-Replication-Get-Changes-All
+      - '{89e4b325-9be7-11d1-b8fb-00c04fc2dcd2}' # DS-Replication-Get-Changes-In-Filtered-Set
+  filter_dc_accounts:
+    SubjectUserName|endswith: '$'
+  filter_system:
+    SubjectUserName: 'SYSTEM'
+  condition: selection and not filter_dc_accounts and not filter_system
+falsepositives:
+  - Azure AD Connect (Entra Connect) eşitleme hesabı (MSOL_)
+  - Meşru etki alanı denetleyicileri arası replikasyonlar
+level: critical
+tags:
+  - attack.credential_access
+  - attack.t1003.006
