@@ -66,9 +66,9 @@ Yetki devri, bir servisin kendisini arayan istemcinin kimliğine bürünerek (im
 | Konu | Dokümantasyon Dosyası | Kapsam ve Öğrenim Hedefleri |
 |---|---|---|
 | **06.1** | [Unconstrained Delegation Abuse](./06.1_Unconstrained_Delegation_Abuse.md) | Kısıtlamasız yetki devri mimarisi, TGT forwarding mekanizması, Rubeus ile bellekten TGT hasadı, PrinterBug/PetitPotam ile DC makine hesabını yakalayıp DCSync yapma. |
-| **06.2** | [Constrained Delegation ve S4U](./06.2_Constrained_Delegation_S4U.md) | S4U2self ve S4U2proxy RFC uzantıları, Protokol Geçişi (Protocol Transition), Service Principal Name (SPN) manipülasyonu ve cifs/http alternatif servis genişletmesi. |
-| **06.3** | [Resource-Based Constrained Delegation (RBCD)](./06.3_Resource_Based_Constrained_Delegation.md) | Kaynak tabanlı yetki devri, `msDS-AllowedToActOnBehalfOfOtherIdentity`, MachineAccountQuota (MAQ) istismarı, DACL yazma hakkından SYSTEM yetkisine sıçrama. |
-| **06.4** | [Bronze Bit (CVE-2020-17049)](./06.4_Bronze_Bit.md) | KDC bilet denetim açığı, `Forwardable` bitinin şifresiz alanda manipüle edilmesi, `Account is sensitive and cannot be delegated` kısıtlamasını baypas etme teknikleri. |
+| **06.2** | [Constrained Delegation ve S4U](./06.2_Constrained_Delegation_S4U.md) | S4U2self ve S4U2proxy uzantıları, Protokol Geçişi (Protocol Transition), Service Principal Name (SPN) manipülasyonu ve AltService (cifs/host/http/ldap) alternatif servis hilesi. |
+| **06.3** | [Resource-Based Constrained Delegation (RBCD)](./06.3_Resource_Based_Constrained_Delegation.md) | Kaynak tabanlı yetki devri, `msDS-AllowedToActOnBehalfOfOtherIdentity`, MachineAccountQuota (MAQ) istismarı, SPN-less RBCD ve NTLM relay ile otomatik delegasyon yazma. |
+| **06.4** | [Bronze Bit (CVE-2020-17049)](./06.4_Bronze_Bit.md) | KDC bilet denetim açığı, `Forwardable` bitinin manipüle edilmesi, `USER_NOT_DELEGATED` ve Protected Users baypas teknikleri, Golden gMSA/dMSA saldırıları. |
 
 ---
 

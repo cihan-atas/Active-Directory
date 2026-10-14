@@ -59,10 +59,10 @@ Active Directory ortamlarında sıfır bilgiyle (Black-Box) veya sınırlı ağ 
 
 | Konu | Dokümantasyon Dosyası | Kapsam ve Öğrenim Hedefleri |
 |---|---|---|
-| **02.1** | [LLMNR, NBT-NS ve mDNS Poisoning](./02.1_LLMNR_NBTNS_mDNS_Poisoning.md) | Windows ad çözümleme geri düşüş (fallback) mimarisi, NetNTLMv2 challenge-response mekanizması, Responder ve mitm6 çalıştırma, çevrimdışı kırma vs. relay kararı. |
-| **02.2** | [Password Spraying](./02.2_Password_Spraying.md) | Etki alanı kilitlenme politikası matematiği (`lockoutThreshold`, `badPwdCount`), zaman pencereleri, SMB/RPC/LDAP/Kerberos spray metodolojisi, EDR atlatma. |
-| **02.3** | [Kerbrute ile Enum ve Spray](./02.3_Kerbrute_ile_Enum_ve_Spray.md) | Kerberos AS-REQ pre-auth yan kanalı üzerinden hesap kilitlemeden kullanıcı adı doğrulama (`userenum`), Kerberos spray ve bedava AS-REP Roast tespiti. |
-| **02.4** | [İlk Foothold ve Durum Tespiti](./02.4_Ilk_Foothold_ve_Durum_Tespiti.md) | İlk ele geçirilen makinede 5 temel soru çerçevesi, yerel haklardan etki alanı haklarına geçiş, EDR/AV varlık tespiti, GPP cPassword kalıntıları ve yerel kimlik hasadı. |
+| **02.1** | [LLMNR, NBT-NS, mDNS, WPAD ve IPv6 Zehirlemesi](./02.1_LLMNR_NBTNS_mDNS_Poisoning.md) | Windows ad çözümleme geri düşüş mimarisi, NetNTLMv2 challenge-response, WPAD proxy sömürüsü, mitm6 ile IPv6 DNS ele geçirme, PXE/WDS boot imajı ve yazıcı sızıntıları. |
+| **02.2** | [Password Spraying ve Pre2k Sömürüsü](./02.2_Password_Spraying.md) | Etki alanı kilitlenme politikası matematiği (`lockoutThreshold`, `badPwdCount`), zaman pencereleri, pre-Windows 2000 (`pre2k`) bilgisayar hesabı sömürüsü, çok protokollü spray. |
+| **02.3** | [Kerbrute ile Enum, Spray, Timeroasting ve No-Auth NRPC](./02.3_Kerbrute_ile_Enum_ve_Spray.md) | Kerberos AS-REQ pre-auth yan kanalı (`userenum`), NauthNRPC ile kimliksiz kullanıcı dökümü, Timeroasting (NTP/SNTP) ile makine hesabı hash avı ve güvenli spray. |
+| **02.4** | [İlk Foothold ve Durum Tespiti](./02.4_Ilk_Foothold_ve_Durum_Tespiti.md) | İlk ele geçirilen makinede 5 temel soru çerçevesi, `whoami /priv` ayrıcalıkları (SeImpersonate, SeDebug), fltmc ile minifilter EDR tespiti, PSReadLine geçmişi ve Potato privesc. |
 
 ---
 

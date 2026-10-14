@@ -71,7 +71,7 @@ PKI güvenliğindeki temel prensip şudur: **Sertifika = Kimlik Kanıtı**. Bir 
 
 | Konu | Dokümantasyon Dosyası | Kapsam ve Öğrenim Hedefleri |
 |---|---|---|
-| **07.1** | [ESC1 - ESC8 Sömürü Teknikleri](./07.1_ESC1_ESC8_Somuru_Teknikleri.md) | Client Authentication EKU analizi, `ENROLLEE_SUPPLIES_SUBJECT` (ESC1), Any Purpose EKU (ESC2), Enrollment Agent (ESC3), şablon ACL (ESC4), akıllı kart PKINIT ve Certipy analizleri. |
+| **07.1** | [ESC1 - ESC8 Sömürü Teknikleri](./07.1_ESC1_ESC8_Somuru_Teknikleri.md) | Client Authentication EKU analizi, `ENROLLEE_SUPPLIES_SUBJECT` (ESC1), ESC1'den ESC16'ya kadar uzanan genişletilmiş AD CS zafiyet kataloğu, şablon ACL manipülasyonu ve PKINIT TGT elde etme. |
 | **07.2** | [Certifried (CVE-2022-26923)](./07.2_Certifried_CVE_2022_26923.md) | `dNSHostName` ve `servicePrincipalName` öznitelik çakışması, DC makine taklidi, KB5014754 güncellemesi ve Strong Certificate Mapping (SID OID) mekanizması. |
 | **07.3** | [Certipy ile Otomasyon](./07.3_Certipy_ile_Otomasyon.md) | Certipy komut ailesi (`find`, `req`, `auth`, `ca`, `account`, `shadow`, `forge`), ESC6/ESC7 yönetici izinleri sömürüsü ve UnPAC-the-Hash tekniği. |
 | **07.4** | [ForgeCert ve Sertifika Kalıcılığı](./07.4_ForgeCert_ve_Sertifika_Kaliciligi.md) | CA özel anahtarının (Private Key) çalınması, Golden Certificate üretimi, çevrimdışı izsiz sertifika taklitleri ve çift KRBTGT sıfırlamasını atlatma stratejisi. |

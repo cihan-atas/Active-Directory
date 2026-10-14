@@ -66,10 +66,10 @@ Microsoft ekosisteminde her nesnenin (kullanıcı, bilgisayar, grup, GPO, OU) bi
 
 | Konu | Dokümantasyon Dosyası | Kapsam ve Öğrenim Hedefleri |
 |---|---|---|
-| **05.1** | [DACL Abuse](./05.1_DACL_Abuse.md) | Windows güvenlik tanımlayıcısı mimarisi (SDDL, DACL, ACE), `GenericAll`, `WriteDacl`, `ForceChangePassword` haklarının sömürüsü ve targeted Kerberoasting. |
-| **05.2** | [WriteOwner, AddMember ve GPLink](./05.2_WriteOwner_AddMember_GPLink.md) | Sahiplik alma zincirleri (`SeTakeOwnershipPrivilege`), grup hiyerarşisi istismarı, OU nesnelerine kötü niyetli GPO bağlama (`gPLink/gPOptions`) teknikleri. |
-| **05.3** | [GPO Abuse ve SharpGPOAbuse](./05.3_GPO_Abuse_SharpGPOAbuse.md) | Group Policy mimarisi (GPC LDAP nesnesi vs. GPT SYSVOL dosyaları), Immediate Task enjeksiyonu, yerel admin ekleme, SharpGPOAbuse ve pyGPOAbuse otomasyonu. |
-| **05.4** | [Shadow Credentials](./05.4_Shadow_Credentials.md) | `msDS-KeyCredentialLink` özniteliği, Windows Hello for Business altyapısı, parola sıfırlamadan gizli kimlik devralma, Whisker ve pywhiskey ile PKINIT zinciri. |
+| **05.1** | [DACL Abuse](./05.1_DACL_Abuse.md) | Windows güvenlik tanımlayıcısı mimarisi (SDDL, DACL, ACE), `GenericAll`, `WriteDacl`, `ForceChangePassword`, `userAccountControl` bayrak manipülasyonu, targeted Kerberoasting ve dinamik nesneler (`entryTTL`). |
+| **05.2** | [WriteOwner, AddMember ve GPLink](./05.2_WriteOwner_AddMember_GPLink.md) | Sahiplik alma zincirleri (`OwnerSID` ile örtük `WRITE_DAC`), grup hiyerarşisi (AGDLP) istismarı, OU nesnelerine zorlanmış GPO bağlama (`gPLink/gPOptions`) ve AdminSDHolder/SDProp mekanizması. |
+| **05.3** | [GPO Abuse ve SharpGPOAbuse](./05.3_GPO_Abuse_SharpGPOAbuse.md) | Group Policy mimarisi (GPC LDAP vs. GPT SYSVOL), İstemci Uzantıları (CSE), SYSTEM bağlamında Immediate Task enjeksiyonu, GPP Local Admin, User Rights Assignment ve hedeflenmiş güvenlik filtreleme. |
+| **05.4** | [Shadow Credentials](./05.4_Shadow_Credentials.md) | `msDS-KeyCredentialLink` özniteliği, Windows Hello for Business (Key Trust) altyapısı, parola sıfırlamadan gizli kimlik devralma, UnPAC-the-Hash ile NT hash çözme ve Whisker/Certipy otomasyonu. |
 
 ---
 

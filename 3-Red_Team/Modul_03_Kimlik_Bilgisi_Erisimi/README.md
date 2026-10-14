@@ -62,10 +62,10 @@ Bu aşamada iki temel zafiyet ekseni kullanılır:
 
 | Konu | Dokümantasyon Dosyası | Kapsam ve Öğrenim Hedefleri |
 |---|---|---|
-| **03.1** | [Kerberoasting ve AS-REP Roasting](./03.1_Kerberoasting_ve_AS_REP_Roasting.md) | Kerberos TGS-REP ve AS-REP bilet şifreleme matematiği, RC4/AES etype downgrade teknikleri, hedefli SPN atama (Targeted Kerberoasting), Rubeus ve Impacket kullanımı. |
-| **03.2** | [LSASS Bellek Dökümü](./03.2_LSASS_Bellek_Dokumu.md) | SSP paketleri (MSV1_0, Kerberos, WDigest), RunAsPPL ve Credential Guard mekanizmaları, EDR filtrelerini atlatarak LOLBin (`comsvcs.dll`) ve `nanodump` ile bellek çıkarma. |
-| **03.3** | [DPAPI ve Credential Vault](./03.3_DPAPI_ve_Credential_Vault.md) | DPAPI mimarisi, Kullanıcı/Sistem Master Key zincirleri, Domain Backup Key (`LsaUnprotectMemory`), Credential Guard atlatma ve tarayıcı şifrelerini sızdırma. |
-| **03.4** | [Offline Hash Kırma](./03.4_Offline_Hash_Kirma.md) | Hashcat mod seçimleri, maske ve kural tabanlı kırma stratejileri, Pass-the-Hash vs. Hash Cracking operasyonel kararı, DCC2 (Domain Cached Credentials) yavaşlığı. |
+| **03.1** | [Kerberoasting, AS-REP Roasting ve Hedefli SPN Enjeksiyonu](./03.1_Kerberoasting_ve_AS_REP_Roasting.md) | Kerberos TGS-REP ve AS-REP bilet şifreleme matematiği, RC4/AES etype downgrade, hedefli SPN atama (Targeted Kerberoasting), PAC-less bilet talepleri ve Hashcat kırma. |
+| **03.2** | [LSASS Bellek Mimarisi, PPL Baypas ve Özel SSP Enjeksiyonu](./03.2_LSASS_Bellek_Dokumu.md) | SSP paketleri (MSV1_0, Kerberos, CloudAP), RunAsPPL baypasları (BYOVD sürücüleri, PPLdump), özel SSP enjeksiyonu (`mimilib`), EDR filtrelerini atlatarak `nanodump` ve `comsvcs.dll` ile bellek dökümü. |
+| **03.3** | [DPAPI, Credential Vault, LAPS ve Tarayıcı Sırlarının Hasadı](./03.3_DPAPI_ve_Credential_Vault.md) | DPAPI mimarisi, Kullanıcı/Sistem Master Key zincirleri, Domain Backup Key (`LsaUnprotectMemory` / PVK), LAPS v1 ve modern Windows LAPS (v2) çözümü, Chrome App-Bound Encryption çerez hasadı. |
+| **03.4** | [Çevrimdışı Hash Kırma, Strateji ve Hash Shucking (NT Adayı)](./03.4_Offline_Hash_Kirma.md) | Hashcat mod seçimleri, Hash Shucking (NT-Adayı modları 35300, 35400, 27100), maske ve kural tabanlı kırma stratejileri, Pass-the-Hash vs. Hash Cracking operasyonel kararı. |
 
 ---
 

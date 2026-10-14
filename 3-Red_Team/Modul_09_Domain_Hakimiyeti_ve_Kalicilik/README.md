@@ -89,8 +89,8 @@ Domain hakimiyeti ve kalıcılık operasyonlarında kullanılan başlıca araçl
 
 | No | Araç | Modül 11 Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |
 |---|---|---|---|
-| 01 | **impacket-secretsdump** | [secretsdump.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/ntdsutil.md) | DRSNAPI replikasyon protokolünü taklit ederek (DCSync) DC'den krbtgt dahil tüm kullanıcı parolalarını ve NTDS kovanlarını uzaktan çeken lider araç. |
-| 02 | **impacket-ticketer** | [ticketer.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-ticketer.md) | Linux ortamında Golden ve Silver Kerberos biletleri üreterek `.ccache` formatında dışa aktaran Impacket aracı. |
+| 01 | **ntdsutil** | [ntdsutil.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/ntdsutil.md) | Active Directory veritabanını (NTDS.dit) ve SYSTEM kovanını IFM yöntemiyle kilitsiz ve yasal yedekleme maskesi altında dışa aktaran araç. |
+| 02 | **impacket-ticketer** | [impacket-ticketer.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-ticketer.md) | Linux ortamında Golden ve Silver Kerberos biletleri üreterek `.ccache` formatında dışa aktaran Impacket aracı. |
 | 03 | **Mimikatz** | [Mimikatz.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/Mimikatz.md) | Golden Ticket (`kerberos::golden`), DCSync (`lsadump::dcsync`), Skeleton Key (`misc::skeleton`) ve DCShadow (`misc::shadow`) yeteneklerini barındıran efsanevi araç. |
 | 04 | **Rubeus** | [Rubeus.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/Rubeus.md) | Diamond Ticket (`diamond`) ve Sapphire Ticket sahteciliklerini bellek içinde icra ederek EDR alarmlarını atlatabilen C# Kerberos aracı. |
 | 05 | **NetExec (nxc)** | [NetExec.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/NetExec_nxc.md) | `--ntds` bayrağı ile VSS veya ntdsutil yöntemlerini otomatik tetikleyerek etki alanı veritabanını dışa aktaran araç. |
@@ -98,6 +98,7 @@ Domain hakimiyeti ve kalıcılık operasyonlarında kullanılan başlıca araçl
 | 07 | **reg** | [reg.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/reg.md) | DSRM arka kapısını yapılandırmak için kayıt defteri anahtarlarını (`reg add`) düzenleyen Windows yerel LOLBin. |
 | 08 | **whoami** | [whoami.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/whoami.md) | Kalıcılık sonrasında sahte bilet enjeksiyonunun geçerliliğini doğrulamak için kullanılan komut satırı aracı. |
 | 09 | **Hashcat** | [Hashcat.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_18_Cevrimdisi_Parola_Kirma/Hashcat.md) | NTDS dökümünden elde edilen binlerce NT karmasını şirket parola politikası analizi için çevrimdışı kıran GPU motoru. |
+| 10 | **vssadmin / diskshadow** | [vssadmin_diskshadow.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/vssadmin_diskshadow.md) | Volume Shadow Copy servisini kullanarak kilitli NTDS.dit veritabanının anlık gölge kopyasını oluşturan Windows yerleşik araçları. |
 
 ---
 

@@ -66,7 +66,7 @@ Bir etki alanında keşif süreci rastgele araç çalıştırmakla değil, kadem
 |---|---|---|
 | **01.1** | [LDAP Enumerasyonu](./01.1_LDAP_Enumerasyonu.md) | RootDSE mekanizması, Partition'lar (Domain, Configuration, Schema), Global Catalog (3268), LDAP bit filtreleri (1.2.840.113556.1.4.803), ASN.1 BER ve MaxPageSize sayfalaması. |
 | **01.2** | [SharpHound ve BloodHound](./01.2_SharpHound_ve_BloodHound.md) | Graf veri modeli, toplayıcı metotları (CollectionMethods), HasSession kenarı ile avlanma, Cypher sorguları ile en kısa DA yolunu tespit etme. |
-| **01.3** | [Kullanıcı, Grup, ACL ve SPN Keşfi](./01.3_Kullanici_Grup_ACL_SPN_Kesfi.md) | SPN keşfi ile Kerberoast havuzu oluşturma, tehlikeli DACL hakları (GenericAll, WriteDacl), GPO sömürü yüzeyi, PowerView ve LOLBin araçları. |
+| **01.3** | [Kullanıcı, Grup, ACL, SPN, ADI-DNS ve Paylaşım Keşfi](./01.3_Kullanici_Grup_ACL_SPN_Kesfi.md) | SPN keşfi ile Kerberoast havuzu, ADI-DNS (adidnsdump), Snaffler ile ağ paylaşımları ve loot avı, gMSA/dMSA parola okuma yetkileri, tehlikeli DACL hakları (GenericAll, WriteDacl) ve GPO sömürü yüzeyi. |
 | **01.4** | [Trust ve Forest Enumerasyonu](./01.4_Trust_ve_Forest_Enumerasyonu.md) | Forest güvenlik sınırları, trust yönü ve transitiflik, `trustAttributes` bayrakları, SID filtering ve cross-forest sıçrama öncesi haritalama. |
 
 ---

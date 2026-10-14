@@ -62,10 +62,10 @@ Kimlik doğrulama süreçlerinde açık metin parola bilmek şart değildir:
 
 | Konu | Dokümantasyon Dosyası | Kapsam ve Öğrenim Hedefleri |
 |---|---|---|
-| **04.1** | [Pass-the-Hash ve Overpass-the-Hash](./04.1_Pass_the_Hash_ve_Overpass_the_Hash.md) | NTLM challenge-response matematiği, NT hash'in parola eşdeğerliği, Overpass-the-Hash ile TGT üretme, RC4 vs. AES şifreleme ve OPSEC değerlendirmeleri. |
-| **04.2** | [Pass-the-Ticket](./04.2_Pass_the_Ticket.md) | Kerberos TGT ve TGS bilet anatomisi, Linux (.ccache) ve Windows (.kirbi) format dönüşümleri, LSA bilet enjeksiyonu (`kerberos::ptt`), `tgtdeleg` ile bilet çalma. |
-| **04.3** | [PsExec, WMI ve WinRM](./04.3_PsExec_WMI_WinRM.md) | Üç temel uzak yürütme kanalının mimari farkları, bıraktıkları telemetri izleri (Event ID 7045, 4688, 4104), DCOM nesneleri ve EDR atlatma stratejileri. |
-| **04.4** | [NetExec ile Otomasyon](./04.4_NetExec_Otomasyon.md) | Çoklu protokol (SMB, WMI, WinRM, RDP, MSSQL) desteği, "Pwn3d!" tespit mantığı, LAPS dökümü, LSASS hasadı modülleri ve ağ taraması OPSEC kuralları. |
+| **04.1** | [Pass-the-Hash ve Overpass-the-Hash](./04.1_Pass_the_Hash_ve_Overpass_the_Hash.md) | NTLM challenge-response matematiği, Pass-the-Key (AES-128/256), Pass-the-Cert (PKINIT), Overpass-the-Hash ile TGT üretimi ve LocalAccountTokenFilterPolicy (Remote UAC) baypas mekanizmaları. |
+| **04.2** | [Pass-the-Ticket](./04.2_Pass_the_Ticket.md) | Kerberos TGT/TGS bilet anatomisi, `.kirbi` ve `.ccache` format dönüşümleri, `kerberos::ptt`, Kerberos Double-Hop sorunu ve çözümleri (tgtdeleg, CredSSP, RBCD). |
+| **04.3** | [PsExec, WMI ve WinRM](./04.3_PsExec_WMI_WinRM.md) | SMB, WMI ve WinRM protokol karşılaştırması, DCOM tabanlı yanal hareket (`MMC20.Application`, `ShellWindows`), RDP oturum ele geçirme (`tscon.exe`) ve telemetri izleri. |
+| **04.4** | [NetExec ile Otomasyon](./04.4_NetExec_Otomasyon.md) | Çoklu protokol orkestrasyonu (SMB, WMI, WinRM, RDP, MSSQL), "Pwn3d!" mantığı, modüler yürütme yöntemleri (`wmiexec, smbexec, atexec, mmcexec`) ve `spider_plus`/`lsassy` modülleri. |
 
 ---
 
