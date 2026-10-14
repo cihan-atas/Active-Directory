@@ -36,3 +36,18 @@ Bu modül **Blue Team'e köprüdür** — hardening ve denetim temelleri orada d
 ## Kaynak yaklaşımı
 
 Tüm dosyalar `KAYNAKLAR.md` zincirini izler: 🏛️ Microsoft Learn / Forest Recovery Guide → 📐 CIS/NSA-CISA / uyumluluk standartları. Her dosya sonunda erişim tarihli kaynaklar.
+---
+
+## ⚖️ YASAL UYARI VE SORUMLULUK REDDİ (DISCLAIMER)
+
+> **ÖNEMLİ:** Bu dokümanda açıklanan Active Directory mimarisi, nesne yönetimi, replikasyon ve sistem yapılandırmaları; **kurumsal altyapıların en iyi uygulamalar (Best Practices) doğrultusunda güvenle yönetilmesi** amacıyla hazırlanmıştır.
+>
+> Üretim ortamlarında uygulanacak yapılandırmalar öncesinde mutlaka tam yedekleme (System State / NTDS) alınmalı ve değişiklikler yetkili değişim yönetimi prosedürlerine uygun olarak icra edilmelidir.
+
+---
+
+## 🌐 Yararlanılan Başlıca Açık Kaynaklar
+
+- 🌐 [Microsoft Learn — Windows Server Documentation](https://learn.microsoft.com/en-us/windows-server/): Active Directory Domain Services resmi teknik rehberi.
+- 🌐 [Microsoft Open Specifications](https://learn.microsoft.com/en-us/openspecs/windows_protocols/): MS-ADTS, MS-DRSR, MS-KILE protokol standartları.
+- 🌐 [InternalAllTheThings — Active Directory Architecture](https://swisskyrepo.github.io/InternalAllTheThings/active-directory/): Mimari şablonlar ve operasyonel notlar.

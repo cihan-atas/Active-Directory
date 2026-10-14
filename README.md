@@ -2,7 +2,11 @@
 
 Bu proje, Active Directory (AD) altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, güvenliğini sağlamak ve saldırı/savunma boyutlarıyla kavramak için oluşturulmuş **kitap/eğitim niteliğinde kapsamlı bir dokümantasyon deposudur**. Aynı sistem, **üç farklı bakış açısıyla** ve bu kollar birbirine çapraz referans vererek işlenir: **Sistem Mimarı**, **Blue Team (Savunma)** ve **Red Team (Saldırı)**.
 
-> **Durum:** 🟢 **Tamamlandı** — 3 kol · 30 modül · **120 konu dosyası** + 30 modül README'si.
+# Active Directory Ustalık Programı
+
+Bu proje, Active Directory (AD) altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, güvenliğini sağlamak ve saldırı/savunma boyutlarıyla kavramak için oluşturulmuş **ansiklopedik eğitim ve referans dokümantasyon deposudur**. Aynı sistem, **üç farklı bakış açısıyla** ve bu kollar birbirine çift yönlü çapraz referans vererek işlenir: **Sistem Mimarı**, **Blue Team (Savunma)** ve **Red Team (Saldırı & Araç Cephaneliği)**.
+
+> **Durum:** 🟢 **Tamamlandı** — 3 kol · 31 modül · **265+ konu ve araç kılavuzu** + 31 modül ve 18 kategori README'si.
 
 ---
 
@@ -10,21 +14,21 @@ Bu proje, Active Directory (AD) altyapılarını sıfırdan en ileri seviyeye ka
 
 Bir konu üç açıdan da ele alınır ve birbirine bağlanır. Örneğin **Kerberos delegation**:
 
-- **Sistem Yöneticisi** → ne olduğunu ve nasıl yapılandırıldığını anlatır.
+- **Sistem Yöneticisi** → ne olduğunu, neden gerektiğini ve nasıl güvenle yapılandırıldığını anlatır.
 - **Red Team** → nasıl kötüye kullanıldığını (unconstrained / constrained / RBCD abuse) gösterir.
-- **Blue Team** → nasıl tespit ve önleneceğini (Event ID, hardening) anlatır.
+- **Blue Team** → nasıl tespit ve önleneceğini (Event ID, Sigma, hardening) anlatır.
 
-Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eşleştirilmiştir (Red Modül N ↔ Blue Modül N).
+Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eşleştirilmiştir (Red Modül N ↔ Blue Modül N), ayrıca **Modül 11** ile tüm bu saldırı tekniklerini sahada icra eden 145 aracın operasyonel komut rehberi sunulmuştur.
 
 ---
 
 ## 🗂️ Proje Yapısı
 
-| Kol | Klasör | Bakış Açısı | Modül |
-|-----|--------|-------------|-------|
-| 🏗️ **Sistem Yöneticisi / Mimar** | [`1-Sistem_Yoneticisi`](1-Sistem_Yoneticisi/) | Kurma, yapılandırma, işletme | 10 |
-| 🛡️ **Blue Team (Savunma)** | [`2-Blue_Team`](2-Blue_Team/) | İzleme, tespit, sıkılaştırma, kurtarma | 10 |
-| 🔴 **Red Team (Saldırı)** | [`3-Red_Team`](3-Red_Team/) | Keşif, sömürü, yanal hareket, hakimiyet | 10 |
+| Kol | Klasör | Bakış Açısı | Modül Sayısı | Kapsam |
+|-----|--------|-------------|--------------|--------|
+| 🏗️ **Sistem Yöneticisi / Mimar** | [`1-Sistem_Yoneticisi`](1-Sistem_Yoneticisi/) | Kurma, yapılandırma, işletme | 10 Modül | Fiziksel altyapı, replikasyon, kimlik yönetimi, GPO, DNS, AD CS, hibrit Entra |
+| 🛡️ **Blue Team (Savunma)** | [`2-Blue_Team`](2-Blue_Team/) | İzleme, tespit, sıkılaştırma, kurtarma | 10 Modül | WEF, Sysmon, SIEM/Sigma, Credential Guard, Tiering, PKI güvenliği, DFIR |
+| 🔴 **Red Team (Saldırı & Cephanelik)** | [`3-Red_Team`](3-Red_Team/) | Keşif, sömürü, yanal hareket, cephanelik | 11 Modül | 10 Saldırı Aşaması + 18 Kategori ve 145 Araçlık Derin Cephanelik (Modül 11) |
 
 ---
 
@@ -42,7 +46,7 @@ Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eş
 9. [Otomasyon ve Arayüzler](1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/) — PowerShell, DSC, LDAP/REST, WAC
 10. [Güvenlik, Yedekleme ve Kurtarma](1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/) — NTDS, `ntdsutil`, Restore, hardening
 
-### 🔴 Red Team — Saldırı Yaşam Döngüsü (Kill Chain)
+### 🔴 Red Team — Saldırı Yaşam Döngüsü ve Araç Cephaneliği
 > ⚔️ **Uçtan Uca Senaryolar:** [Operasyonel Oyun Kitabı (Playbook)](3-Red_Team/PLAYBOOK.md) — Attack Chain zincirleri, Kerberos hata çözümü ve OPSEC ilkeleri.
 
 1. [Keşif ve Numaralandırma](3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/) — LDAP/BloodHound, ACL/SPN keşfi
@@ -55,6 +59,7 @@ Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eş
 8. [Koersiyon ve NTLM Relay](3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/) — ntlmrelayx, PetitPotam, ESC8, KrbRelayUp
 9. [Domain Hakimiyeti ve Kalıcılık](3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/) — DCSync, Golden/Silver/Diamond, AdminSDHolder
 10. [Trust, Forest ve Hibrit Saldırılar](3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/) — SID History, cross-forest, Entra pivot, OPSEC
+11. [Araç Ustalığı ve Komut Notları](3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/) — **18 Kategori ve 145 Araçlık Tam Operasyonel Cephanelik** (CLI Bayrakları, Pratik Senaryolar, Troubleshooting, OPSEC/IOC ve Cheat Sheet'ler)
 
 ### 🛡️ Blue Team — Savunma Yaşam Döngüsü (Red ile 1:1 Simetrik)
 1. [Görünürlük ve Log Yönetimi](2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/) ↔ Red 01 — WEF, Sysmon, Audit Policy
@@ -70,10 +75,30 @@ Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eş
 
 ---
 
+## ⚖️ YASAL UYARI VE SORUMLULUK REDDİ (DISCLAIMER)
+
+> **ÖNEMLİ:** Bu depoda yer alan tüm dokümantasyon, teknik analizler, saldırı komutları ve araç kullanım kılavuzları; **yalnızca yasal sınırlar dahilinde gerçekleştirilen sızma testleri, kırmızı takım tatbikatları, yetkili güvenlik denetimleri ve savunma mekanizmalarının geliştirilmesi** amacıyla hazırlanmıştır.
+>
+> 1. **İzin ve Onay:** Buradaki tekniklerin yazılı izin ve yetkilendirme belgesi bulunmayan bilişim sistemleri üzerinde uygulanması; 5237 Sayılı Türk Ceza Kanunu (Madde 243, 244, 245) ve uluslararası siber suç mevzuatları (CFAA vb.) kapsamında suç teşkil eder.
+> 2. **Sorumluluk Sınırı:** Proje yazarları ve katkıda bulunanlar; buradaki bilgilerin kötüye kullanılmasından, hedef sistemlerde meydana gelebilecek veri kayıplarından, kesintilerden veya yasal yaptırımlardan doğrudan ya da dolaylı olarak **sorumlu tutulamaz**.
+> 3. **Savunma Önceliği:** Tüm saldırı teknikleri; güvenlik analistlerinin, mavi takım uzmanlarının ve sistem yöneticilerinin Active Directory ortamlarını sıkılaştırması (hardening) ve saldırıları gerçek zamanlı tespit edebilmesi amacıyla simetrik olarak sunulmuştur.
+
+---
+
+## 🌐 Yararlanılan Başlıca Açık Kaynaklar ve Teşekkür
+
+Bu çalışmanın hazırlanmasında, siber güvenlik ekosistemine yön veren ve Active Directory araştırmalarına öncülük eden aşağıdaki saygın açık kaynak projelerinden, araştırma makalelerinden ve dokümantasyonlardan istifade edilmiştir:
+
+- 🌐 [InternalAllTheThings — Swisskyrepo](https://swisskyrepo.github.io/InternalAllTheThings/active-directory/): Active Directory sömürü teknikleri, komut dizilimleri ve referans saldırı kılavuzları.
+- 🌐 [HackTricks Wiki — Carlos Polop](https://book.hacktricks.wiki/): Ağ, Active Directory ve ayrıcalık yükseltme tekniklerine dair ansiklopedik güvenlik rehberi.
+- 🌐 [The Hacker Recipes — Shutdown](https://www.thehacker.recipes/): Active Directory protokolleri, Kerberos ve AD CS mekanizmaları üzerine derinlemesine metodoloji arşivi.
+- 🌐 [SpecterOps Research](https://posts.specterops.io/): BloodHound graf teorisi, Certified Pre-Owned (AD CS) ve erişim kontrolü (ACL) araştırma raporları.
+- 🌐 [MITRE ATT&CK Framework](https://attack.mitre.org/): Taktik, teknik ve alt-teknik eşleştirmeleri.
+- 🌐 [Microsoft Open Specifications](https://learn.microsoft.com/en-us/openspecs/windows_protocols/): `[MS-ADTS]`, `[MS-KILE]`, `[MS-DRSR]`, `[MS-SFU]` protokol standartları ve teknik belgeleri.
+
+---
+
 ## 🎓 Kimler İçin?
 
-Kariyerini Microsoft altyapıları üzerine kuran sistem yöneticileri, siber güvenlik uzmanları, altyapı mimarları, pentester'lar ve DevOps mühendisleri. Her dosya tek başına okunduğunda konuyu hem **öğretir**, hem **uygulatır**, hem de **savunma/saldırı boyutunu** gösterir.
+Kariyerini Microsoft kurumsal altyapıları üzerine kuran sistem yöneticileri, siber güvenlik uzmanları, altyapı mimarları, pentester'lar, tehdit avcıları ve SOC analistleri. Her dosya tek başına okunduğunda konuyu hem **öğretir**, hem **uygulatır**, hem de **savunma/saldırı boyutunu** eksiksiz gösterir.
 
-## ⚠️ Etik ve Kapsam Sınırı
-
-Red Team içeriği **yalnızca yetkili sızma testi, CTF ve eğitim** bağlamında hazırlanmıştır. Saldırı teknikleri savunmayı öğretmek amacıyla anlatılır ve her Red konusu karşılık gelen Blue tespiti/önlemiyle eşleştirilmiştir. Bu materyalin yetkisiz sistemlerde kullanılması yasa dışıdır; kullanıcı, içeriği kendi sorumluluğunda değerlendirir. Yazarlar, materyalin kötüye kullanımından doğacak sonuçlardan sorumlu tutulamaz.

@@ -37,3 +37,19 @@ Bu modül, Sistem kolunun denetim temelini ([Sistem 10.4](../../1-Sistem_Yonetic
 ## Kaynak yaklaşımı
 
 Tüm dosyalar `KAYNAKLAR.md` zincirini izler: 🏛️ Microsoft Learn / Sysinternals → 🎓 NSA-CISA / SwiftOnSecurity / Elastic ECS → 🛠️ Palantir WEF / Atomic Red Team. Her dosya sonunda erişim tarihli kaynaklar.
+---
+
+## ⚖️ YASAL UYARI VE SORUMLULUK REDDİ (DISCLAIMER)
+
+> **ÖNEMLİ:** Bu modülde yer alan savunma, tespit, log denetimi ve sıkılaştırma yönergeleri; **yalnızca yetkili sistem yöneticileri, mavi takım analistleri ve kurum içi güvenlik ekiplerinin savunma kabiliyetlerini artırmak** amacıyla hazırlanmıştır.
+>
+> Yapılandırma değişiklikleri öncesinde test ortamlarında doğrulama yapılmalı, olası kesintilere karşı tedbir alınmalıdır. Yazarlar, sistem değişikliklerinden kaynaklanabilecek iş sürekliliği aksaklıklarından sorumlu tutulamaz.
+
+---
+
+## 🌐 Yararlanılan Başlıca Açık Kaynaklar
+
+- 🌐 [InternalAllTheThings — Active Directory Hardening (Swisskyrepo)](https://swisskyrepo.github.io/InternalAllTheThings/active-directory/): Savunma mekanizmaları ve protokol sıkılaştırma kılavuzları.
+- 🌐 [HackTricks Wiki — Defensive Security (Carlos Polop)](https://book.hacktricks.wiki/): Tespit kuralları, Event ID analizleri ve telemetri mimarisi.
+- 🌐 [Microsoft Security Documentation](https://learn.microsoft.com/en-us/security/): Kurumsal Active Directory sıkılaştırma standartları.
+- 🌐 [SigmaHQ Rules Repository](https://github.com/SigmaHQ/sigma): Açık kaynak SIEM tespit kuralları.
