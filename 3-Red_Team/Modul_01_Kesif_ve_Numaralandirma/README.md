@@ -89,6 +89,7 @@ Bu modüldeki keşif ve numaralandırma tekniklerinin sahada icra edilmesinde ku
 | 10 | **dsquery / dsget** | [dsquery_dsget.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/dsquery_dsget.md) | Windows Server yerleşik komut satırı aracı; harici dosya yüklemeden SPN, kullanıcı ve bilgisayar listelemeyi sağlar. |
 | 11 | **nltest** | [nltest.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/nltest.md) | Netlogon servisini sorgulayarak etki alanı denetleyicilerini, site bilgilerini ve güven ilişkilerini listeleyen yerel LOLBin. |
 | 12 | **adalanche** | [adalanche.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/adalanche.md) | Harici veritabanına ihtiyaç duymadan tek bir ikili dosyayla çalışan yüksek performanslı AD graf ve yetki analiz motoru. |
+| 13 | **SOAPHound** | [SOAPHound.md](../Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/SOAPHound.md) | LDAP (389) izleme ve tuzaklarını atlatmak için TCP 9389 ADWS üzerinden SOAP XML ile BloodHound verisi toplayan keşif aracı. |
 
 ---
 

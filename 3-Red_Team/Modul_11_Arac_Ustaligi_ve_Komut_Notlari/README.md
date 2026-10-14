@@ -1,6 +1,6 @@
 # Modül 11 — Kırmızı Takım Araç Cephaneliği ve Komut Rehberi
 
-> **Kol:** 🔴 Red Team (Saldırı) · **Kapsam:** 18 Kategori · 145 Araç  
+> **Kol:** 🔴 Red Team (Saldırı) · **Kapsam:** 18 Kategori · 146 Araç  
 > **Amaç:** Active Directory sızma testleri ve kırmızı takım operasyonlarında kullanılan tüm araçların operasyonel komut referansı, protokol mimarisi, OPSEC/tespit analizleri ve parametre kütüphanesi.
 
 ---
@@ -24,7 +24,7 @@
 
 1. [1. TEMEL İSTEMCİLER VE AĞ PROTOKOL ARAÇLARI (NATIVE CLIENTS & UTILITIES)](Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/README.md) — *(11 araç)*
 2. [2. WINDOWS YEREL KOMUT SATIRI VE LOLBINS (NATIVE WINDOWS & SYSINTERNALS)](Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/README.md) — *(15 araç)*
-3. [3. DİZİN KEŞFİ, GRAF ANALİZİ VE SALDIRI YOLU HARİTALAMA (RECON & BLOODHOUND)](Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/README.md) — *(19 araç)*
+3. [3. DİZİN KEŞFİ, GRAF ANALİZİ VE SALDIRI YOLU HARİTALAMA (RECON & BLOODHOUND)](Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/README.md) — *(20 araç)*
 4. [4. ZEHİRLEME, ORTADAKİ ADAM VE ZORLAMALI KİMLİK DOĞRULAMA (POISONING & COERCION)](Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/README.md) — *(13 araç)*
 5. [5. NTLM VE KERBEROS RELAY MOTORLARI (RELAY ENGINES)](Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/README.md) — *(3 araç)*
 6. [6. KERBEROS PROTOKOL CEPHANELİĞİ (KERBEROS SUITE)](Kategori_06_Kerberos_Protokol_Cephaneligi/README.md) — *(10 araç)*
@@ -104,6 +104,7 @@
 | 17 | **Kerbrute** | [Kerbrute.md](Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/Kerbrute.md) | Kerberos Pre-Authentication (AS-REQ) isteklerini kullanarak hedef kullanıcı hesaplarını kilitlemeden doğrulamak ve parola püskürtme yapmak için kullanılan Go tabanlı hızlı araçtır. |
 | 18 | **DomainPasswordSpray** | [DomainPasswordSpray.md](Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/DomainPasswordSpray.md) | Etki alanındaki tüm kullanıcı hesaplarına lockout ilkesini dikkate alarak tek bir parola püskürten (password spraying) PowerShell betiğidir. |
 | 19 | **Spray-Passwords** | [Spray-Passwords.md](Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/Spray-Passwords.md) | Çeşitli protokoller üzerinden etki alanı kullanıcılarına kontrollü parola püskürtme saldırıları düzenleyen alternatif bir otomasyon scriptidir. |
+| 20 | **SOAPHound** | [SOAPHound.md](Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/SOAPHound.md) | LDAP izlemelerini atlatmak için Active Directory Web Services (ADWS - TCP 9389) üzerinden SOAP XML sorguları ile BloodHound verisi toplayan keşif aracıdır. |
 
 ### 📁 Kategori 4: [4. ZEHİRLEME, ORTADAKİ ADAM VE ZORLAMALI KİMLİK DOĞRULAMA (POISONING & COERCION)](Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/README.md)
 
