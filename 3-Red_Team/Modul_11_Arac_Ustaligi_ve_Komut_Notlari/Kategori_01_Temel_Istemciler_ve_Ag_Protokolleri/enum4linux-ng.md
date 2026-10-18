@@ -114,7 +114,7 @@ enum4linux-ng [seçenekler] <hedef_IP_veya_FQDN>
 | `-L`, `--ldap-info` | LDAP RootDSE ve temel dizin bilgilerini sorgular |
 | `-T`, `--trusts` | Etki alanı güven ilişkilerini (Domain Trusts) listeler |
 | `-e`, `--sessions` | Oturum açmış aktif kullanıcıları (Logged-on users) listeler |
-| `-p`, `--printers` | Paylaşılan yazıcıları sorgular |
+| `--printers` | Paylaşılan yazıcıları sorgular |
 | `-R`, `--rid-cycling` | Belirtilen aralıkta RID döngüsü yaparak kullanıcı/grup arar |
 
 ### Çıktı ve Ağ Parametreleri

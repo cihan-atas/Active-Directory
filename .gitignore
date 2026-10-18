@@ -10,3 +10,16 @@ Thumbs.db
 *~
 .vscode/
 .idea/
+
+# Flutter & Build çıktıları
+app/build/
+app/.dart_tool/
+app/.flutter-plugins
+app/.flutter-plugins-dependencies
+dist/
+
+# Test ve ekran görüntüsü çıktıları
+scripts/*.png
+scripts/__pycache__/
+__pycache__/
+*.pyc

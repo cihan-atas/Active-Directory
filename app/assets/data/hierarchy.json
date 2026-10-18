@@ -1,0 +1,2700 @@
+[
+  {
+    "id": "red_team",
+    "name": "Red Team (Ofansif)",
+    "subtitle": "Saldırı Teknikleri, Operasyonel Cephanelik & Modüller",
+    "dir": "3-Red_Team",
+    "color": "#ef4444",
+    "featured_articles": [
+      {
+        "id": "f6787654d1",
+        "title": "⚔️ Active Directory Saldırı Yaşam Döngüsü ve Operasyonel Oyun Kitabı (Playbook)",
+        "description": "Active Directory sızma testlerinde başarı, rastgele araç çalıştırmakla değil; etki alanının mimarisini, güven sınırlarını ve savunma telemetrisini anlayarak **doğru teknikleri doğru sırayla zincirleme",
+        "path": "3-Red_Team/PLAYBOOK.md",
+        "is_readme": false
+      }
+    ],
+    "modules": [
+      {
+        "id": "red_team_Modul_01_Kesif_ve_Numaralandirma",
+        "folder": "Modul_01_Kesif_ve_Numaralandirma",
+        "title": "Modül 01: Kesif ve Numaralandirma",
+        "path": "3-Red_Team/Modul_01_Kesif_ve_Numaralandirma",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "907a8a0deb",
+            "title": "📋 Modül 01: Kesif ve Numaralandirma - Genel Bakış",
+            "description": "Active Directory güvenliğinde değişmez bir temel kural vardır: **Kimliği doğrulanmış (authenticated) herhangi bir etki alanı kullanıcısı veya makine hesabı, dizin veritabanının (NTDS.dit) büyük bir bö",
+            "path": "3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "32d2483705",
+            "title": "01.1 — Yetkisiz ve Yetkili LDAP Enumerasyonu",
+            "description": "Active Directory yapısının kalbi, **LDAP (Lightweight Directory Access Protocol - RFC 4511)** protokolü ile erişilen dağıtık bir veritabanıdır (`NTDS.dit`). Bir ormandaki (forest) veya domain'deki her",
+            "path": "3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.1_LDAP_Enumerasyonu.md",
+            "is_readme": false
+          },
+          {
+            "id": "b28c51843b",
+            "title": "01.2 — SharpHound ve BloodHound ile Saldırı Yolu Grafiği",
+            "description": "Klasik LDAP sorguları hedefe dair **düz ve ayrık listeler** sunar: 5.000 kullanıcı, 900 grup, 10.000 ACL girdisi. Ancak modern Active Directory ortamlarında Domain Admin seviyesine giden yol düz bir l",
+            "path": "3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.2_SharpHound_ve_BloodHound.md",
+            "is_readme": false
+          },
+          {
+            "id": "8f0f1cc540",
+            "title": "01.3 — Kullanıcı, Grup, GPO, ACL, SPN, ADI-DNS ve Paylaşım Keşfi",
+            "description": "Grafiksel analiz (BloodHound), ormandaki ana rotayı ortaya koyar. Ancak bu rotayı besleyen ve çoğu zaman tek bir açık kapıyla tüm etki alanının çökmesini sağlayan unsurlar, **nesne bazlı öznitelikler ",
+            "path": "3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.3_Kullanici_Grup_ACL_SPN_Kesfi.md",
+            "is_readme": false
+          },
+          {
+            "id": "66006b22b3",
+            "title": "01.4 — Domain Trust ve Forest Enumerasyonu",
+            "description": "Bir etki alanında (domain) yerel yönetici veya Domain Admin olmak, kurumsal saldırı simülasyonlarında çoğu zaman **son durak değil, geniş orman yapısına açılan ilk kapıdır**. Modern kurumlar operasyon",
+            "path": "3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/01.4_Trust_ve_Forest_Enumerasyonu.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_02_Ilk_Erisim_ve_Yerlesme",
+        "folder": "Modul_02_Ilk_Erisim_ve_Yerlesme",
+        "title": "Modül 02: Ilk Erisim ve Yerlesme",
+        "path": "3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "cb7351222b",
+            "title": "📋 Modül 02: Ilk Erisim ve Yerlesme - Genel Bakış",
+            "description": "Active Directory ortamlarında sıfır bilgiyle (Black-Box) veya sınırlı ağ erişimiyle başlayan bir saldırgan için ilk aşama, **etki alanında geçerli bir kullanıcı kimliği (Foothold)** elde etmektir. Bir",
+            "path": "3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "9a7b9c7c6c",
+            "title": "02.1 — LLMNR, NBT-NS, mDNS, WPAD ve IPv6 Zehirlemesi (Zorlamalı Kimlik Avı)",
+            "description": "Bir kırmızı takım operatörü hedef kurumsal ağa (fiziksel bağlantı, misafir/şirket Wi-Fi veya ele geçirilmiş bir IoT cihazı üzerinden) bağlandığında başlangıçta **hiçbir etki alanı kullanıcısına veya p",
+            "path": "3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.1_LLMNR_NBTNS_mDNS_Poisoning.md",
+            "is_readme": false
+          },
+          {
+            "id": "55d1b514bb",
+            "title": "02.2 — Password Spraying, Kilit Politikası Kaçınma ve Pre2k Sömürüsü",
+            "description": "Geleneksel kaba kuvvet (brute-force) saldırıları, tek bir hedef kullanıcıya yüzlerce veya binlerce parola dener. Ancak modern kurumsal Active Directory ortamlarında bu yaklaşım saniyeler içinde **Hesa",
+            "path": "3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.2_Password_Spraying.md",
+            "is_readme": false
+          },
+          {
+            "id": "663f02f244",
+            "title": "02.3 — Kerbrute ile Kullanıcı Enumerasyonu, Spray, Timeroasting ve No-Auth NRPC",
+            "description": "Başarılı bir Password Spraying saldırısı ([02.2](./02.2_Password_Spraying.md)) veya AS-REP Roasting için en kritik gereksinim **doğrulanmış ve temiz bir kullanıcı listesidir**. Ancak sızma testinin il",
+            "path": "3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.3_Kerbrute_ile_Enum_ve_Spray.md",
+            "is_readme": false
+          },
+          {
+            "id": "94d0cb52fc",
+            "title": "02.4 — İlk Foothold ve Durum Tespiti (Situational Awareness)",
+            "description": "Bir sızma testinde veya kırmızı takım tatbikatında ilk kullanıcı kimliği doğrulandığında ya da bir iş istasyonunda komut satırı (shell) erişimi kazanıldığında en kritik an başlar: **Acele etmemek.**",
+            "path": "3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/02.4_Ilk_Foothold_ve_Durum_Tespiti.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_03_Kimlik_Bilgisi_Erisimi",
+        "folder": "Modul_03_Kimlik_Bilgisi_Erisimi",
+        "title": "Modül 03: Kimlik Bilgisi Erisimi",
+        "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "13c3023fa8",
+            "title": "📋 Modül 03: Kimlik Bilgisi Erisimi - Genel Bakış",
+            "description": "Active Directory saldırı yaşam döngüsünde (Kill Chain) operasyonun ivme kazandığı en kritik dönüm noktası **Kimlik Bilgisi Erişimi** aşamasıdır. Düşük yetkili tek bir hesap elde edildikten sonra hedef",
+            "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "8ca3b71139",
+            "title": "03.1 — Kerberoasting, AS-REP Roasting ve Hedefli SPN Enjeksiyonu",
+            "description": "Kerberos protokolünün tasarımında, saldırganlara etki alanı denetleyicisine tek bir hatalı oturum açma isteği göndermeden **çevrimdışı (offline) kırılabilir parola karmaları** sunan iki temel mekanizm",
+            "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.1_Kerberoasting_ve_AS_REP_Roasting.md",
+            "is_readme": false
+          },
+          {
+            "id": "8610a75d27",
+            "title": "03.2 — LSASS Bellek Mimarisi, PPL Baypas ve Özel SSP Enjeksiyonu",
+            "description": "Windows işletim sisteminde kullanıcıların her paylaşıma, veritabanına veya intranet servisine eriştiklerinde tekrar tekrar parola girmelerini engelleyen **Tek Oturum Açma (Single Sign-On - SSO)** meka",
+            "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.2_LSASS_Bellek_Dokumu.md",
+            "is_readme": false
+          },
+          {
+            "id": "023b02a2bb",
+            "title": "03.3 — DPAPI, Credential Vault, LAPS ve Tarayıcı Sırlarının Hasadı",
+            "description": "LSASS bellek dökümü ([03.2](./03.2_LSASS_Bellek_Dokumu.md)) yalnızca o an makinede oturum açmış aktif kullanıcıların kimliklerini sunar. Ancak sistemde disk üzerinde **saklanan (at-rest)** devasa bir ",
+            "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.3_DPAPI_ve_Credential_Vault.md",
+            "is_readme": false
+          },
+          {
+            "id": "99211f5732",
+            "title": "03.4 — Çevrimdışı Hash Kırma, Strateji ve Hash Shucking (NT Adayı)",
+            "description": "Kerberoasting, Responder ve AS-REP Roasting saldırıları sonucunda elde edilen veriler doğrudan bir hedef sistemde oturum açmak için kullanılamaz (Pass-the-Hash yapılamaz). Çünkü bu veriler **challenge",
+            "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.4_Offline_Hash_Kirma.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_04_Yanal_Hareket",
+        "folder": "Modul_04_Yanal_Hareket",
+        "title": "Modül 04: Yanal Hareket",
+        "path": "3-Red_Team/Modul_04_Yanal_Hareket",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "da023419af",
+            "title": "📋 Modül 04: Yanal Hareket - Genel Bakış",
+            "description": "Yanal Hareket (Lateral Movement), bir saldırganın etki alanında ele geçirdiği bir başlangıç noktasından (Foothold) ağdaki diğer kritik sistemlere (sunucular, SQL veritabanları, yedekleme sistemleri ve",
+            "path": "3-Red_Team/Modul_04_Yanal_Hareket/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "38385d042d",
+            "title": "04.1 — Pass-the-Hash, Overpass-the-Hash, Pass-the-Key ve Pass-the-Cert",
+            "description": "Windows NTLM kimlik doğrulamasının temel tasarımında değişmez bir kural vardır: **Parolanın kendisi ağ üzerinden asla aktarılmaz; bunun yerine kullanıcının NT karması (NTLM Hash) doğrudan matematiksel",
+            "path": "3-Red_Team/Modul_04_Yanal_Hareket/04.1_Pass_the_Hash_ve_Overpass_the_Hash.md",
+            "is_readme": false
+          },
+          {
+            "id": "8b886dded3",
+            "title": "04.2 — Pass-the-Ticket, Bilet Dönüşümleri ve Kerberos Double-Hop Çözümleri",
+            "description": "Kerberos bilet tabanlı bir kimlik doğrulama protokolüdür. Kullanıcı kimliğini bir kez etki alanı denetleyicisine kanıtladıktan sonra, eline **taşınabilir kriptografik biletler (TGT / TGS)** verilir. K",
+            "path": "3-Red_Team/Modul_04_Yanal_Hareket/04.2_Pass_the_Ticket.md",
+            "is_readme": false
+          },
+          {
+            "id": "cff4485948",
+            "title": "04.3 — Uzak Yürütme: PsExec, WMI, WinRM, DCOM ve RDP Session Hijacking",
+            "description": "Yanal hareket (Lateral Movement) aşamasında geçerli bir kimlik veya karma elde edildikten sonra temel amaç, bu yetkiyi kullanarak **başka bir hedef sistemde komut çalıştırmaktır**.",
+            "path": "3-Red_Team/Modul_04_Yanal_Hareket/04.3_PsExec_WMI_WinRM.md",
+            "is_readme": false
+          },
+          {
+            "id": "2f35955b67",
+            "title": "04.4 — NetExec (nxc) ile Yanal Hareket, Otomasyon ve Ağ Geneli Hasat",
+            "description": "Yanal hareket sürecinde onlarca veya yüzlerce farklı iş istasyonu ve sunucuyu tek tek `wmiexec` veya `psexec` ile denemek operasyonel açıdan sürdürülemezdir. **NetExec (nxc)** — eski CrackMapExec (CME",
+            "path": "3-Red_Team/Modul_04_Yanal_Hareket/04.4_NetExec_Otomasyon.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_05_Yetki_Yukseltme_ACL_ve_GPO",
+        "folder": "Modul_05_Yetki_Yukseltme_ACL_ve_GPO",
+        "title": "Modül 05: Yetki Yukseltme ACL ve GPO",
+        "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "2daea77186",
+            "title": "📋 Modül 05: Yetki Yukseltme ACL ve GPO - Genel Bakış",
+            "description": "Active Directory güvenliğinde ayrıcalık yükseltme (Privilege Escalation) çoğunlukla bir işletim sistemi çekirdek açığı (kernel exploit) ile gerçekleşmez. AD ortamlarında yetki yükseltme, **yıllar için",
+            "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "e8541434f9",
+            "title": "05.1 — DACL Abuse (GenericAll / WriteDACL / ForceChangePassword)",
+            "description": "Active Directory mimarisinde yetki yükseltme (Privilege Escalation), çoğu senaryoda ikili bir yazılım zafiyeti (binary exploit) veya çekirdek açığı gerektirmez. Kurumsal ortamlarda on yıllar boyunca b",
+            "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.1_DACL_Abuse.md",
+            "is_readme": false
+          },
+          {
+            "id": "ba102c53e6",
+            "title": "05.2 — WriteOwner / AddMember / GPLink Abuse",
+            "description": "Active Directory yetki zincirinde doğrudan parola sıfırlamak veya nesne silmek her zaman en avantajlı rota değildir. Servis kesintisine yol açmadan ve parola değişiklik alarmlarını tetiklemeden yüksel",
+            "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.2_WriteOwner_AddMember_GPLink.md",
+            "is_readme": false
+          },
+          {
+            "id": "8a6de0bbd7",
+            "title": "05.3 — GPO Abuse ve SharpGPOAbuse",
+            "description": "Grup İlkeleri (Group Policy Objects - GPO), Active Directory mimarisinin en güçlü merkezi yönetim ve konfigürasyon omurgasıdır. Tek bir GPO politikası; bağlı bulunduğu etki alanı, site veya Organizasy",
+            "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.3_GPO_Abuse_SharpGPOAbuse.md",
+            "is_readme": false
+          },
+          {
+            "id": "5b58602733",
+            "title": "05.4 — Shadow Credentials (msDS-KeyCredentialLink)",
+            "description": "Active Directory ortamlarında bir kullanıcı veya bilgisayar hesabı üzerinde `GenericAll` veya `GenericWrite` hakkı elde edildiğinde başvurulan klasik yöntem **parolayı zorla sıfırlamaktır (ForceChange",
+            "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.4_Shadow_Credentials.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_06_Kerberos_Delegation_Saldirilari",
+        "folder": "Modul_06_Kerberos_Delegation_Saldirilari",
+        "title": "Modül 06: Kerberos Delegation Saldirilari",
+        "path": "3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "93a9af6a4f",
+            "title": "📋 Modül 06: Kerberos Delegation Saldirilari - Genel Bakış",
+            "description": "Active Directory ortamlarında çok katmanlı (multi-tier) uygulamaların (örneğin bir Web sunucusunun kullanıcı adına arka plandaki SQL veritabanına bağlanması) çalışabilmesi için Microsoft tarafından ge",
+            "path": "3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "733b82516c",
+            "title": "06.1 — Unconstrained Delegation Abuse",
+            "description": "Kerberos Delegasyonu, çok katmanlı kurumsal mimarilerde (örneğin Web Sunucusu ──▶ Veritabanı Sunucusu) bir ön uç servisinin oturum açmış kullanıcı adına arka uçtaki kaynaklara erişebilmesini sağlamak ",
+            "path": "3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.1_Unconstrained_Delegation_Abuse.md",
+            "is_readme": false
+          },
+          {
+            "id": "8eb0f591bb",
+            "title": "06.2 — Constrained Delegation ve S4U2Self / S4U2Proxy",
+            "description": "Unconstrained Delegation'ın yarattığı kontrolsüz güvenlik risklerini (herhangi bir sunucuya her kullanıcının TGT'sinin iletilmesi) sınırlamak amacıyla Microsoft, Windows Server 2003 ile birlikte **Con",
+            "path": "3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.2_Constrained_Delegation_S4U.md",
+            "is_readme": false
+          },
+          {
+            "id": "183df87b11",
+            "title": "06.3 — Resource-Based Constrained Delegation (RBCD)",
+            "description": "Geleneksel Kerberos Yetki Devri (Constrained Delegation) modellerinde delegasyon yetkisi, **hizmeti sunan istemci hesabı** üzerinde yapılandırılır (`msDS-AllowedToDelegateTo`). Bu yapılandırma doğruda",
+            "path": "3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.3_Resource_Based_Constrained_Delegation.md",
+            "is_readme": false
+          },
+          {
+            "id": "779aeacf42",
+            "title": "06.4 — Bronze Bit (CVE-2020-17049) ve İleri Delegasyon İstismarı",
+            "description": "Kerberos Kısıtlı Yetki Devri (Constrained Delegation ve RBCD) mimarilerinde savunmanın en son kalkanı; kritik kullanıcıların (Domain Admins vb.) **\"Account is sensitive and cannot be delegated\" (`USER",
+            "path": "3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/06.4_Bronze_Bit.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_07_AD_CS_PKI_Saldirilari",
+        "folder": "Modul_07_AD_CS_PKI_Saldirilari",
+        "title": "Modül 07: AD CS PKI Saldirilari",
+        "path": "3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "6693f9def2",
+            "title": "📋 Modül 07: AD CS PKI Saldirilari - Genel Bakış",
+            "description": "Active Directory Sertifika Servisleri (AD CS), kurumsal ağlarda akıllı kart oturum açma, VPN, SSL/TLS ve şifreleme için kullanılan Microsoft'un resmi Açık Anahtar Altyapısıdır (PKI). 2021 yılında Will",
+            "path": "3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "0f7c1a0c10",
+            "title": "07.1 — AD CS / PKI Zafiyet ve Sömürü Kataloğu (ESC1–ESC16)",
+            "description": "Active Directory Certificate Services (AD CS), kurumsal ağlarda bilgisayarlar, kullanıcılar ve ağ servisleri için Genel Anahtar Altyapısı (PKI) sunan kritik bir Microsoft rolüdür. Bir sertifikanın Act",
+            "path": "3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.1_ESC1_ESC8_Somuru_Teknikleri.md",
+            "is_readme": false
+          },
+          {
+            "id": "83c5b454ae",
+            "title": "07.2 — Certifried (CVE-2022-26923) ve Makine Eşleme İstismarı",
+            "description": "ESC1'den ESC8'e kadar uzanan klasik AD CS zafiyetleri, bir yöneticinin sertifika şablonunu veya CA konfigürasyonunu hatalı yapılandırmasını (misconfiguration) gerektirir. **Certifried (CVE-2022-26923)",
+            "path": "3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.2_Certifried_CVE_2022_26923.md",
+            "is_readme": false
+          },
+          {
+            "id": "bd3c2e3266",
+            "title": "07.3 — Certipy ile Otomasyon ve Uçtan Uca AD CS Sömürüsü",
+            "description": "Active Directory Certificate Services (AD CS) saldırı yüzeyinin genişliği (ESC1'den ESC16'ya kadar uzanan şablon zaafları, CA konfigürasyon hataları, makine eşleme açıkları ve HTTP NTLM relay vektörle",
+            "path": "3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.3_Certipy_ile_Otomasyon.md",
+            "is_readme": false
+          },
+          {
+            "id": "cd2c3d10be",
+            "title": "07.4 — ForgeCert ve Sertifika Tabanlı Kalıcılık (Golden Certificate)",
+            "description": "Klasik Active Directory hakimiyetinde nihai kalıcılık (persistence) noktası genellikle **Golden Ticket (krbtgt anahtarı ile sahte TGT üretimi)** olarak bilinir. Ancak modern Olay Müdahale (IR) ekipler",
+            "path": "3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/07.4_ForgeCert_ve_Sertifika_Kaliciligi.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_08_Koersiyon_ve_NTLM_Relay",
+        "folder": "Modul_08_Koersiyon_ve_NTLM_Relay",
+        "title": "Modül 08: Koersiyon ve NTLM Relay",
+        "path": "3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "2783faaa47",
+            "title": "📋 Modül 08: Koersiyon ve NTLM Relay - Genel Bakış",
+            "description": "NTLM kimlik doğrulama protokolünün (NTLMSSP) mimari açıdan en ölümcül zafiyeti; **kimlik doğrulama oturumunun hedef sunucuya veya güvenli kanala kriptografik olarak bağlanmamasıdır (Mutual Authenticat",
+            "path": "3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "e40fc8db97",
+            "title": "08.1 — NTLM Relay (ntlmrelayx) Senaryoları ve Çapraz Protokol Sömürüsü",
+            "description": "NTLM kimlik doğrulaması matematiksel olarak bir **Challenge-Response** el sıkışmasıdır. İstemci parolasını asla açık metin olarak ağa iletmez; bunun yerine sunucunun ürettiği 8 baytlık rastgele bir so",
+            "path": "3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.1_NTLM_Relay_Senaryolari.md",
+            "is_readme": false
+          },
+          {
+            "id": "cc49d7d15c",
+            "title": "08.2 — Koersiyon: PetitPotam / PrinterBug / DFSCoerce ve WebDAV",
+            "description": "[08.1 NTLM Relay](./08.1_NTLM_Relay_Senaryolari.md) saldırılarının başarıya ulaşması için bir kurbanın saldırgana kimlik doğrulaması göndermesi şarttır. LLMNR/NBT-NS ağ zehirlemesi (Poisoning) pasifti",
+            "path": "3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.2_PetitPotam_PrinterBug_DFSCoerce.md",
+            "is_readme": false
+          },
+          {
+            "id": "3f39f2a622",
+            "title": "08.3 — Relay → AD CS (ESC8) Zinciri ve DC Ele Geçirme",
+            "description": "Active Directory Certificate Services (AD CS) ortamlarında kullanılan **Web Enrollment (`/certsrv/`)** arayüzü, kullanıcıların ve yöneticilerin web tarayıcısı üzerinden dijital sertifika talep edebilm",
+            "path": "3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.3_Relay_AD_CS_ESC8_Zinciri.md",
+            "is_readme": false
+          },
+          {
+            "id": "9a03277fb1",
+            "title": "08.4 — KrbRelayUp ile Yerel Yetki Yükseltme (Local Kerberos Relay LPE)",
+            "description": "Önceki bölümlerde incelenen NTLM relay teknikleri, bir makineden diğerine ağ üzerinden yatay sıçramayı (Lateral Movement) hedefler. **KrbRelayUp**, sızma testlerinde sıklıkla karşılaşılan kritik bir s",
+            "path": "3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/08.4_KrbRelayUp_ile_Yerel_Yukseltme.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_09_Domain_Hakimiyeti_ve_Kalicilik",
+        "folder": "Modul_09_Domain_Hakimiyeti_ve_Kalicilik",
+        "title": "Modül 09: Domain Hakimiyeti ve Kalicilik",
+        "path": "3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "ddf7ecefcb",
+            "title": "📋 Modül 09: Domain Hakimiyeti ve Kalicilik - Genel Bakış",
+            "description": "Active Directory sızma testlerinde ve kırmızı takım operasyonlarında \"Domain Admin olmak\" ile \"Etki alanını **sahiplenmek ve kalıcı olmak**\" arasında derin bir ayrım vardır. Parolalar değiştirildiğind",
+            "path": "3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "ce56fbe7bb",
+            "title": "09.1 — DCSync ile Hash Çıkarma",
+            "description": "Active Directory mimarisinde birden fazla Domain Controller (DC) bulunduğunda, kullanıcı hesapları, parolalar ve güvenlik tanımlayıcıları etki alanı genelinde senkronize tutulmak zorundadır. Microsoft",
+            "path": "3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.1_DCSync_ile_Hash_Cikarma.md",
+            "is_readme": false
+          },
+          {
+            "id": "0f24c8bfa9",
+            "title": "09.2 — Golden / Silver / Diamond / Sapphire Ticket",
+            "description": "Kerberos kimlik doğrulama mimarisinin tüm güven zinciri **simetrik anahtarlar ve kriptografik imzalar** üzerine kuruludur. Kerberos istemcisi bir bilet aldığında, biletin içeriği istemciye kapalıdır; ",
+            "path": "3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.2_Golden_Silver_Diamond_Sapphire_Ticket.md",
+            "is_readme": false
+          },
+          {
+            "id": "69bc3bb733",
+            "title": "09.3 — AdminSDHolder, DCShadow ve DSRM Kalıcılığı",
+            "description": "[Golden Ticket](./09.2_Golden_Silver_Diamond_Sapphire_Ticket.md) gibi bilet tabanlı yöntemler güçlü olsa da kırılgan bir yapıya sahiptir: Savunma tarafı `krbtgt` parolasını iki kez sıfırladığında tüm ",
+            "path": "3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.3_AdminSDHolder_DCShadow_DSRM.md",
+            "is_readme": false
+          },
+          {
+            "id": "0877b3f33f",
+            "title": "09.4 — Skeleton Key ve NTDS.dit Exfiltration",
+            "description": "Active Directory ortamlarında etki alanı denetleyicisi (DC) üzerinde Tier-0 yetkisine ulaşıldığında, kimlik veritabanına ve kimlik doğrulama akışına iki farklı yaklaşım ile tam hakimiyet kurulabilir:",
+            "path": "3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/09.4_Skeleton_Key_ve_NTDS_Exfiltration.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_10_Trust_Forest_ve_Hibrit_Saldirilar",
+        "folder": "Modul_10_Trust_Forest_ve_Hibrit_Saldirilar",
+        "title": "Modül 10: Trust Forest ve Hibrit Saldirilar",
+        "path": "3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "e45db808b8",
+            "title": "📋 Modül 10: Trust Forest ve Hibrit Saldirilar - Genel Bakış",
+            "description": "Active Directory mimarisinde **tek bir etki alanı (Domain) bir güvenlik sınırı değildir; gerçek güvenlik sınırı Orman (Forest) yapısıdır.** Tek bir alt etki alanını (Child Domain) ele geçiren bir sald",
+            "path": "3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "cf53ce23b6",
+            "title": "10.1 — SID History Injection ve Intra-Forest Yükseltme",
+            "description": "Windows NT ve Active Directory mimarisinde erişim yetkilendirmesi, kullanıcının oturum belirtecinde (Access Token) yer alan **Güvenlik Tanımlayıcıları (SID - Security Identifier)** ile hedef nesnenin ",
+            "path": "3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.1_SID_History_Injection.md",
+            "is_readme": false
+          },
+          {
+            "id": "28723b0055",
+            "title": "10.2 — Cross-Forest Trust Abuse",
+            "description": "Aynı orman içi ([Intra-Forest](./10.1_SID_History_Injection.md)) yükseltmelerde orman köküne sıçramak görece kolaydır; çünkü orman tek bir güvenlik sınırıdır ve etki alanları arasında SID karantinası ",
+            "path": "3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.2_Cross_Forest_Trust_Abuse.md",
+            "is_readme": false
+          },
+          {
+            "id": "8fa2688305",
+            "title": "10.3 — Entra ID / Bulut Pivot (On-Prem ↔ Cloud)",
+            "description": "Modern kurumsal ortamlarda Active Directory altyapısı izole bir ada değildir. Şirketler e-posta, dosya paylaşımı ve iş uygulamaları için **Microsoft Entra ID (eski adıyla Azure AD)** ve Microsoft 365 ",
+            "path": "3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.3_Entra_ID_ve_Bulut_Pivot.md",
+            "is_readme": false
+          },
+          {
+            "id": "625c6a1ec0",
+            "title": "10.4 — Savunma Atlatma: AMSI/ETW Bypass, İz Gizleme, OPSEC",
+            "description": "Kırmızı takım operasyonlarında ve gelişmiş sızma testlerinde teknik başarı yalnızca hedef sisteme sızmakla ölçülmez; operasyonun **tespit edilmeden, gürültü üretmeden ve güvenlik katmanlarını tetiklem",
+            "path": "3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/10.4_Savunma_Atlatma_AMSI_ETW_OPSEC.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+        "folder": "Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+        "title": "Modül 11: Arac Ustaligi ve Komut Notlari",
+        "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+        "has_subcategories": true,
+        "subcategories": [
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri",
+            "folder": "Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri",
+            "title": "Kategori 01 Temel Istemciler ve Ag Protokolleri",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri",
+            "articles": [
+              {
+                "id": "a63ec39f8c",
+                "title": "1. TEMEL İSTEMCİLER VE AĞ PROTOKOL ARAÇLARI (NATIVE CLIENTS & UTILITIES)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "c1392a6fa2",
+                "title": "enum4linux-ng",
+                "description": "Python tabanlı yeni nesil bilgi toplama aracı; SMB, RPC, LDAP ve NetBIOS verilerini otomatik çıkarma.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/enum4linux-ng.md",
+                "is_readme": false
+              },
+              {
+                "id": "bc6e75c329",
+                "title": "impacket-rpcdump",
+                "description": "RPC Endpoint Mapper (TCP 135) üzerinden hedef sistemdeki kayıtlı RPC arayüzlerini ve servisleri dökme.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/impacket-rpcdump.md",
+                "is_readme": false
+              },
+              {
+                "id": "d2e615cd85",
+                "title": "impacket-samrdump",
+                "description": "SAMR protokolü üzerinden kullanıcı ve grup listelerini uzaktan çekme.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/impacket-samrdump.md",
+                "is_readme": false
+              },
+              {
+                "id": "73d8c06496",
+                "title": "impacket-smbclient",
+                "description": "Python interaktif SMB kabuğu; NTLM hash (Pass-the-Hash) ve Kerberos bilet desteği ile C$ paylaşımında gezinme.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/impacket-smbclient.md",
+                "is_readme": false
+              },
+              {
+                "id": "d04fa62e0e",
+                "title": "ldapsearch",
+                "description": "OpenLDAP CLI istemcisi; basit ve Kerberos GSSAPI bind ile ham LDAP sorguları, gelişmiş eşleme kuralları (OID), filtreleme ve sayfalama.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/ldapsearch.md",
+                "is_readme": false
+              },
+              {
+                "id": "5a5aeba34c",
+                "title": "mount.cifs",
+                "description": "Linux dosya sistemine uzaktaki Windows SMB/CIFS paylaşımlarını yerel klasör olarak bağlama.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/mount.cifs.md",
+                "is_readme": false
+              },
+              {
+                "id": "a7f407db38",
+                "title": "nmap (NSE Script)",
+                "description": "smb2-security-mode (signing kontrolü), smb-enum-shares, krb5-enum-users, ldap-rootdse ve AD keşif scriptleri.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/nmap_NSE_Script.md",
+                "is_readme": false
+              },
+              {
+                "id": "e74e965646",
+                "title": "rpcclient",
+                "description": "Samba MS-RPC CLI istemcisi; SAMR/LSA üzerinden kullanıcı/grup listeleme, RID lookup, parola politikası sorgulama.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/rpcclient.md",
+                "is_readme": false
+              },
+              {
+                "id": "902711f0ab",
+                "title": "smbclient",
+                "description": "Samba CLI istemcisi; SMB paylaşımlarında gezinme, dosya indirme/yükleme, recursive transfer, null/guest session.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/smbclient.md",
+                "is_readme": false
+              },
+              {
+                "id": "2f2324212a",
+                "title": "smbmap",
+                "description": "Paylaşım izinlerini (READ/WRITE) tarama, dosya listeleme, regex ile hassas dosya arama, upload/download.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/smbmap.md",
+                "is_readme": false
+              },
+              {
+                "id": "4864e349dc",
+                "title": "windapsearch",
+                "description": "Python tabanlı hızlı LDAP numaralandırma; SPN, unconstrained delegation, Domain Admins ve parola politikası filtreleme.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/windapsearch.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins",
+            "folder": "Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins",
+            "title": "Kategori 02 Windows Yerel Komut Satiri ve LOLBins",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins",
+            "articles": [
+              {
+                "id": "071a30cb08",
+                "title": "2. WINDOWS YEREL KOMUT SATIRI VE LOLBINS (NATIVE WINDOWS & SYSINTERNALS)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "097d843667",
+                "title": "ADExplorer",
+                "description": "Microsoft Sysinternals gelişmiş Active Directory yönetim ve gezinti aracı; canlı AD veritabanı anlık görüntüsü alma (`-snapshot`), çevrimdışı LDAP analizi, LAPS ve ACL denetimi ve nesne karşılaştırma.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/ADExplorer.md",
+                "is_readme": false
+              },
+              {
+                "id": "283b0f04b7",
+                "title": "LDP.exe",
+                "description": "Microsoft yerleşik gelişmiş LDAP yönetim, arama ve protokol tanı aracı; ham LDAP öznitelik analizi, genişletilmiş kontroller (Controls), silinmiş nesne avı (Tombstone) ve güvenlik tanımlayıcısı (DACL) inceleme.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/LDP.md",
+                "is_readme": false
+              },
+              {
+                "id": "a9852c589b",
+                "title": "ProcDump",
+                "description": "Microsoft Sysinternals resmi bellek dökümü aracı; LSASS sürecinin tam bellek dökümünü alma (`-ma lsass.exe`), süreç klonlama (`-r`), çevrimdışı kimlik bilgisi (hash/parola) çıkarma.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/ProcDump.md",
+                "is_readme": false
+              },
+              {
+                "id": "e93606ab27",
+                "title": "certutil",
+                "description": "Windows Sertifika Hizmetleri LOLBin aracı; AD CS şablon ve CA keşfi (`-ca.info`, `-catemplates`), uzaktan dosya indirme (`-urlcache -split -f`), Base64 kodlama/çözme (`-encode`/`-decode`) ve dosya hashleme (`-hashfile`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/certutil.md",
+                "is_readme": false
+              },
+              {
+                "id": "eff8258e78",
+                "title": "cmdkey",
+                "description": "Windows Kimlik Yöneticisi CLI aracı; kasada saklanan kayıtlı RDP, SMB ve ağ kimlik bilgilerini listeleme (`/list`), yeni kimlik ekleme (`/generic`, `/add`) ve silme (`/delete`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/cmdkey.md",
+                "is_readme": false
+              },
+              {
+                "id": "0170cd999a",
+                "title": "dsquery / dsget",
+                "description": "Windows yerleşik Active Directory komut satırı arama araçları; LDAP filtreleriyle nesne bulma (`dsquery`) ve bulunan nesnelerin özniteliklerini boru hattı (pipeline) üzerinden dökme (`dsget`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/dsquery_dsget.md",
+                "is_readme": false
+              },
+              {
+                "id": "3c12520d33",
+                "title": "gpresult",
+                "description": "Windows yerleşik Grup İlkesi (GPO) tanılama aracı; uygulanan ilkeleri, LSDOU hiyerarşisini, AppLocker kurallarını ve RSoP (Resultant Set of Policy) raporunu dökme (`/r`, `/v`, `/h`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/gpresult.md",
+                "is_readme": false
+              },
+              {
+                "id": "da120cfc23",
+                "title": "klist",
+                "description": "Windows yerel Kerberos tanı aracı; LSASS bellek önbelleğindeki Kerberos biletlerini görüntüleme (`klist`), bilet temizleme (`purge`) ve KDC'den servis bileti talep etme (`get`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/klist.md",
+                "is_readme": false
+              },
+              {
+                "id": "2718529821",
+                "title": "net.exe",
+                "description": "Windows yerel yönetim LOLBin aracı; etki alanı ve yerel kullanıcılar (`net user`), güvenlik grupları (`net group`), parola politikaları (`net accounts`) ve paylaşımlar (`net share` / `net view`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/net.md",
+                "is_readme": false
+              },
+              {
+                "id": "aaa390c0a0",
+                "title": "nltest",
+                "description": "Windows yerel komut satırı aracı; Netlogon servisi üzerinden DC tespiti, güvenli kanal (secure channel) doğrulaması, güven ilişkileri (trusts) ve kullanıcı sorgulaması.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/nltest.md",
+                "is_readme": false
+              },
+              {
+                "id": "afa76fc772",
+                "title": "reg.exe",
+                "description": "Windows Kayıt Defteri CLI yönetim LOLBin aracı; kilitli kovanları yedekleme (`reg save SAM/SYSTEM/SECURITY`), kalıcılık anahtarları oluşturma (`reg add Run`), savunma kör etme ve sistem yapılandırması sorgulama (`reg query`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/reg.md",
+                "is_readme": false
+              },
+              {
+                "id": "252f9dc4c7",
+                "title": "sc.exe",
+                "description": "Windows Hizmet Kontrol Yöneticisi (Service Control Manager - SCM) CLI aracı; yerel ve uzaktan servis oluşturma (`sc create`), yapılandırma manipülasyonu (`sc config binPath=`), durum sorgulama (`sc qc`) ve servis yönetimi (`sc start`/`sc delete`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/sc.md",
+                "is_readme": false
+              },
+              {
+                "id": "ab57b0bd32",
+                "title": "schtasks.exe",
+                "description": "Windows Görev Zamanlayıcısı CLI LOLBin aracı; yerel ve uzaktan zamanlanmış görev oluşturma (`schtasks /create`), tetikleme (`/run`), sorgulama (`/query`) ve kalıcılık (persistence) sağlama.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/schtasks.md",
+                "is_readme": false
+              },
+              {
+                "id": "e510ae33ad",
+                "title": "whoami",
+                "description": "Windows yerleşik kimlik ve token analiz aracı; kullanıcı SID tespiti (`/user`), token ayrıcalıkları (`/priv`), güvenlik grupları ve UAC bütünlük seviyesi analizi (`/groups`, `/all`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/whoami.md",
+                "is_readme": false
+              },
+              {
+                "id": "e66a5a91b4",
+                "title": "wmic.exe",
+                "description": "Windows Yönetim Araçları Komut Satırı (WMI CLI) LOLBin aracı; uzaktan süreç başlatma (`process call create`), sistem/yama keşfi (`qfe`, `os`), kullanıcı/SID analizi (`useraccount`) ve savunma engelleme (`shadowcopy delete`).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_02_Windows_Yerel_Komut_Satiri_ve_LOLBins/wmic.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama",
+            "folder": "Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama",
+            "title": "Kategori 03 Dizin Kesfi Graf Analizi ve Haritalama",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama",
+            "articles": [
+              {
+                "id": "cd44a960b7",
+                "title": "3. DİZİN KEŞFİ, GRAF ANALİZİ VE SALDIRI YOLU HARİTALAMA (RECON & BLOODHOUND)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "0dd8ca35c2",
+                "title": "ADRecon",
+                "description": "Prashant Mahajan (@sense-of-security) tarafından geliştirilen; standart bir etki alanı kullanıcısı yetkisiyle LDAP, ADSI ve WMI sorguları üzerinden tüm Active Directory topolojisini çıkarıp çok sekmeli Microsoft Excel (.xlsx), CSV veya JSON raporlarına dönüştüren PowerShell tabanlı denetim ve keşif aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/ADRecon.md",
+                "is_readme": false
+              },
+              {
+                "id": "ec851f3f07",
+                "title": "AdFind.exe",
+                "description": "Joe Richards (joeware.net) tarafından C++ ile yazılmış; PowerShell veya .NET bağımlılığı olmadan, Win32 Native LDAP API üzerinden etki alanı keşfi, ACL incelemesi ve nesne dökümü yapan hafif ve ultra hızlı komut satırı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/AdFind.md",
+                "is_readme": false
+              },
+              {
+                "id": "3582a1c70c",
+                "title": "AdMod.exe",
+                "description": "Joe Richards (joeware.net) tarafından C++ ile yazılmış; PowerShell veya RSAT bağımlılığı olmadan, Win32 Native LDAP API üzerinden Active Directory nesnelerini ve özniteliklerini değiştiren, ekleyen, silen ve yetki/kalıcılık enjekte eden güçlü komut satırı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/AdMod.md",
+                "is_readme": false
+              },
+              {
+                "id": "f247679f4d",
+                "title": "AzureHound",
+                "description": "Microsoft Entra ID (eski adıyla Azure AD) ve Azure bulut ortamlarındaki kullanıcılar, roller, servis prensipleri, uygulama izinleri ve Azure kaynakları arasındaki yetki ilişkilerini ve hibrit saldırı yollarını haritalandıran Go tabanlı BloodHound veri toplayıcısı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/AzureHound.md",
+                "is_readme": false
+              },
+              {
+                "id": "24e9b3fde2",
+                "title": "BloodHound.py",
+                "description": "Linux/Python ortamında çalışan resmi BloodHound veri toplayıcısı; uzaktan LDAP, SMB ve RPC protokolleri üzerinden Pass-the-Hash ve Kerberos biletleriyle uç noktaya dosya bırakmadan AD verisi toplama.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/BloodHound.md",
+                "is_readme": false
+              },
+              {
+                "id": "444096719f",
+                "title": "BloodHound CE",
+                "description": "Neo4j ve PostgreSQL tabanlı yeni nesil etki alanı saldırı yolu, ACL ve hibrit yetki ilişkilerini görselleştiren modern Attack Path Management (APM) platformu.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/BloodHound_CE.md",
+                "is_readme": false
+              },
+              {
+                "id": "795b079dcb",
+                "title": "DomainPasswordSpray",
+                "description": "Brandon Colley (DaftHack) tarafından geliştirilen; Active Directory etki alanı kilitleme politikasını (Account Lockout Policy) önceden sorgulayarak kullanıcı hesaplarını kilitlemeyecek güvenli aralıklarla parola püskürtmesi (Password Spraying) yapan PowerShell aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/DomainPasswordSpray.md",
+                "is_readme": false
+              },
+              {
+                "id": "3a3335be00",
+                "title": "Kerbrute",
+                "description": "Ronnie Flathers (@ropnop) tarafından Go dilinde geliştirilen; Kerberos Ön Kimlik Doğrulama (Pre-Authentication) protokolü üzerinden hesapları kilitlemeden saniyede binlerce kullanıcı doğrulayan (User Enumeration) ve yüksek hızlı parola püskürtmesi (Password Spraying) yapan CLI saldırı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/Kerbrute.md",
+                "is_readme": false
+              },
+              {
+                "id": "a8091dd9a0",
+                "title": "PowerView.ps1",
+                "description": "Will Schroeder (@harmj0y) tarafından geliştirilen; saf Windows API, .NET `System.DirectoryServices` (ADSI) ve LDAP/RPC/SMB protokollerini kullanarak RSAT veya ActiveDirectory PowerShell modülüne ihtiyaç duymadan etki alanı keşfi, ACL analizi, oturum avcılığı (session hunting) ve güven ilişkisi haritalama sağlayan kırmızı takım keşif kütüphanesi.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/PowerView.md",
+                "is_readme": false
+              },
+              {
+                "id": "393908c203",
+                "title": "SOAPHound",
+                "description": "FalconForce tarafından geliştirilen; standart LDAP (TCP 389/636) izleme mekanizmalarını ve bal küpü (honeytoken) tuzaklarını atlatmak amacıyla Active Directory Web Services (ADWS - TCP Port 9389) arayüzünü SOAP XML sorguları ile kullanarak etki alanı nesnelerini gizlice toplayan ve BloodHound uyumlu JSON çıktıları üreten C# ve Python tabanlı yeni nesil keşif aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/SOAPHound.md",
+                "is_readme": false
+              },
+              {
+                "id": "496835ea9c",
+                "title": "SharpHound",
+                "description": "BloodHound için resmi C# (.NET) veri toplayıcısı; LDAP, SMB, RPC, Session ve AD CS verilerini çok iş parçacıklı olarak toplayıp analiz arşivine (`.zip`) dönüştürme.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/SharpHound.md",
+                "is_readme": false
+              },
+              {
+                "id": "301c7ba4a0",
+                "title": "SharpView",
+                "description": "Kevin Robertson (@NetSPI) tarafından geliştirilen; PowerView.ps1 betiğinin bağımsız C# (.NET) ortamına aktarılmış hali olup, PowerShell kısıtlamalarını (CLM), betik günlüğünü (Script Block Logging) ve AMSI kontrollerini aşarak bellek içi (in-memory) etki alanı keşfi sağlayan saldırı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/SharpView.md",
+                "is_readme": false
+              },
+              {
+                "id": "7729bdf93d",
+                "title": "Spray-Passwords",
+                "description": "Mark Kraus (@markekraus) tarafından geliştirilen; PowerShell RunspacePool mimarisi ile çok iş parçacıklı (multi-threaded) paralel parola püskürtmesi (Password Spraying) yapan, LDAP ve Win32 API kimlik doğrulama seçenekleri sunan gelişmiş PowerShell aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/Spray-Passwords.md",
+                "is_readme": false
+              },
+              {
+                "id": "fd4f213cc1",
+                "title": "adalanche",
+                "description": "Lars Karlslund (@lkarlslund) tarafından Go dilinde geliştirilen; harici bir Neo4j veya Docker veritabanına ihtiyaç duymadan, LDAP üzerinden Active Directory ACL ve yetki zincirlerini toplayıp dahili bellek içi graf motoru ve gömülü web arayüzü ile görselleştiren bağımsız saldırı yolu analiz aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/adalanche.md",
+                "is_readme": false
+              },
+              {
+                "id": "8ce9ee5663",
+                "title": "adidnsdump",
+                "description": "Dirk-jan Mollema (@_dirkjan) tarafından geliştirilen; DNS Bölge Transferi (AXFR) kapalı olsa dahi Active Directory ile Bütünleşik DNS (ADIDNS) bölgelerindeki tüm kayıtları doğrudan LDAP üzerinden sorgulayıp CSV formatında döken Python tabanlı keşif aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/adidnsdump.md",
+                "is_readme": false
+              },
+              {
+                "id": "201fb0bb48",
+                "title": "dnstool.py",
+                "description": "Dirk-jan Mollema (@_dirkjan) tarafından geliştirilen; Active Directory ile Bütünleşik DNS (ADIDNS) ortamında standart etki alanı kullanıcısı yetkisiyle LDAP üzerinden yeni DNS kayıtları ekleyen, değiştiren, silen ve Wildcard (*) ya da WPAD zehirlemesiyle MitM/Relay saldırılarına zemin hazırlayan Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/dnstool.md",
+                "is_readme": false
+              },
+              {
+                "id": "e4ed42b068",
+                "title": "ldapdomaindump",
+                "description": "Dirk-jan Mollema (@_dirkjan) tarafından geliştirilen; Active Directory etki alanındaki tüm nesneleri LDAP sayfalama (paging) yöntemiyle hızlıca çekip çevrimdışı incelemeye uygun HTML, JSON ve Grep formatında raporlayan Python tabanlı dizin döküm aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/ldapdomaindump.md",
+                "is_readme": false
+              },
+              {
+                "id": "9313d72d79",
+                "title": "ldeep",
+                "description": "François-Xavier Darve (@ShutdownRepo) tarafından geliştirilen; Active Directory LDAP ortamlarında derinlemesine öznitelik çözümlemesi, LAPS parolaları, gMSA hash'leri, AD CS PKI yapılandırmaları ve Kerberos delegasyonlarını cerrahi hassasiyetle sorgulayan gelişmiş Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/ldeep.md",
+                "is_readme": false
+              },
+              {
+                "id": "5b206c61a4",
+                "title": "linWinPwn",
+                "description": "Lefy (@lefayjiss) tarafından geliştirilen; Linux ortamında çalışan, Active Directory sızma testlerinde kullanılan onlarca açık kaynaklı keşif, sertifika analizi (AD CS) ve istismar aracını tek bir çatı altında modüler olarak zincirleyen gelişmiş bash otomasyon aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/linWinPwn.md",
+                "is_readme": false
+              },
+              {
+                "id": "398cb6192d",
+                "title": "pywerview",
+                "description": "Yannick Méheut (@the-useless-one) tarafından geliştirilen; Impacket ve ldap3 kütüphaneleri üzerinden PowerView'ın temel keşif yeteneklerini Linux ortamına taşıyan, NTLM hash ve Kerberos biletleriyle (ccache) uzaktan etki alanı sorgulama imkanı sunan Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_03_Dizin_Kesfi_Graf_Analizi_ve_Haritalama/pywerview.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik",
+            "folder": "Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik",
+            "title": "Kategori 04 Zehirleme MitM ve Zorlamali Kimlik",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik",
+            "articles": [
+              {
+                "id": "8c360a12be",
+                "title": "4. ZEHİRLEME, ORTADAKİ ADAM VE ZORLAMALI KİMLİK DOĞRULAMA (POISONING & COERCION)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "00db3b4c3f",
+                "title": "Coercer",
+                "description": "MS-EFSR, MS-RPRN, MS-DFSNM, MS-FSRVP ve MS-EVEN dahil olmak üzere Windows RPC arayüzlerindeki bilinen tüm kimlik doğrulama zorlama (coercion) vektörlerini otomatik tarayan, test eden ve tetikleyen hepsi bir arada Python sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Coercer.md",
+                "is_readme": false
+              },
+              {
+                "id": "d4224259ce",
+                "title": "Crop",
+                "description": "Windows sistemlerinde WebDAV isteklerini tetikleyerek (coercion) kurban makinelerin saldırganın HTTP/WebDAV dinleyicisine NetNTLM kimlik doğrulaması göndermesini sağlayan C# .NET aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Crop.md",
+                "is_readme": false
+              },
+              {
+                "id": "897f2567db",
+                "title": "DFSCoerce",
+                "description": "MS-DFSNM (Distributed File System Namespace Management) protokolündeki `NetrDfsRemoveStdRoot` ve `NetrDfsAddStdRoot` fonksiyonlarını kullanarak Windows sunucularını ve Domain Controller'ları saldırgana kimlik doğrulamaya zorlayan Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/DFSCoerce.md",
+                "is_readme": false
+              },
+              {
+                "id": "53ee6026d0",
+                "title": "Dementor",
+                "description": "Linux ortamında Python ve Impacket altyapısıyla çalışan, MS-RPRN Print Spooler protokolünü (PrinterBug) istismar ederek Windows sunucularını ve Domain Controller'ları saldırganın dinleyicisine kimlik doğrulamaya zorlayan sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Dementor.md",
+                "is_readme": false
+              },
+              {
+                "id": "952eb9efc0",
+                "title": "Farmer",
+                "description": "WebDAV (Web Distributed Authoring and Versioning) protokolü üzerinden NetNTLMv2 hash'lerini toplamak amacıyla hafif (lightweight) bir yerel HTTP dinleyicisi açan C# .NET aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Farmer.md",
+                "is_readme": false
+              },
+              {
+                "id": "0daba47558",
+                "title": "Inveigh",
+                "description": "Windows üzerinde yerel olarak çalışan, LLMNR, NBT-NS, mDNS ve DNS protokollerini zehirleyerek sahte HTTP/HTTPS/SMB/WPAD servisleri üzerinden NetNTLM hash'lerini yakalayan C# ve PowerShell tabanlı sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Inveigh.md",
+                "is_readme": false
+              },
+              {
+                "id": "a7ffba135a",
+                "title": "PetitPotam",
+                "description": "MS-EFSR (Encrypting File System Remote) protokolünü istismar ederek Windows sistemlerini ve Domain Controller'ları saldırganın dinleyicisine NTLM kimlik doğrulaması göndermeye zorlayan efsanevi koersiyon aracı (CVE-2021-36942).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/PetitPotam.md",
+                "is_readme": false
+              },
+              {
+                "id": "fdee9687ca",
+                "title": "Pre2k",
+                "description": "Active Directory'de önceden oluşturulmuş (prestaged) veya eski Pre-Windows 2000 makine hesaplarını tespit eden ve varsayılan bilgisayar parolalarını (hesap adının küçük harfli hali) test ederek yetki yükseltme kapısı açan sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Pre2k.md",
+                "is_readme": false
+              },
+              {
+                "id": "94e24036e4",
+                "title": "PrivExchange",
+                "description": "Microsoft Exchange Web Services (EWS) SOAP bildirimlerini suistimal ederek Exchange sunucusunu saldırganın HTTP dinleyicisine NTLM doğrulaması yapmaya zorlayan ve LDAP relay üzerinden sıradan bir kullanıcıya DCSync yetkisi kazandıran Python sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/PrivExchange.md",
+                "is_readme": false
+              },
+              {
+                "id": "f5bf0a0aee",
+                "title": "Responder",
+                "description": "LLMNR, NBT-NS ve mDNS protokollerini zehirleyerek yerel ağdaki Windows istemcilerini sahte kimlik doğrulama servislerine yönlendiren, NetNTLMv1/v2 hash'lerini toplayan ve WPAD saldırılarını yöneten endüstri standardı sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/Responder.md",
+                "is_readme": false
+              },
+              {
+                "id": "8398ab11e7",
+                "title": "ShadowCoerce",
+                "description": "MS-FSRVP (File Server Remote VSS Protocol) arayüzündeki `IsPathSupported` ve `IsPathShadowCopied` fonksiyonlarını kullanarak Windows dosya sunucularını ve Domain Controller'ları saldırgana kimlik doğrulamaya zorlayan Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/ShadowCoerce.md",
+                "is_readme": false
+              },
+              {
+                "id": "830033e2b8",
+                "title": "SpoolSample",
+                "description": "Windows Print Spooler (MS-RPRN) servisindeki `RpcRemoteFindFirstPrinterChangeNotificationEx` fonksiyonunu tetikleyerek hedef sunucuları saldırganın belirlediği adrese kimlik doğrulamaya zorlayan C# aracı (PrinterBug).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/SpoolSample.md",
+                "is_readme": false
+              },
+              {
+                "id": "36896c0ff4",
+                "title": "mitm6",
+                "description": "Windows sistemlerinin varsayılan IPv6 önceliğini suistimal ederek sahte DHCPv6 ve DNS sunucusu açan, yerel ağdaki istemcilerin DNS trafiğini ele geçirip NTLM Relay saldırılarına yönlendiren MitM aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/mitm6.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari",
+            "folder": "Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari",
+            "title": "Kategori 05 NTLM ve Kerberos Relay Motorlari",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari",
+            "articles": [
+              {
+                "id": "49d17314e0",
+                "title": "5. NTLM VE KERBEROS RELAY MOTORLARI (RELAY ENGINES)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "c95f1491e7",
+                "title": "KrbRelay",
+                "description": "Windows ortamlarında çalışan yüksek yetkili sistem servislerini (SYSTEM / Network Service) COM/RPC arayüzleri üzerinden sahte veya hedef SPN'lere Kerberos kimlik doğrulaması (AP-REQ) yapmaya zorlayan ve bu biletleri yerel/uzak LDAP, HTTP veya RPC servislerine aktararak doğrudan LPE ve RBCD sağlayan C# tabanlı Kerberos relay motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/KrbRelay.md",
+                "is_readme": false
+              },
+              {
+                "id": "f2693f7b73",
+                "title": "KrbRelayUp",
+                "description": "KrbRelay, RBCD (Kaynak Tabanlı Kısıtlı Yetki Devri), Shadow Credentials ve Rubeus (S4U2Proxy/PTT) tekniklerini tek bir çatı altında birleştiren, Active Directory ortamındaki standart bir etki alanı kullanıcısından saniyeler içinde yerel `NT AUTHORITY\\SYSTEM` haklarına ulaşmayı sağlayan hepsi bir arada (All-in-One) yerel yetki yükseltme (LPE) otomasyon aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/KrbRelayUp.md",
+                "is_readme": false
+              },
+              {
+                "id": "5621fc5b49",
+                "title": "impacket-ntlmrelayx",
+                "description": "Ağ üzerinden yakalanan veya zorlanan NTLM kimlik doğrulama oturumlarını SMB, HTTP, LDAP, LDAPS, MSSQL ve IMAP gibi servislere aktararak (relay) etki alanında ayrıcalık yükseltme, RBCD yapılandırma, AD CS üzerinden sertifika talep etme ve oturum kaçırma saldırılarını otomatize eden endüstri standardı relay motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/impacket-ntlmrelayx.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_06_Kerberos_Protokol_Cephaneligi",
+            "folder": "Kategori_06_Kerberos_Protokol_Cephaneligi",
+            "title": "Kategori 06 Kerberos Protokol Cephaneligi",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi",
+            "articles": [
+              {
+                "id": "3aa233e1c8",
+                "title": "6. KERBEROS PROTOKOL CEPHANELİĞİ (KERBEROS SUITE)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "829139c639",
+                "title": "Kirbikator",
+                "description": "Benjamin Delpy (@gentilkiwi) tarafından geliştirilen Kekeo cephaneliğinin bir parçası olan, Windows ortamında yerel olarak çalışan, Kerberos biletlerini dönüştürme (`.kirbi` <-> `.ccache`), çoklu bilet havuzlarını parçalama (`split`), biletleri tek dosya altında birleştirme (`merge`) ve LSA bilet yapısını manipüle etme yeteneklerine sahip yüksek performanslı C tabanlı bilet işlemcisi.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/Kirbikator.md",
+                "is_readme": false
+              },
+              {
+                "id": "642c6ac782",
+                "title": "Rubeus",
+                "description": "Windows ortamlarında ham Kerberos bilet etkileşimi, bilet talep etme (asktgt/asktgs), Kerberoasting, AS-REP Roasting, kısıtlı yetki devri istismarı (S4U2Self/S4U2Proxy), Golden/Silver/Diamond bilet üretimi, bellekten bilet dökümü (dump/triage) ve Pass-the-Ticket (PTT) operasyonlarını C# .NET üzerinde gerçekleştiren endüstri standardı Kerberos manipülasyon aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/Rubeus.md",
+                "is_readme": false
+              },
+              {
+                "id": "364f8d14f1",
+                "title": "TGSTomp",
+                "description": "Klasik Kerberoasting saldırılarında ortaya çıkan RC4 şifreleme anomalilerini (Downgrade), tuzak servis hesaplarını (HoneySPN) ve SIEM frekans kurallarını atlatmak amacıyla Kerberos TGS-REQ isteklerini, şifreleme türü müzakerelerini (Encryption Negotiation) ve bellek içi bilet yapılarını manipüle eden gelişmiş ve EDR-güvenli Kerberoasting aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/TGSTomp.md",
+                "is_readme": false
+              },
+              {
+                "id": "9fb508ec2d",
+                "title": "impacket-GetNPUsers",
+                "description": "Active Directory ortamında Kerberos ön kimlik doğrulama (Pre-Authentication) zorunluluğu kaldırılmış (`DONT_REQ_PREAUTH`) kullanıcı hesaplarını LDAP veya harici kullanıcı listeleri üzerinden tespit eden, bu hesaplar için parola girmeksizin KDC'den AS-REP yanıtı talep eden ve dönen şifrelenmiş paketleri Hashcat/John the Ripper formatında dışa aktaran AS-REP Roasting aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-GetNPUsers.md",
+                "is_readme": false
+              },
+              {
+                "id": "5a31271500",
+                "title": "impacket-GetUserSPNs",
+                "description": "Active Directory etki alanında `servicePrincipalName` (SPN) özniteliğine sahip kullanıcı (servis) hesaplarını LDAP üzerinden sorgulayan, bu hesaplar için KDC'den Kerberos Hizmet Biletleri (TGS) talep eden ve biletlerin şifrelenmiş kısımlarını çevrimdışı parola kırma araçları (Hashcat / John the Ripper) formatında dışa aktaran Python tabanlı Kerberoasting aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-GetUserSPNs.md",
+                "is_readme": false
+              },
+              {
+                "id": "4cf643e103",
+                "title": "impacket-describeTicket",
+                "description": "Linux `.ccache`, Windows `.kirbi` veya ham ASN.1 Kerberos bilet dosyalarını ayrıştırarak bilet bayraklarını, şifreleme türlerini, geçerlilik sürelerini, oturum anahtarlarını (Session Key) ve Privilege Attribute Certificate (PAC) yetkilendirme bloklarını ayrıntılı olarak ekrana döken adli analiz ve protokol denetim aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-describeTicket.md",
+                "is_readme": false
+              },
+              {
+                "id": "856d002ba9",
+                "title": "impacket-getST",
+                "description": "Microsoft Kerberos protokol uzantılarını (S4U2self ve S4U2proxy) kullanarak, ele geçirilmiş bir servis veya makine hesabı adına herhangi bir etki alanı kullanıcısını (örneğin `Administrator`) taklit eden ve hedef servise yönelik Hizmet Biletleri (Service Ticket / TGS) üreten, Kısıtlı Yetki Devri (Constrained Delegation) ve RBCD sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-getST.md",
+                "is_readme": false
+              },
+              {
+                "id": "e732fd9707",
+                "title": "impacket-getTGT",
+                "description": "Kullanıcı parolası, NTLM hash'i veya AES anahtarı kullanarak Kerberos Dağıtım Merkezi'nden (KDC / Port 88) resmi bir Bilet Verme Bileti (TGT) talep eden, oturum anahtarını ayrıştırıp Linux Credential Cache (`.ccache`) formatında diske kaydeden ve Pass-the-Hash tekniğini Pass-the-Ticket operasyonuna dönüştüren temel Kerberos istemci aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-getTGT.md",
+                "is_readme": false
+              },
+              {
+                "id": "2577d1d53d",
+                "title": "impacket-ticketConverter",
+                "description": "Linux/Unix ortamlarında kullanılan MIT Kerberos Kimlik Önbelleği (`.ccache`) formatı ile Windows/Mimikatz/Rubeus ekosisteminde kullanılan Microsoft Kerberos Bilet (`.kirbi` / KRB-CRED) formatı arasında çift yönlü, kayıpsız dönüştürme işlemi yapan köprü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-ticketConverter.md",
+                "is_readme": false
+              },
+              {
+                "id": "8361de8c3c",
+                "title": "impacket-ticketer",
+                "description": "Ele geçirilmiş KRBTGT hesabı veya servis hesabı anahtarlarını (NTLM hash veya AES) kullanarak, Domain Controller ile hiçbir ağ iletişimi kurmaksızın tamamen çevrimdışı (offline) sahte Altın Bilet (Golden Ticket) ve Gümüş Bilet (Silver Ticket) inşa eden Python tabanlı bilet sahteciliği motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_06_Kerberos_Protokol_Cephaneligi/impacket-ticketer.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi",
+            "folder": "Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi",
+            "title": "Kategori 07 Bellek Analizi LSASS ve DPAPI Hasadi",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi",
+            "articles": [
+              {
+                "id": "bab1846063",
+                "title": "7. BELLEK ANALİZİ, LSASS DÖKÜMÜ VE KASA HASADI (CREDENTIAL HARVESTING & DPAPI)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "b205678929",
+                "title": "DonPAPI",
+                "description": "Hedef Windows sistemlerinde hiçbir süreç veya kod çalıştırmadan (Code-Executionless); SMB ve RPC protokolleri üzerinden uzaktan DPAPI (Data Protection API) anahtarlarını, Windows Vault kayıtlarını, Chrome/Edge/Firefox tarayıcı parolalarını ve çerezlerini otomatik olarak toplayıp etki alanı yedekleme anahtarıyla (Domain Backup Key) yerel olarak deşifre eden açık kaynaklı kimlik hasat motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/DonPAPI.md",
+                "is_readme": false
+              },
+              {
+                "id": "b8432f0f2d",
+                "title": "Dumpert",
+                "description": "Outflank tarafından geliştirilen; EDR çözümlerinin kullanıcı alanında (Userland) `ntdll.dll` üzerine yerleştirdiği API kancalarını (Hook) doğrudan sistem çağrıları (Direct Syscalls) ve API kancasızlaştırma (Unhooking) teknikleriyle baypas ederek `lsass.exe` bellek dökümünü alan öncü C/BOF güvenlik aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/Dumpert.md",
+                "is_readme": false
+              },
+              {
+                "id": "545de2db87",
+                "title": "Internal-Monologue",
+                "description": "Elad Shamir (@elad_shamir) tarafından geliştirilen; LSASS sürecinin bellek alanına hiçbir tanıtıcı (handle) açmadan veya DLL enjekte etmeden, Güvenlik Desteği Sağlayıcısı Arabirimi (SSPI) üzerinden yerel bir NTLM kimlik doğrulama döngüsü başlatarak ve kayıt defterini geçici olarak NetNTLMv1 seviyesine düşürerek (Downgrade) aktif kullanıcıların parola karmalarını sessizce elde eden çığır açıcı kimlik hasat aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/Internal-Monologue.md",
+                "is_readme": false
+              },
+              {
+                "id": "4c7de99edf",
+                "title": "Mimikatz",
+                "description": "Windows Local Security Authority Subsystem Service (LSASS) bellek alanını doğrudan okuyarak düz metin parolaları, NTLM karmalarını ve Kerberos biletlerini çıkaran; uzaktan DCSync ve DCShadow protokol manipülasyonları gerçekleştiren; Golden/Silver bilet sahteciliği, Pass-the-Hash (PTH) ve Skeleton Key kalıcılık tekniklerini yöneten Active Directory sızma testlerinin temel bellek analizi motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/Mimikatz.md",
+                "is_readme": false
+              },
+              {
+                "id": "ee9e445c73",
+                "title": "PPLKiller",
+                "description": "Meşru ve dijital olarak imzalanmış ancak güvenlik açığı barındıran çekirdek sürücülerini (Bring Your Own Vulnerable Driver - BYOVD) kullanarak Windows çekirdeğinde (Ring 0) çalışan LSASS ve EDR süreçlerinin `EPROCESS` yapısındaki PPL koruma baytını sıfırlayan ve korumayı tamamen devre dışı bırakan gelişmiş çekirdek manipülasyon aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/PPLKiller.md",
+                "is_readme": false
+              },
+              {
+                "id": "0dadae980b",
+                "title": "PPLMedic & PPLDump",
+                "description": "Windows RunAsPPL (Protected Process Light) mekanizmasıyla korunan LSASS sürecine yönelik kullanıcı modundaki (Userland) mimari mantık zafiyetlerini istismar ederek çekirdek sürücüsü (Kernel Driver / BYOVD) yüklemeksizin tam bellek dökümü almayı sağlayan gelişmiş istismar ve analiz araç seti.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/PPLMedic_PPLDump.md",
+                "is_readme": false
+              },
+              {
+                "id": "2b73e876f0",
+                "title": "SafetyKatz",
+                "description": "Will Schroeder (@harmj0y) tarafından GhostPack projesi kapsamında geliştirilen; Windows `MiniDumpWriteDump` API'sini kullanarak LSASS sürecinin bellek dökümünü geçici bir dosyaya alan ve diskte hiçbir zaman `mimikatz.exe` çalıştırmadan, gömülü şifreli Mimikatz ikilisini doğrudan bellek içinde (In-Memory PE Loader) yürüterek kimlikleri ayrıştıran C# tabanlı post-exploitation aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/SafetyKatz.md",
+                "is_readme": false
+              },
+              {
+                "id": "a926d24d12",
+                "title": "Seatbelt",
+                "description": "Will Schroeder (@harmj0y) tarafından GhostPack projesi kapsamında geliştirilen; kırmızı takım operatörlerine bir sisteme sızdıktan sonra (Post-Exploitation) güvenlik yazılımlarını (EDR/AV), LSA korumalarını (RunAsPPL, Credential Guard), oturum sırlarını, DPAPI anahtarlarını ve sistem duruşunu (Situational Awareness) bellek içinde dosyasız denetleme imkanı veren C# tabanlı durumsal farkındalık aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/Seatbelt.md",
+                "is_readme": false
+              },
+              {
+                "id": "96961e5112",
+                "title": "SharpChrome",
+                "description": "Will Schroeder (@harmj0y) tarafından GhostPack projesi kapsamında geliştirilen; Google Chrome ve Chromium tabanlı tarayıcılarda (Microsoft Edge, Brave, Opera, Vivaldi) depolanan AES-256-GCM ve DPAPI korumalı web şifrelerini, oturum çerezlerini (Session Cookies) ve gezinti geçmişini bellek içinde dosyasız olarak ayrıştıran C# tabanlı post-exploitation aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/SharpChrome.md",
+                "is_readme": false
+              },
+              {
+                "id": "aaf0c13096",
+                "title": "SharpDPAPI",
+                "description": "Will Schroeder (@harmj0y) tarafından GhostPack projesi kapsamında geliştirilen; Windows DPAPI (Data Protection API) mimarisini, kullanıcı ve makine MasterKey anahtarlarını, Windows Kasa (Vault) kayıtlarını, tarayıcı parolalarını/çerezlerini ve kurumsal yazılım sırlarını (RDCMan, KeePass, mRemoteNG) doğrudan bellek içinde (C# / .NET) çözümleyen post-exploitation aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/SharpDPAPI.md",
+                "is_readme": false
+              },
+              {
+                "id": "151852a369",
+                "title": "SharpKatz",
+                "description": "Marcellus (@b4rtik) tarafından geliştirilen; Mimikatz'ın `sekurlsa` (yerel bellek analizi) ve `lsadump` (uzaktan DCSync replikasyonu) modüllerini hiçbir üçüncü taraf C/C++ ikilisi veya gömülü PE yükleyiciye ihtiyaç duymadan, sıfırdan ve tamamen yerel C# (.NET) kodu ile yeniden uygulayan gelişmiş post-exploitation aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/SharpKatz.md",
+                "is_readme": false
+              },
+              {
+                "id": "a50276b79d",
+                "title": "comsvcs.dll",
+                "description": "Windows işletim sisteminde yerleşik olarak bulunan (Living-off-the-Land / LOLBin), `rundll32.exe` aracılığıyla dışa aktardığı 24 numaralı ordinal veya `MiniDump` fonksiyonu üzerinden `dbghelp.dll!MiniDumpWriteDump` API'sini tetikleyerek diske hiçbir harici yazılım yüklemeden `lsass.exe` bellek dökümünü alabilen yerel COM+ Services kütüphanesi.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/comsvcs.dll.md",
+                "is_readme": false
+              },
+              {
+                "id": "30e9fdff72",
+                "title": "dpapi.py",
+                "description": "Impacket çatısı altında yer alan; kurban Windows sistemlerinden diske erişim, gölge kopya (VSS) veya dosya sızdırma yoluyla elde edilen DPAPI MasterKey'lerini, Windows Kasa (Vault) kayıtlarını, Credential blob'larını ve Chrome/Edge tarayıcı verilerini saldırganın kendi Linux/macOS analiz ortamında %100 çevrimdışı (offline) deşifre eden Python kütüphanesi ve komut seti.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/dpapi.md",
+                "is_readme": false
+              },
+              {
+                "id": "71132b67be",
+                "title": "LaZagne",
+                "description": "Alessandro Zanni (@n1nj4sec) tarafından geliştirilen; Windows ve Linux sistemlerde işletim sistemi bileşenleri, web tarayıcıları, sistem yönetim araçları, veri tabanları, e-posta istemcileri ve yerel kasa dizinleri dahil 50'den fazla farklı yazılımdan yerel şifrelenmiş veya düz metin kimlik bilgilerini otomatik olarak ayrıştırıp çözen çok amaçlı parola hasat aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/lazagne.md",
+                "is_readme": false
+              },
+              {
+                "id": "598c714734",
+                "title": "lsassy",
+                "description": "Uzak Windows sistemleri üzerinde etkileşimli kabuk açmadan veya diske Mimikatz ikilisi bırakmadan; SMB, WMI veya Görev Zamanlayıcı aracılığıyla yerel Windows mekanizmalarıyla (comsvcs, procdump, nanodump vb.) LSASS bellek dökümünü tetikleyen ve dökümü SMB akışı üzerinden pypykatz ile uzaktan çözümleyen açık kaynaklı kimlik hasat motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/lsassy.md",
+                "is_readme": false
+              },
+              {
+                "id": "db2c6593b4",
+                "title": "nanodump",
+                "description": "Modern EDR ve antivirüs çözümlerinin `lsass.exe` bellek korumalarını atlatmak amacıyla tasarlanan; açık tanıtıcı çoğaltma (Handle Duplication), süreç anlık görüntüsü (Process Snapshotting / PssCaptureSnapshot), süreç çatallama (Forking) ve bellek içi şifreleme/imza bozma tekniklerini kullanarak tespit edilmeden LSASS dökümü alan gelişmiş C ve Beacon Object File (BOF) aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/nanodump.md",
+                "is_readme": false
+              },
+              {
+                "id": "9ef5cd84bf",
+                "title": "pypykatz",
+                "description": "Benjamin Delpy'nin Mimikatz aracının saf Python ile sıfırdan yazılmış açık kaynaklı uygulaması olan; Windows `lsass.exe` minidump dosyalarını, ham RAM imajlarını, çevrimdışı kayıt defteri kovanlarını (SAM, SYSTEM, SECURITY) ve DPAPI sırlarını Linux, macOS ve Windows üzerinde tamamen çevrimdışı (offline) olarak ayrıştırıp parola, NTLM karması ve Kerberos biletlerini çıkaran çok platformlu bellek adli bilişim ve parola hasat aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/pypykatz.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_08_Active_Directory_Sertifika_Servisleri",
+            "folder": "Kategori_08_Active_Directory_Sertifika_Servisleri",
+            "title": "Kategori 08 Active Directory Sertifika Servisleri",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri",
+            "articles": [
+              {
+                "id": "1e0e4828d6",
+                "title": "8. ACTIVE DIRECTORY SERTİFİKA SERVİSLERİ (AD CS / PKI EXPLOITATION)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "f7e9f89a3f",
+                "title": "CertStealer",
+                "description": "Windows işletim sisteminde CryptoAPI (CAPI) ve Cryptography Next Generation (CNG / KSP) sağlayıcıları tarafından yönetilen, dışa aktarılamaz (`non-exportable`) olarak işaretlenmiş özel anahtarları (Private Keys) bellek içi fonksiyon yamalama (API hooking / memory patching) yöntemleriyle serbest bırakarak şifreli PFX formatında diske çıkaran C/C++ ve C# tabanlı sertifika hırsızlığı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/CertStealer.md",
+                "is_readme": false
+              },
+              {
+                "id": "970d6f038b",
+                "title": "Certify",
+                "description": "Will Schroeder (@harmj0y) ve Lee Christensen (@tifkin_) tarafından GhostPack ailesi kapsamında geliştirilen; Active Directory Sertifika Servisleri (AD CS) altyapısında zafiyetli sertifika şablonlarını (ESC1-ESC4 vb.) LDAP üzerinden listeleyen ve DCOM/RPC (`ICertRequestD2`) protokolü ile ayrıcalıklı hesaplar adına sertifika talep eden C# tabanlı sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/Certify.md",
+                "is_readme": false
+              },
+              {
+                "id": "e40dafbc91",
+                "title": "Certipy",
+                "description": "Oliver Lyak (@ly4k) tarafından geliştirilen; Active Directory Sertifika Servisleri (AD CS) mimarisinde LDAP şablon keşfi, RPC/DCOM ve HTTP üzerinden sertifika talebi, PKINIT üzerinden Kerberos TGT ve NTLM hash hasadı (UnPAC-the-hash), şablon ACL manipülasyonu, NTLM relay ve ESC1'den ESC16'ya kadar tüm modern AD CS sömürü vektörlerini otomatikleştiren kapsamlı Python sömürü motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/Certipy.md",
+                "is_readme": false
+              },
+              {
+                "id": "3915565f15",
+                "title": "ForgeCert",
+                "description": "Lee Christensen (@tifkin_) tarafından GhostPack ailesi bünyesinde geliştirilen; ele geçirilen bir kurumsal Sertifika Yetkilisi (CA) özel anahtarı ile CA sunucusuna hiçbir ağ bağlantısı yapmadan, tamamen çevrimdışı (offline) ortamda etki alanındaki herhangi bir kullanıcı veya bilgisayar adına geçerli, kriptografik olarak imzalanmış \"Altın Sertifika\" (Golden Certificate) üreten C# tabanlı sahtecilik ve kalıcılık aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/ForgeCert.md",
+                "is_readme": false
+              },
+              {
+                "id": "f22adb4572",
+                "title": "PKINITtools",
+                "description": "Dirk-jan Mollema (@dirkjanm) tarafından geliştirilen; RFC 4556 (PKINIT - Public Key Cryptography for Initial Authentication in Kerberos) protokolünü saf Python ile uygulayarak, elde edilen X.509 sertifikaları ve özel anahtarları üzerinden Kerberos TGT bileti alan (`gettgtpkinit.py`), S4U2self/S4U2proxy yetki devri biletleri türeten (`gets4uticket.py`) ve PAC verisinden kullanıcının ham NTLM hash'ini deşifre eden (`UnPAC-the-hash`) temel Kerberos/PKI araç seti.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/PKINITtools.md",
+                "is_readme": false
+              },
+              {
+                "id": "b08bc6c50a",
+                "title": "Whisker",
+                "description": "Lee Christensen (@tifkin_) ve Will Schroeder (@harmj0y) tarafından geliştirilen; hedef Active Directory kullanıcı veya bilgisayar nesneleri üzerinde yazma hakkına (`GenericAll`, `GenericWrite`, `WriteProperty`) sahip olunduğunda, nesnenin `msDS-KeyCredentialLink` özniteliğine genel anahtar enjekte ederek (Shadow Credentials / Gölge Kimlik Bilgisi) parola sıfırlamadan ve CA gerektirmeden PKINIT üzerinden Kerberos TGT biletini alan C# tabanlı sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/Whisker.md",
+                "is_readme": false
+              },
+              {
+                "id": "4e5911a88d",
+                "title": "pyWhiskey",
+                "description": "Linux ve Python ortamlarında çalışan; hedef Active Directory kullanıcı veya bilgisayar nesneleri üzerinde yazma izni bulunduğunda, LDAP/LDAPS protokolü üzerinden hedef nesnenin `msDS-KeyCredentialLink` özniteliğine genel anahtar (Shadow Credentials) enjekte eden, PKINIT protokolü ile Kerberos TGT talep eden ve sömürü tamamlandığında nesneyi otomatik olarak temizleyen açık kaynaklı sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_08_Active_Directory_Sertifika_Servisleri/pyWhiskey.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu",
+            "folder": "Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu",
+            "title": "Kategori 09 ACL GPO ve Nesne Manipulasyonu",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu",
+            "articles": [
+              {
+                "id": "ed9488ff9a",
+                "title": "9. ACL, GPO VE NESNE MANİPÜLASYONU (OBJECT, ACL & DELEGATION ABUSE)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "19347ba0da",
+                "title": "Incognito",
+                "description": "Luke Jennings (MWR InfoSecurity) tarafından geliştirilen ve Metasploit/Meterpreter ile bağımsız ikili olarak kullanılan; Windows işletim sisteminde çalışan tüm süreçlerin Erişim Belirteçlerini (Access Tokens) listeleyen, hedef belirteci kopyalayarak (`DuplicateTokenEx`) başka bir kullanıcının (Domain Admin, SYSTEM vb.) kimliğine bürünen ve o belirteçle yeni süreç başlatan öncü belirteç hırsızlığı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/Incognito.md",
+                "is_readme": false
+              },
+              {
+                "id": "73f8edbd70",
+                "title": "PowerMad",
+                "description": "Kevin Robertson (@Kevin_Robertson / NetSPI) tarafından geliştirilen; Active Directory'de standart etki alanı kullanıcılarına tanınan Makine Hesabı Kotası'nı (`MachineAccountQuota - MAQ`) kullanarak RSAT veya AD modülleri gerektirmeden saf .NET/LDAP ile yeni bilgisayar hesapları ekleyen, düzenleyen ve Active Directory Entegre DNS (ADIDNS) kayıtlarını dinamik olarak yöneten PowerShell sömürü modülü.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/PowerMad.md",
+                "is_readme": false
+              },
+              {
+                "id": "1fdda2bdd2",
+                "title": "SharpGPOAbuse",
+                "description": "F-Secure LABS tarafından geliştirilen; saldırganın düzenleme yetkisine (`WriteProperty`, `GenericWrite`, `GenericAll`, `WriteDacl`) sahip olduğu bir Grup İlkesi Nesnesini (GPO) hedef alarak, etki alanındaki tüm bağlı bilgisayarlara anlık zamanlanmış görev (Immediate Scheduled Task), yerel yönetici (Local Admin) veya kullanıcı hakları enjekte eden C# tabanlı sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/SharpGPOAbuse.md",
+                "is_readme": false
+              },
+              {
+                "id": "4f38a933b1",
+                "title": "StandIn",
+                "description": "Rubén Boonen (@FuzzySec) tarafından geliştirilen; Windows sistemlerinde C# (.NET) ile sıfırdan yazılmış, RSAT veya PowerShell gerektirmeden doğrudan .NET Dizin Hizmetleri (`System.DirectoryServices`) API'leri üzerinden çalışan, Active Directory nesnelerinde DACL/SACL manipülasyonu, sahiplik değişimi, grup yönetimi, RBCD ve LAPS parola hasadı yapan C2 uyumlu sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/StandIn.md",
+                "is_readme": false
+              },
+              {
+                "id": "95048af4f2",
+                "title": "Tokenvator",
+                "description": "Alexander Leary (@0xbadjuju) tarafından geliştirilen; Windows işletim sisteminde C# (.NET) ile yazılmış, Cobalt Strike / Sliver C2 çerçevelerinde bellek içi (`execute-assembly`) çalıştırılabilen, süreç ve iş parçacığı belirteçlerini (Access Tokens) ayrıntılı listeleyen, ayrıcalıkları etkinleştiren (`SeDebugPrivilege` vb.), token kopyalayan (`DuplicateTokenEx`) ve çalınan belirteçle yeni süreç başlatan gelişmiş belirteç manipülasyon aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/Tokenvator.md",
+                "is_readme": false
+              },
+              {
+                "id": "342e6a3a8f",
+                "title": "aclpwn.py",
+                "description": "Dirk-jan Mollema (@dirkjanm / Fox-IT) tarafından geliştirilen; BloodHound Neo4j veritabanındaki Active Directory graf verilerini sorgulayarak, saldırganın kontrolündeki bir başlangıç kullanıcısından hedef ayrıcalıklı gruba (Domain Admins) uzanan en kısa ACL yükseltme zincirini bulan, adımları LDAP ve SAMR protokolleri ile otomatik olarak işleten ve değişiklikleri geri alabilen (restore) gelişmiş exploit motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/aclpwn.md",
+                "is_readme": false
+              },
+              {
+                "id": "d227642c3e",
+                "title": "bloodyAD",
+                "description": "Sylvain Heiniger (@CravateRouge) tarafından geliştirilen; Active Directory ortamlarında nesne erişim izinleri (DACL), sahiplik (Owner), grup üyelikleri, parola sıfırlama, Shadow Credentials, Resource-Based Constrained Delegation (RBCD), LAPS şifre okuma ve UAC bayrakları dahil tüm nesne manipülasyonlarını doğrudan saf LDAP/LDAPS protokolü üzerinden gerçekleştiren gelişmiş Python sömürü motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/bloodyAD.md",
+                "is_readme": false
+              },
+              {
+                "id": "c55c4794eb",
+                "title": "dsacls",
+                "description": "Microsoft tarafından Windows Server ve RSAT araçları kapsamında yerleşik olarak sunulan; Active Directory nesnelerinin Güvenlik Tanımlayıcıları (Security Descriptor), Erişim Denetim Listeleri (DACL) ve Denetim Listelerini (SACL) üçüncü parti hiçbir araca ihtiyaç duymadan komut satırından sorgulayan, düzenleyen ve yöneten meşru sistem yönetim ikilisi (LOLBin).",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/dsacls.md",
+                "is_readme": false
+              },
+              {
+                "id": "89432a79d2",
+                "title": "impacket-addcomputer",
+                "description": "Alberto Solino (@agsolino) ve Impacket geliştiricileri tarafından hazırlanan; Active Directory ortamlarında standart kullanıcılara tanınan `ms-DS-MachineAccountQuota` (MAQ) hakkını veya yönetici ayrıcalıklarını kullanarak, hem LDAP/LDAPS hem de SMB/SAMR protokolü üzerinden uzaktan etki alanına yeni bilgisayar hesapları ekleyen (`-method LDAP / SAMR`) ve gerektiğinde silen (`-delete`) temel komut satırı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/impacket-addcomputer.md",
+                "is_readme": false
+              },
+              {
+                "id": "cb37a5eb81",
+                "title": "impacket-rbcd",
+                "description": "Elad Shamir (@elad_shamir) tarafından keşfedilen Kaynak Tabanlı Kısıtlı Yetki Devri (RBCD - Resource-Based Constrained Delegation) saldırısını otomatikleştiren; hedef bilgisayar hesabı üzerinde yazma iznine sahip olunduğunda hedef nesnenin `msDS-AllowedToActOnBehalfOfOtherIdentity` özniteliğine saldırgan kontrolündeki bir makinenin güvenlik tanımlayıcısını (DACL) yazan, okuyan ve temizleyen Impacket/Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/impacket-rbcd.md",
+                "is_readme": false
+              },
+              {
+                "id": "40f246a3da",
+                "title": "pyGPOAbuse",
+                "description": "Charlie Bromberg (@ShutdownRepo) tarafından geliştirilen; Linux işletim sisteminden Python 3 ve Impacket/ldap3 kütüphaneleriyle çalışan, saldırganın düzenleme yetkisine (`GenericAll`, `GenericWrite`, `WriteProperty`) sahip olduğu bir Grup İlkesi Nesnesini (GPO) hedef alarak SYSVOL paylaşımına anlık zamanlanmış görev (`ScheduledTasks.xml`) enjekte eden ve bağlı tüm makinelerde `SYSTEM` yetkisiyle kod yürüten sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_09_ACL_GPO_ve_Nesne_Manipulasyonu/pyGPOAbuse.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi",
+            "folder": "Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi",
+            "title": "Kategori 10 Kurumsal Altyapi Paylasim ve Veri Avi",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi",
+            "articles": [
+              {
+                "id": "5400bb917b",
+                "title": "10. KURUMSAL ALTYAPI, PAYLAŞIM VE VERİ AVI (ENTERPRISE DATA HUNTING)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "c7477b2582",
+                "title": "MalSCCM",
+                "description": "Microsoft Endpoint Configuration Manager (SCCM / MECM) altyapısını kötüye kullanarak SMS Provider üzerinden hedefli cihaz koleksiyonları oluşturan, zararlı uygulama/paket dağıtan, anlık ilke yenilemesiyle hedef sistemlerde SYSTEM yetkisinde kod yürüten ve izleri temizleyen C# tabanlı yanal hareket ve yayılma aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/MalSCCM.md",
+                "is_readme": false
+              },
+              {
+                "id": "e671d92196",
+                "title": "PowerUpSQL",
+                "description": "Active Directory ortamında Service Principal Name (SPN) ve SSRP yayınları üzerinden MSSQL sunucularını keşfeden, zafiyet ve yetki denetimi yapan, Linked Server zincirlerini (dblink) haritalandıran, xp_cmdshell, CLR ve UNC NTLM zorlama tekniklerini destekleyen PowerShell tabanlı veritabanı saldırı ve denetim paketi.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/PowerUpSQL.md",
+                "is_readme": false
+              },
+              {
+                "id": "06930ffd99",
+                "title": "SharpSCCM",
+                "description": "Microsoft Endpoint Configuration Manager (SCCM/MECM) altyapısını WMI, SMS Provider ve HTTP/HTTPS yönetim noktaları (Management Point) üzerinden sorgulayan, Ağ Erişim Hesabı (NAA) kimlik bilgilerini çıkaran, birincil kullanıcı ilişkilerini (UDA) haritalandıran ve merkezi dağıtımlarla kod yürüten C# tabanlı post-exploitation aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/SharpSCCM.md",
+                "is_readme": false
+              },
+              {
+                "id": "4ba7383b50",
+                "title": "SharpShares",
+                "description": "Active Directory etki alanındaki bilgisayarları LDAP üzerinden sorgulayarak çok iş parçacıklı Win32 NetShareEnum API çağrılarıyla ağ paylaşımlarını keşfeden, okuma ve yazma (Read/Write) erişim yetkilerini hızla denetleyen C# (.NET) tabanlı paylaşım keşif aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/SharpShares.md",
+                "is_readme": false
+              },
+              {
+                "id": "c5e5673038",
+                "title": "Snaffler",
+                "description": "Active Directory etki alanındaki SMB ve DFS ağ paylaşımlarını otomatik keşfeden, dosya ve dizinleri çok iş parçacıklı kural motoruyla (regex/triage) tarayarak parola, API anahtarı, sertifika, SSH anahtarı, veritabanı yedeği ve yapılandırma sırlarını sınıflandıran C# tabanlı veri avı aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/Snaffler.md",
+                "is_readme": false
+              },
+              {
+                "id": "6e8f18eba1",
+                "title": "impacket-mssqlclient",
+                "description": "Linux ortamından TDS (Tabular Data Stream) protokolü üzerinden Microsoft SQL Server örneklerine bağlanan, Windows/Kerberos/NTLM ve Pass-the-Hash kimlik doğrulamasını destekleyen, etkileşimli SQL kabuğu ve dahili xp_cmdshell/OLE otomasyon komutları sunan Impacket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/impacket-mssqlclient.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme",
+            "folder": "Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme",
+            "title": "Kategori 11 Yanal Hareket ve Uzak Kod Yurutme",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme",
+            "articles": [
+              {
+                "id": "2a99b4b0b9",
+                "title": "11. YANAL HAREKET VE UZAK KOD YÜRÜTME (LATERAL MOVEMENT & EXECUTION)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "8a7efca864",
+                "title": "Evil-WinRM",
+                "description": "Windows Remote Management (WinRM / WS-Management) protokolü üzerinden Linux sistemlerden uç noktalara etkileşimli PowerShell oturumu sağlayan, Pass-the-Hash ve Kerberos destekli kırmızı takım yönetim kabuğu.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/Evil-WinRM.md",
+                "is_readme": false
+              },
+              {
+                "id": "c18624683a",
+                "title": "NetExec (nxc)",
+                "description": "CrackMapExec'in modern topluluk ardılı olan; SMB, WinRM, LDAP, MSSQL, RDP, SSH ve FTP protokolleri üzerinden parola püskürtme (spray), kimlik doğrulama, komut yürütme, LAPS/SAM/LSA/NTDS dökümü ve zengin modül mimarisi (spider_plus, lsassy, nanodump) sunan çok protokollü ağ sömürü motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/NetExec_nxc.md",
+                "is_readme": false
+              },
+              {
+                "id": "6dd9a5758f",
+                "title": "SharpWMI",
+                "description": "GhostPack araç setine ait, C# ile geliştirilmiş, .NET CLR üzerinden DCOM/WMI çağrılarıyla uzak sistemlerde WQL sorguları çalıştıran ve `Win32_Process.Create` ile kod yürüten kırmızı takım aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/SharpWMI.md",
+                "is_readme": false
+              },
+              {
+                "id": "02983f8910",
+                "title": "WMIHacker",
+                "description": "Hedef sistemde SMB (TCP 445) ve diğer yönetim portları kapalıyken, yalnızca WMI/RPC (TCP 135) üzerinden komut çalıştırma, Registry tabanlı çıktı okuma ve dosya transferi sağlayan kırmızı takım yanal hareket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/WMIHacker.md",
+                "is_readme": false
+              },
+              {
+                "id": "8a841ce8aa",
+                "title": "impacket-atexec",
+                "description": "Microsoft Task Scheduler (MS-TSCH) RPC arayüzü üzerinden uzak sistemde geçici zamanlanmış görev tanımlayarak NT AUTHORITY\\SYSTEM yetkisinde komut yürüten ve çıktıları SMB üzerinden okuyan Impacket yanal hareket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/impacket-atexec.md",
+                "is_readme": false
+              },
+              {
+                "id": "a6ca0d77f3",
+                "title": "impacket-dcomexec",
+                "description": "Uzak Windows sistemlerinde MMC20.Application, ShellWindows ve ShellBrowserWindow gibi meşru DCOM/COM nesnelerini aktive ederek servis kurmadan ve mmc.exe / explorer.exe süreç ağacı altında uzaktan kod yürüten Impacket yanal hareket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/impacket-dcomexec.md",
+                "is_readme": false
+              },
+              {
+                "id": "72bf3daf98",
+                "title": "impacket-psexec",
+                "description": "Windows Service Control Manager (SCM) ve SMB RPC protokollerini kullanarak uzak sistemin ADMIN$ paylaşımına rastgele bir servis ikilisi yükleyen, servis başlatma yoluyla NT AUTHORITY\\SYSTEM yetkisinde tam interaktif kabuk sağlayan Impacket yanal hareket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/impacket-psexec.md",
+                "is_readme": false
+              },
+              {
+                "id": "52f6e31087",
+                "title": "impacket-smbexec",
+                "description": "Uzak sistemin diskine çalıştırılabilir (.exe) servis ikilisi yüklemeden, Windows Service Control Manager (SCM) binPath özniteliğine doğrudan cmd.exe komut dizgisi enjekte eden ve çıktıları yerel SMB paylaşımı üzerinden okuyan Impacket yanal hareket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/impacket-smbexec.md",
+                "is_readme": false
+              },
+              {
+                "id": "d3c4e84b49",
+                "title": "impacket-wmiexec",
+                "description": "Windows Management Instrumentation (WMI) ve DCOM protokolleri üzerinden Win32_Process sınıfını kullanarak hedef sistemde servis oluşturmadan ve diske ikili bırakmadan uzaktan komut yürüten dosyasız Impacket yanal hareket aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_11_Yanal_Hareket_ve_Uzak_Kod_Yurutme/impacket-wmiexec.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi",
+            "folder": "Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi",
+            "title": "Kategori 12 NTDS GPO Sifreleri ve LAPS Hasadi",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi",
+            "articles": [
+              {
+                "id": "eca9df77b4",
+                "title": "12. NTDS.DIT, GPO ŞİFRELERİ VE LAPS HASADI (CREDENTIAL DUMPING & LAPS)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "37990725da",
+                "title": "Get-GPPPassword",
+                "description": "PowerSploit / PowerUp modülleri içerisinde yer alan, etki alanı genelindeki `SYSVOL` paylaşımını özyinelemeli tarayarak GPP XML dosyalarındaki şifreli `cpassword` değerlerini otomatik tespit eden ve bellek içinde düz metne dönüştüren PowerShell aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/Get-GPPPassword.md",
+                "is_readme": false
+              },
+              {
+                "id": "e329dfcb1c",
+                "title": "Grouper2",
+                "description": "Active Directory SYSVOL paylaşımındaki Group Policy Object (GPO) yapılandırmalarını derinlemesine ayrıştırarak güvenlik açığı oluşturan ayarları, yetki devri hatalarını ve gömülü parolaları otomatik puanlayan C# (.NET) aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/Grouper2.md",
+                "is_readme": false
+              },
+              {
+                "id": "ae647c028a",
+                "title": "Invoke-NinjaCopy",
+                "description": "Windows dosya sistemi kilitleme mekanizmalarını ve Volume Shadow Copy (VSS) gereksinimini devre dışı bırakarak, doğrudan ham NTFS disk sektörleri (Raw Disk Access) üzerinden `NTDS.dit` ve `SYSTEM` kovanlarını okuyan PowerShell aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/Invoke-NinjaCopy.md",
+                "is_readme": false
+              },
+              {
+                "id": "133ea80b52",
+                "title": "LAPSToolkit.ps1",
+                "description": "Active Directory ortamlarında Microsoft LAPS (Local Administrator Password Solution) altyapısını denetleyen, yetki devri açıklarını haritalayan ve okunabilir `ms-Mcs-AdmPwd` yerel yönetici parolalarını LDAP üzerinden hasat eden PowerShell aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/LAPSToolkit.md",
+                "is_readme": false
+              },
+              {
+                "id": "7134086540",
+                "title": "gpp-decrypt",
+                "description": "Active Directory SYSVOL paylaşımında depolanan Group Policy Preferences (GPP) XML dosyalarındaki, Microsoft'un kamuya açık statik AES-256 anahtarıyla şifrelenmiş `cpassword` değerlerini anında düz metne dönüştüren hafif şifre çözücü araç.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/gpp-decrypt.md",
+                "is_readme": false
+              },
+              {
+                "id": "24132c256f",
+                "title": "ntdsutil",
+                "description": "Windows Server üzerinde Active Directory veritabanını (`NTDS.dit`) ve şifre çözme anahtarlarını barındıran `SYSTEM` kovanını, yerleşik IFM (Install From Media) mekanizmasıyla Volume Shadow Copy üzerinden diske çıkaran yerleşik yönetim aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/ntdsutil.md",
+                "is_readme": false
+              },
+              {
+                "id": "c2d4d869a1",
+                "title": "pyLAPS",
+                "description": "Linux platformu üzerinden LDAP/LDAPS protokolüyle Active Directory etki alanı denetleyicisine bağlanarak, Pass-the-Hash ve Kerberos biletleri desteğiyle LAPS yerel yönetici parolalarını hasat eden Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/pyLAPS.md",
+                "is_readme": false
+              },
+              {
+                "id": "b4ae17925d",
+                "title": "vssadmin / diskshadow",
+                "description": "Windows Volume Shadow Copy Service (VSS) altyapısını kullanarak kilitli durumdaki Active Directory veritabanının (`NTDS.dit`) ve sistem kovanlarının anlık gölge kopyalarını oluşturan ve dışa aktaran yerleşik yönetim araçları.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_12_NTDS_GPO_Sifreleri_ve_LAPS_Hasadi/vssadmin_diskshadow.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari",
+            "folder": "Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari",
+            "title": "Kategori 13 Tarihi ve Kritik Zafiyet Araclari",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari",
+            "articles": [
+              {
+                "id": "880cf791d5",
+                "title": "13. TARİHİ VE KRİTİK ZAFİYET İSTİSMAR ARAÇLARI (EXPLOIT TOOLING)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "2895c4b81f",
+                "title": "PrintNightmare (CVE-2021-1675 / CVE-2021-34527)",
+                "description": "Windows Print Spooler (`spoolsv.exe`) servisindeki `RpcAddPrinterDriverEx` RPC işlevinin yetki denetimi hatasını istismar ederek, düşük yetkili bir etki alanı kullanıcısıyla hedef sistemde ve etki alanı denetleyicilerinde uzaktan SYSTEM yetkisinde rastgele DLL yürüten sömürü aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari/PrintNightmare.md",
+                "is_readme": false
+              },
+              {
+                "id": "552e0e65b3",
+                "title": "cve-2020-1472-exploit (Zerologon)",
+                "description": "Netlogon Uzaktan Yönetim Protokolü'ndeki (MS-NRPC) AES-CFB8 kriptografik uygulama hatasını istismar ederek, hiçbir kimlik bilgisi olmadan Active Directory etki alanı denetleyicisinin bilgisayar hesabı (`DC$`) parolasını sıfırlayan kritik zafiyet aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari/cve-2020-1472-exploit.md",
+                "is_readme": false
+              },
+              {
+                "id": "2e6357a720",
+                "title": "noPac / sam-the-admin (CVE-2021-42278 & CVE-2021-42287)",
+                "description": "`sAMAccountName` sahteciliği (CVE-2021-42278) ve Kerberos PAC kafa karışıklığı (CVE-2021-42287) zafiyetlerini zincirleyerek, etki alanındaki en düşük yetkili kullanıcı hesabından dakikalar içinde Domain Controller kimliğini taklit eden ve Domain Admin haklarına yükselen istismar aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari/noPac_sam-the-admin.md",
+                "is_readme": false
+              },
+              {
+                "id": "36c0ff293c",
+                "title": "restorepassword.py",
+                "description": "Zerologon (CVE-2020-1472) istismarı sonrasında sıfırlanan etki alanı denetleyicisi makine hesabı (`DC$`) parolasını, yerel SAM kovanındaki orijinal değerine geri yükleyerek Active Directory replikasyonunu ve güvenli kanalı onaran kurtarma aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_13_Tarihi_ve_Kritik_Zafiyet_Araclari/restorepassword.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik",
+            "folder": "Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik",
+            "title": "Kategori 14 AD FS Bulut ve Hibrit Kimlik",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik",
+            "articles": [
+              {
+                "id": "9b64a1b982",
+                "title": "14. AD FS, BULUT VE HİBRİT KİMLİK (FEDERATION & HYBRID PIVOT)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "2976f0e23c",
+                "title": "AADInternals",
+                "description": "Azure AD (Microsoft Entra ID), Office 365, Azure AD Connect ve AD FS altyapılarını yönetmek, hibrit kimlik mekanizmalarını denetlemek ve `MSOL_` senkronizasyon parolaları ile Token-Signing sertifikalarını hasat etmek için geliştirilmiş kapsamlı PowerShell modülü.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik/AADInternals.md",
+                "is_readme": false
+              },
+              {
+                "id": "b430a3bb73",
+                "title": "ADFSpoof (Golden SAML)",
+                "description": "Ele geçirilen AD FS Token-Signing özel anahtarını ve sertifikasını kullanarak, şirket içi sunuculara ihtiyaç duymaksızın herhangi bir kullanıcı adına sahte SAML 2.0 / 1.1 belirteçleri (Golden SAML) üreten ve bulutta parola/MFA olmaksızın oturum açan Python aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik/ADFSpoof.md",
+                "is_readme": false
+              },
+              {
+                "id": "a08f59fbcb",
+                "title": "ROADtools / roadrecon",
+                "description": "Azure AD / Microsoft Entra ID bulut ortamlarındaki kullanıcıları, grupları, rolleri, uygulamaları ve Koşullu Erişim (Conditional Access) politikalarını Microsoft Graph API üzerinden tarayan, yerel SQLite veritabanında depolayan ve görsel web arayüzünde analiz eden keşif çerçevesi.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik/ROADtools_roadrecon.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi",
+            "folder": "Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi",
+            "title": "Kategori 15 Yerel Yetki Yukseltme ve Potato Ailesi",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi",
+            "articles": [
+              {
+                "id": "ef105d8983",
+                "title": "15. YEREL YETKİ YÜKSELTME (LPE) VE POTATO AİLESİ",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "3988dd10d2",
+                "title": "GodPotato",
+                "description": "Windows Server 2008'den Windows Server 2022'ye kadar neredeyse tüm Windows sürümlerinde çalışan, DCOM `IStorage` arayüzü ve yerel RPC dispatching mekanizmasıyla `SeImpersonatePrivilege` yetkisini sömürerek `NT AUTHORITY\\SYSTEM` seviyesine yükselen evrensel (universal) yerel yetki yükseltme aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi/GodPotato.md",
+                "is_readme": false
+              },
+              {
+                "id": "7eaf8b8dfd",
+                "title": "PrintSpoofer",
+                "description": "Windows 10 ve Windows Server 2016/2019/2022 sistemlerde `SeImpersonatePrivilege` yetkisini Print Spooler Named Pipe mekanizması üzerinden istismar ederek `NT AUTHORITY\\SYSTEM` haklarına sıçrayan yüksek performanslı yerel yetki yükseltme (LPE) aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi/PrintSpoofer.md",
+                "is_readme": false
+              },
+              {
+                "id": "855c3f4a93",
+                "title": "SweetPotato / JuicyPotatoNG",
+                "description": "Windows 10 ve Windows Server 2019/2022 sistemlerde DCOM, BITS ve Named Pipe mekanizmalarını birleştirerek `SeImpersonatePrivilege` ve `SeAssignPrimaryTokenPrivilege` hakları üzerinden `NT AUTHORITY\\SYSTEM` seviyesine yerel yetki yükselten yeni nesil Potato ailesi araçları.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_15_Yerel_Yetki_Yukseltme_ve_Potato_Ailesi/SweetPotato_JuicyPotatoNG.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy",
+            "folder": "Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy",
+            "title": "Kategori 16 Tunelleme Pivot ve SOCKS Proxy",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy",
+            "articles": [
+              {
+                "id": "f10a1f5141",
+                "title": "16. TÜNELLEME, PİVOT VE SOCKS PROXY (PIVOTING & TUNNELING)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "18d3427208",
+                "title": "Chisel",
+                "description": "HTTP/WebSocket protokolü üzerinden tünellenmiş ve SSH şifrelemesi ile korunan, kısıtlı kurumsal güvenlik duvarlarını aşarak iç Active Directory ağlarına ters (reverse) veya düz (forward) SOCKS5/TCP erişimi sağlayan yüksek performanslı pivot aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy/Chisel.md",
+                "is_readme": false
+              },
+              {
+                "id": "c7580e54a0",
+                "title": "Ligolo-ng",
+                "description": "Sanal TUN ağ arabirimi kullanarak saldırgan makinesinde doğrudan Katman 3 (IP seviyesinde) yönlendirme sağlayan, Proxychains kısıtlamalarını ortadan kaldırarak yerel araçların iç Active Directory ağlarına şeffaf erişimini mümkün kılan yeni nesil pivot aracı.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy/Ligolo-ng.md",
+                "is_readme": false
+              },
+              {
+                "id": "84055380aa",
+                "title": "Proxychains-ng",
+                "description": "Dinamik olarak bağlanan Linux komut satırı araçlarının TCP ve DNS bağlantılarını `LD_PRELOAD` kancalamasıyla yakalayarak SOCKS4, SOCKS5 veya HTTP vekil sunucuları üzerinden iç Active Directory ağına yönlendiren yeni nesil vekil zinciri yöneticisi.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_16_Tunelleme_Pivot_ve_SOCKS_Proxy/Proxychains-ng.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_17_Modern_EDR_Safe_Beacon_Object_Files",
+            "folder": "Kategori_17_Modern_EDR_Safe_Beacon_Object_Files",
+            "title": "Kategori 17 Modern EDR Safe Beacon Object Files",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_17_Modern_EDR_Safe_Beacon_Object_Files",
+            "articles": [
+              {
+                "id": "f907be4b84",
+                "title": "17. MODERN EDR-SAFE BEACON OBJECT FILES (AD BOFS)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_17_Modern_EDR_Safe_Beacon_Object_Files/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "494337bd9e",
+                "title": "BOF-AD / SA-BOF",
+                "description": "Cobalt Strike, Havoc, Sliver ve Brute Ratel gibi modern C2 altyapılarında çalışan; `Fork & Run` veya alt süreç (child process) türetmeden doğrudan ajan bellek alanı içinde (in-process) C Win32 API'leri ile çalışan EDR-güvenli Active Directory keşif kütüphaneleri.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_17_Modern_EDR_Safe_Beacon_Object_Files/BOF-AD_SA-BOF.md",
+                "is_readme": false
+              }
+            ]
+          },
+          {
+            "id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari_Kategori_18_Cevrimdisi_Parola_Kirma",
+            "folder": "Kategori_18_Cevrimdisi_Parola_Kirma",
+            "title": "Kategori 18 Cevrimdisi Parola Kirma",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_18_Cevrimdisi_Parola_Kirma",
+            "articles": [
+              {
+                "id": "1dbfd65504",
+                "title": "18. ÇEVRİMDIŞI PAROLA KIRMA (OFFLINE CRACKING)",
+                "description": "| No | Araç | Dokümantasyon Dosyası | Ne İçin Kullanılır? (Tanım ve Amaç) |",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_18_Cevrimdisi_Parola_Kirma/README.md",
+                "is_readme": true
+              },
+              {
+                "id": "f1f13922c1",
+                "title": "Hashcat",
+                "description": "Modern GPU (CUDA / OpenCL / Metal) donanım hızlandırmasını kullanarak Active Directory ortamlarından elde edilen NTLM, NetNTLMv2, Kerberoast ve AS-REP bilet hash'lerini saniyede milyarlarca deneme hızıyla çözen dünyanın en gelişmiş çevrimdışı parola kırma motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_18_Cevrimdisi_Parola_Kirma/Hashcat.md",
+                "is_readme": false
+              },
+              {
+                "id": "a384ea46ce",
+                "title": "John the Ripper",
+                "description": "Otomatik hash formatı tespiti, `*2john` dönüştürücü ekosistemi (kirbi2john, pfx2john vb.), Single Crack ve Markov tabanlı Incremental modlarıyla Active Directory NTLM, Kerberos ve sertifika parolalarını çevrimdışı çözen esnek parola kırma motoru.",
+                "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_18_Cevrimdisi_Parola_Kirma/John_the_Ripper.md",
+                "is_readme": false
+              }
+            ]
+          }
+        ],
+        "articles": [
+          {
+            "id": "220b0e752b",
+            "title": "📋 Modül 11: Arac Ustaligi ve Komut Notlari - Genel Bakış",
+            "description": "* [InternalAllTheThings — Active Directory Methodology (Swisskyrepo)](https://swisskyrepo.github.io/InternalAllTheThings/active-directory/)",
+            "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/README.md",
+            "is_readme": true
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "blue_team",
+    "name": "Blue Team (Defansif)",
+    "subtitle": "Tespit Mühendisliği, Savunma, Sertleştirme & Loglar",
+    "dir": "2-Blue_Team",
+    "color": "#3b82f6",
+    "featured_articles": [],
+    "modules": [
+      {
+        "id": "blue_team_Modul_01_Gorunurluk_ve_Log_Yonetimi",
+        "folder": "Modul_01_Gorunurluk_ve_Log_Yonetimi",
+        "title": "Modül 01: Gorunurluk ve Log Yonetimi",
+        "path": "2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "012a6b1800",
+            "title": "📋 Modül 01: Gorunurluk ve Log Yonetimi - Genel Bakış",
+            "description": "Göremediğini savunamazsın. Bu modül dört katmanı kurar: olayı **üret** → merkeze **taşı** → **derinleştir** → **sakla/normalleştir**. Ana ilke:",
+            "path": "2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "ea8a83766d",
+            "title": "01.1 — Windows Event Forwarding (WEF): Merkezî Görünürlüğün Omurgası",
+            "description": "Savunmanın **birinci yasası:** göremediğini savunamazsın. Bir saldırgan DC'ye eriştiği anda ilk işlerinden biri **yerel Security log'unu temizlemektir** (Event ID **1102**). Log DC'nin kendi diskinde ",
+            "path": "2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.1_Windows_Event_Forwarding_WEF.md",
+            "is_readme": false
+          },
+          {
+            "id": "b0f44179c6",
+            "title": "01.2 — Advanced Audit Policy: Hangi Olay, Neden",
+            "description": "[01.1](./01.1_Windows_Event_Forwarding_WEF.md) olayları **taşır**; ama önce olayın **üretilmesi** gerekir. Windows varsayılan olarak güvenlik açısından kritik olayların çoğunu **üretmez** — bir domain",
+            "path": "2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.2_Advanced_Audit_Policy.md",
+            "is_readme": false
+          },
+          {
+            "id": "06ae77deea",
+            "title": "01.3 — Sysmon ile Derin Telemetri",
+            "description": "Windows'un yerleşik Security log'u ([01.2](./01.2_Advanced_Audit_Policy.md)) **kim ne yaptı**'yı iyi anlatır ama **süreçler arası ilişkiyi, ağ bağlantısını, DLL yüklemesini** yeterince göstermez. Örne",
+            "path": "2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.3_Sysmon_ile_Derin_Telemetri.md",
+            "is_readme": false
+          },
+          {
+            "id": "563060762d",
+            "title": "01.4 — Log Toplama, Saklama ve Normalizasyon",
+            "description": "Önceki üç dosya olayı **üretti** ([01.2](./01.2_Advanced_Audit_Policy.md)/[01.3](./01.3_Sysmon_ile_Derin_Telemetri.md)) ve **merkeze taşıdı** ([01.1](./01.1_Windows_Event_Forwarding_WEF.md)). Ama ham ",
+            "path": "2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/01.4_Log_Toplama_Saklama_Normalizasyon.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_02_SIEM_ve_Tespit_Muhendisligi",
+        "folder": "Modul_02_SIEM_ve_Tespit_Muhendisligi",
+        "title": "Modül 02: SIEM ve Tespit Muhendisligi",
+        "path": "2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "e1470a5e32",
+            "title": "📋 Modül 02: SIEM ve Tespit Muhendisligi - Genel Bakış",
+            "description": "Hangi olay saldırıyı ele verir, o olay nasıl taşınabilir kurala dönüşür, kural nasıl doğrulanır. Ana ilke:",
+            "path": "2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "1a543c0efd",
+            "title": "02.1 — Kritik Event ID Kataloğu",
+            "description": "[Blue M01](../Modul_01_Gorunurluk_ve_Log_Yonetimi/) telemetriyi topladı; ama binlerce Event ID içinde **hangileri saldırıyı ele verir?** Tespit mühendisliğinin ilk adımı, gürültü denizinde **yüksek si",
+            "path": "2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.1_Kritik_Event_ID_Katalogu.md",
+            "is_readme": false
+          },
+          {
+            "id": "39cabe456c",
+            "title": "02.2 — Sigma / Elastic / Splunk Kural Yazımı",
+            "description": "[02.1](./02.1_Kritik_Event_ID_Katalogu.md) \"hangi olay saldırıyı ele verir\"i belirledi. Ama her SIEM'in kendi sorgu dili vardır: Splunk **SPL**, Elastic **KQL/EQL**, Sentinel **KQL**, ArcSight kendi d",
+            "path": "2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.2_Sigma_Elastic_Splunk_Kural_Yazimi.md",
+            "is_readme": false
+          },
+          {
+            "id": "4ec5ece437",
+            "title": "02.3 — Kerberoasting ve AS-REP Roasting Tespiti",
+            "description": "Kerberos, kimliği doğrulanmış her kullanıcının **herhangi bir servis için bilet (TGS) isteyebilmesine** izin verir — ve bu bilet, servis hesabının parola hash'iyle (NTLM/RC4 veya AES) **şifrelenir**. ",
+            "path": "2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.3_Kerberoasting_AS_REP_Tespiti.md",
+            "is_readme": false
+          },
+          {
+            "id": "a72ed6f2dd",
+            "title": "02.4 — Atomic Red Team ile Tespit Doğrulama",
+            "description": "Bir tespit kuralı yazdın ([02.2](./02.2_Sigma_Elastic_Splunk_Kural_Yazimi.md)) — **çalıştığını nereden biliyorsun?** Test edilmemiş kural, olmayandan daha tehlikelidir: sahte bir güven verir (\"Kerbero",
+            "path": "2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/02.4_Atomic_Red_Team_ile_Dogrulama.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_03_Kimlik_Bilgisi_Korumasi",
+        "folder": "Modul_03_Kimlik_Bilgisi_Korumasi",
+        "title": "Modül 03: Kimlik Bilgisi Korumasi",
+        "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "413a009f22",
+            "title": "📋 Modül 03: Kimlik Bilgisi Korumasi - Genel Bakış",
+            "description": "Kimlik bilgisi LSASS belleğinde, diskte (DPAPI) ve önbellekte (DCC2) yaşar; hepsi ayrı korunmalı. En değerli kimlik ise riskli makineye **hiç uğramamalı**. Ana ilke:",
+            "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "481791979f",
+            "title": "03.1 — Credential Guard ve LSASS Koruması",
+            "description": "Windows'ta oturum açan her kullanıcının kimlik bilgisi (NTLM hash, Kerberos bileti, bazen düz parola) **LSASS (Local Security Authority Subsystem Service)** sürecinin belleğinde tutulur. Saldırgan bir",
+            "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.1_Credential_Guard_ve_LSASS_Korumasi.md",
+            "is_readme": false
+          },
+          {
+            "id": "918db4bf8d",
+            "title": "03.2 — LAPS ile Yerel Admin Parola Yönetimi",
+            "description": "Kurumsal ortamların en eski, en ölümcül alışkanlığı: **her makinede aynı yerel yönetici (Administrator) parolası.** Bir imaj (golden image) hazırlanır, binlerce makineye kopyalanır — hepsinin yerel ad",
+            "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.2_LAPS_ile_Yerel_Admin_Parola_Yonetimi.md",
+            "is_readme": false
+          },
+          {
+            "id": "191003b88a",
+            "title": "03.3 — Protected Users, Authentication Policies ve Silos",
+            "description": "[03.1](./03.1_Credential_Guard_ve_LSASS_Korumasi.md) kimlik sırlarını bellekte korudu; ama en değerli hesapları (Domain Admins) **hiç riskli yere düşmemeleri** için kısıtlamak daha güçlüdür. Bir Domai",
+            "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.3_Protected_Users_ve_Authentication_Policies.md",
+            "is_readme": false
+          },
+          {
+            "id": "50cd7afc72",
+            "title": "03.4 — DPAPI ve Önbelleklenmiş Kimlik Bilgisi Riski",
+            "description": "Kimlik bilgisi yalnızca LSASS belleğinde ([03.1](./03.1_Credential_Guard_ve_LSASS_Korumasi.md)) değil, **diskte de** durur: tarayıcı parolaları, kayıtlı RDP/kimlik bilgileri, WiFi anahtarları, sertifi",
+            "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.4_DPAPI_ve_Onbelleklenmis_Kimlik.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_04_Yanal_Hareket_Tespiti",
+        "folder": "Modul_04_Yanal_Hareket_Tespiti",
+        "title": "Modül 04: Yanal Hareket Tespiti",
+        "path": "2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "f847c97b24",
+            "title": "📋 Modül 04: Yanal Hareket Tespiti - Genel Bakış",
+            "description": "Yanal hareket iki adımdır: kimliğe bürün + komut çalıştır. Her adım iz bırakır; anomali (baseline sapması) ve deception (tuzak) ile yakalanır. Ana ilke:",
+            "path": "2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "1574e644ab",
+            "title": "04.1 — Anormal Oturum Açma Analizi (4624 LogonType)",
+            "description": "Saldırgan tek bir makineye girdikten sonra amacı **yayılmaktır** (lateral movement): bir makineden diğerine atlayarak Domain Admin'e ve DC'ye ulaşmak. Her atlama, hedef makinede bir **oturum açma olay",
+            "path": "2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.1_Anormal_Oturum_Acma_Analizi.md",
+            "is_readme": false
+          },
+          {
+            "id": "ab742fd162",
+            "title": "04.2 — Pass-the-Hash ve Pass-the-Ticket Tespiti",
+            "description": "Kerberos ve NTLM'in temel zaafı: **kimlik doğrulaması parolanın kendisini değil, ondan türetilen bir \"sırrı\" (NTLM hash veya Kerberos bileti) kullanır.** Saldırgan bu sırrı çalarsa ([Blue M03](../Modu",
+            "path": "2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.2_Pass_the_Hash_Ticket_Tespiti.md",
+            "is_readme": false
+          },
+          {
+            "id": "5a24525a3f",
+            "title": "04.3 — Uzak Yürütme İzleri (PsExec / WMI / WinRM)",
+            "description": "Çalınan kimlik ([04.2](./04.2_Pass_the_Hash_Ticket_Tespiti.md)) tek başına yetmez; saldırgan hedef makinede **komut çalıştırmak** ister. Bunun için \"yaşayan araçları\" (living-off-the-land) kullanır — ",
+            "path": "2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.3_Uzak_Yurutme_Izleri.md",
+            "is_readme": false
+          },
+          {
+            "id": "69a1aab9af",
+            "title": "04.4 — Honeytoken ve Honey-Account Kullanımı",
+            "description": "Şimdiye kadarki tespitler ([04.1](./04.1_Anormal_Oturum_Acma_Analizi.md)–[04.3](./04.3_Uzak_Yurutme_Izleri.md)) **anormali** aramaya dayanır — ki bu her zaman gürültü/yanlış-pozitif riski taşır. **Hon",
+            "path": "2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/04.4_Honeytoken_ve_Honey_Account.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_05_Yetki_ve_ACL_Sikilastirma",
+        "folder": "Modul_05_Yetki_ve_ACL_Sikilastirma",
+        "title": "Modül 05: Yetki ve ACL Sikilastirma",
+        "path": "2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "a1e31f26c0",
+            "title": "📋 Modül 05: Yetki ve ACL Sikilastirma - Genel Bakış",
+            "description": "Yetki grup üyeliğiyle *görünür*, DACL ile *görünmez* verilir. Saldırgan görünmez yolları arar; savunma aynı grafiği çizip budar. Ana ilke:",
+            "path": "2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "52e76d5e52",
+            "title": "05.1 — Admin Tier Model (Tier 0-1-2) Tasarımı",
+            "description": "Yanal hareketin ([Blue M04](../Modul_04_Yanal_Hareket_Tespiti/)) en yıkıcı biçimi **kimlik bilgisi hırsızlığıyla dikey tırmanıştır**: saldırgan bir iş istasyonundan Domain Admin'e ulaşır. Bunun kök ne",
+            "path": "2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.1_Admin_Tier_Model.md",
+            "is_readme": false
+          },
+          {
+            "id": "34105e05a5",
+            "title": "05.2 — Tehlikeli DACL Denetimi ve Temizliği",
+            "description": "Tier Model ([05.1](./05.1_Admin_Tier_Model.md)) \"kim nereden oturum açar\"ı kilitler; ama AD'de yetki yalnızca grup üyeliğiyle değil, **her nesnenin üzerindeki DACL (Discretionary ACL) ile** de verilir",
+            "path": "2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.2_Tehlikeli_DACL_Denetimi_ve_Temizligi.md",
+            "is_readme": false
+          },
+          {
+            "id": "ff4346189a",
+            "title": "05.3 — GPO Güvenliği ve Yetki Devri Hijyeni",
+            "description": "GPO (Group Policy Object), bir OU'daki **tüm** makine ve kullanıcıya kod/ayar dağıtan güçlü bir mekanizmadır ([Sistem 04.1](../../1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.1_GPO_Mimarisi_ve_Is",
+            "path": "2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.3_GPO_Guvenligi_ve_Yetki_Devri_Hijyeni.md",
+            "is_readme": false
+          },
+          {
+            "id": "327ce2d46e",
+            "title": "05.4 — AdminSDHolder ve SDProp İzleme",
+            "description": "AD, ayrıcalıklı hesapların (Domain Admins, Enterprise Admins, vb.) DACL'lerinin **yanlışlıkla gevşetilmemesi** için özel bir koruma mekanizması içerir: **AdminSDHolder** ve onu her 60 dakikada bir uyg",
+            "path": "2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/05.4_AdminSDHolder_ve_SDProp_Izleme.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_06_Kerberos_ve_Delegation_Sertlestirme",
+        "folder": "Modul_06_Kerberos_ve_Delegation_Sertlestirme",
+        "title": "Modül 06: Kerberos ve Delegation Sertlestirme",
+        "path": "2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "87addf8e47",
+            "title": "📋 Modül 06: Kerberos ve Delegation Sertlestirme - Genel Bakış",
+            "description": "Delegation \"senin adına başkasına gidebilme\" yetkisidir; yanlış verildiğinde ayrıcalık yükseltme yoludur. Zayıf şifreleme bileti kırılabilir kılar; forge PAC sahte yetki yazar. Ana ilke:",
+            "path": "2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "1ec26479eb",
+            "title": "06.1 — Delegation Envanteri ve Gereksizlerin Kaldırılması",
+            "description": "Kerberos **delegation**, bir servisin kullanıcının kimliğine bürünerek **arka uçtaki başka bir servise** kullanıcı adına erişmesine izin verir (örn. web sunucusu, kullanıcı adına SQL'e bağlanır). Meşr",
+            "path": "2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.1_Delegation_Envanteri_ve_Temizligi.md",
+            "is_readme": false
+          },
+          {
+            "id": "a6837585a3",
+            "title": "06.2 — Unconstrained Delegation Riskleri ve Önlemi",
+            "description": "Unconstrained delegation, delegation türleri içinde ([06.1](./06.1_Delegation_Envanteri_ve_Temizligi.md)) **en tehlikelisidir** ve kendi başına derin bir inceleme hak eder. Mekanizması basit ama yıkıc",
+            "path": "2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.2_Unconstrained_Delegation_Riskleri_ve_Onlemi.md",
+            "is_readme": false
+          },
+          {
+            "id": "1eef1fe8d8",
+            "title": "06.3 — AES Zorlama, RC4 Devre Dışı ve PAC Doğrulama",
+            "description": "Kerberos'un güvenliği kullandığı **şifreleme algoritmasına** bağlıdır. Eski **RC4-HMAC (etype 0x17)**, kullanıcının NTLM hash'ini doğrudan anahtar olarak kullanır ve **çok hızlı kırılır** — Kerberoast",
+            "path": "2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.3_AES_Zorlama_RC4_ve_PAC.md",
+            "is_readme": false
+          },
+          {
+            "id": "cdf09be10c",
+            "title": "06.4 — Kerberos Anomali İzleme",
+            "description": "Sertleştirme ([06.1](./06.1_Delegation_Envanteri_ve_Temizligi.md)–[06.3](./06.3_AES_Zorlama_RC4_ve_PAC.md)) saldırı yüzeyini **daraltır**; ama hiçbir sertleştirme mükemmel değildir. Kerberos'un kalan ",
+            "path": "2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/06.4_Kerberos_Anomali_Izleme.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_07_AD_CS_PKI_Guvenligi",
+        "folder": "Modul_07_AD_CS_PKI_Guvenligi",
+        "title": "Modül 07: AD CS PKI Guvenligi",
+        "path": "2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "9e2c946ab6",
+            "title": "📋 Modül 07: AD CS PKI Guvenligi - Genel Bakış",
+            "description": "Sertifika parola/hash gerektirmez, uzun ömürlüdür ve krbtgt reset'ini atlatır. Yanlış bir şablon veya tek bir CA bayrağı tüm domain'i düşürür. Ana ilke:",
+            "path": "2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "cbfcc67200",
+            "title": "07.1 — Sertifika Şablonu İzin Denetimi (ESC1-8 Önleme)",
+            "description": "AD CS (Active Directory Certificate Services), kimlik doğrulama için sertifika dağıtır ([Sistem 07.2](../../1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.2_Sertifika_Sablonlari_ve_Izinle",
+            "path": "2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.1_Sertifika_Sablonu_Izin_Denetimi_ESC.md",
+            "is_readme": false
+          },
+          {
+            "id": "389f38f610",
+            "title": "07.2 — CA Hardening ve EDITF_ATTRIBUTESUBJECTALTNAME2 (ESC6)",
+            "description": "Şablonlar temiz olsa bile ([07.1](./07.1_Sertifika_Sablonu_Izin_Denetimi_ESC.md)), **CA'nın (Certification Authority) kendisi** yanlış yapılandırılmışsa tüm PKI çöker. En kötü şöhretli örnek **ESC6**:",
+            "path": "2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.2_CA_Hardening_ve_ESC6.md",
+            "is_readme": false
+          },
+          {
+            "id": "a735233e64",
+            "title": "07.3 — Sertifika Tabanlı Kalıcılık Tespiti",
+            "description": "Sertifika tabanlı saldırıların en sinsi yanı **kalıcılıktır (persistence)**. Bir parola/hash çalındığında savunma yanıtı basittir: parolayı değiştir, krbtgt'yi resetle. Ama saldırgan geçerli bir **kim",
+            "path": "2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.3_Sertifika_Tabanli_Kalicilik_Tespiti.md",
+            "is_readme": false
+          },
+          {
+            "id": "8ef118f5d7",
+            "title": "07.4 — PKI İzleme ve Olay Kayıtları",
+            "description": "Önceki üç dosya PKI'yı **sertleştirdi** ([07.1](./07.1_Sertifika_Sablonu_Izin_Denetimi_ESC.md)–[07.3](./07.3_Sertifika_Tabanli_Kalicilik_Tespiti.md)); ama sertleştirme statiktir — sürekli **izleme** o",
+            "path": "2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/07.4_PKI_Izleme_ve_Olay_Kayitlari.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme",
+        "folder": "Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme",
+        "title": "Modül 08: Protokol Sertlestirme ve Relay Onleme",
+        "path": "2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "20a44081a1",
+            "title": "📋 Modül 08: Protokol Sertlestirme ve Relay Onleme - Genel Bakış",
+            "description": "Relay, kimlik doğrulamayı bağlamından koparıp başka yere taşımaktır; koersiyon ise kurbanı (DC'yi bile) zorla getirir. Zincir çok noktalı kesilir. Ana ilke:",
+            "path": "2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "279bb2a893",
+            "title": "08.1 — LDAP Signing ve Channel Binding (EPA)",
+            "description": "NTLM relay saldırısının temel hilesi basittir: saldırgan, bir kurbanın kimlik doğrulamasını **yakalar** ve onu **başka bir sunucuya aynen iletir (relay)**. Kurban DC'ye yetkiliyse, saldırgan o yetkiyl",
+            "path": "2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.1_LDAP_Signing_ve_Channel_Binding.md",
+            "is_readme": false
+          },
+          {
+            "id": "3701779694",
+            "title": "08.2 — SMB Signing Zorlama",
+            "description": "SMB (Server Message Block), Windows dosya paylaşımı ve birçok yönetim işleminin (PsExec → [Blue 04.3](../Modul_04_Yanal_Hareket_Tespiti/04.3_Uzak_Yurutme_Izleri.md)) taşıyıcısıdır. **SMB relay**, LDAP",
+            "path": "2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.2_SMB_Signing_Zorlama.md",
+            "is_readme": false
+          },
+          {
+            "id": "291a465415",
+            "title": "08.3 — NTLM Kısıtlama ve NTLMv2 Zorlama",
+            "description": "Signing ([08.1](./08.1_LDAP_Signing_ve_Channel_Binding.md)/[08.2](./08.2_SMB_Signing_Zorlama.md)) relay'i **belirli protokollerde** durdurur; ama en köklü çözüm, **NTLM'i baştan kullanmamaktır**. NTLM",
+            "path": "2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.3_NTLM_Kisitlama_ve_NTLMv2.md",
+            "is_readme": false
+          },
+          {
+            "id": "de158cad0e",
+            "title": "08.4 — Koersiyon Önleme (PetitPotam / PrinterBug / DFSCoerce)",
+            "description": "NTLM relay ([08.1](./08.1_LDAP_Signing_ve_Channel_Binding.md)–[08.3](./08.3_NTLM_Kisitlama_ve_NTLMv2.md)) bir kurbanın kimlik doğrulamasını **yakalamayı** gerektirir. Ama saldırgan pasif beklemek zoru",
+            "path": "2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/08.4_Koersiyon_Onleme_PetitPotam_PrinterBug.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_09_Tehdit_Avciligi_ve_Degerlendirme",
+        "folder": "Modul_09_Tehdit_Avciligi_ve_Degerlendirme",
+        "title": "Modül 09: Tehdit Avciligi ve Degerlendirme",
+        "path": "2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "0e46029e5a",
+            "title": "📋 Modül 09: Tehdit Avciligi ve Degerlendirme - Genel Bakış",
+            "description": "Saldırgan tekil hataya değil, hatalar zincirine bakar; savunma da öyle bakmalı ve saldırgandan önce ölçmeli. Ana ilke:",
+            "path": "2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "3390b1b8b1",
+            "title": "09.1 — BloodHound ile Savunma Amaçlı Saldırı Yolu Analizi",
+            "description": "Önceki Blue modülleri tekil kontrolleri sertleştirdi ([Blue M05](../Modul_05_Yetki_ve_ACL_Sikilastirma/)–[Blue M08](../Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/)); ama saldırgan tekil kontroller",
+            "path": "2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.1_BloodHound_ile_Savunma_Analizi.md",
+            "is_readme": false
+          },
+          {
+            "id": "00a38ad97d",
+            "title": "09.2 — PingCastle ile Risk Skorlama",
+            "description": "BloodHound ([09.1](./09.1_BloodHound_ile_Savunma_Analizi.md)) belirli attack path'leri gösterir; ama yönetim ve denetim, domain'in **genel güvenlik duruşunu** tek bir ölçülebilir sayıyla da görmek ist",
+            "path": "2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.2_PingCastle_ile_Risk_Skorlama.md",
+            "is_readme": false
+          },
+          {
+            "id": "44b224e9a1",
+            "title": "09.3 — Purple Knight ve Forest Druid ile Tier-0 Haritalama",
+            "description": "BloodHound ([09.1](./09.1_BloodHound_ile_Savunma_Analizi.md)) attack path'i, PingCastle ([09.2](./09.2_PingCastle_ile_Risk_Skorlama.md)) genel skoru verir; ama bir savunmacının cevaplaması gereken en ",
+            "path": "2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.3_Purple_Knight_ve_Forest_Druid.md",
+            "is_readme": false
+          },
+          {
+            "id": "6bbbfd7864",
+            "title": "09.4 — Düzenli Proaktif Değerlendirme Süreci",
+            "description": "Tekil araçlar ([09.1](./09.1_BloodHound_ile_Savunma_Analizi.md)–[09.3](./09.3_Purple_Knight_ve_Forest_Druid.md)) tek seferlik bir fotoğraf verir; ama AD **canlı bir organizmadır**: her gün yeni hesapl",
+            "path": "2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/09.4_Duzenli_Proaktif_Degerlendirme.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "blue_team_Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma",
+        "folder": "Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma",
+        "title": "Modül 10: Olay Mudahalesi DFIR ve Kurtarma",
+        "path": "2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "914d154047",
+            "title": "📋 Modül 10: Olay Mudahalesi DFIR ve Kurtarma - Genel Bakış",
+            "description": "Tespit ve değerlendirme bir saldırıyı ortaya çıkardığında \"şimdi ne yapmalı?\" sorusunun disiplinli cevabı. AD'nin kritik zorluğu: Tier 0 ele geçtiyse ortam güvenilmezdir. Ana ilke:",
+            "path": "2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "ce1bc58c5b",
+            "title": "10.1 — IR Playbook: Tespitten Containment'a",
+            "description": "Tespit ([Blue M02](../Modul_02_SIEM_ve_Tespit_Muhendisligi/)) ve değerlendirme ([Blue M09](../Modul_09_Tehdit_Avciligi_ve_Degerlendirme/)) bir saldırıyı ortaya çıkardığında kritik soru şudur: **şimdi ",
+            "path": "2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.1_IR_Playbook_Tespitten_Containment.md",
+            "is_readme": false
+          },
+          {
+            "id": "4e7407b0b4",
+            "title": "10.2 — KRBTGT Çift-Reset ve Ticket Geçersiz Kılma",
+            "description": "**krbtgt**, domain'in Kerberos anahtar dağıtım hesabıdır; onun parola hash'i tüm TGT'leri (Ticket Granting Ticket) imzalar/şifreler. Bir saldırgan bu hash'i ele geçirirse (DCSync → [Blue 05.2](../Modu",
+            "path": "2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.2_KRBTGT_Cift_Reset_ve_Ticket_Gecersizlestirme.md",
+            "is_readme": false
+          },
+          {
+            "id": "bca86bb3ba",
+            "title": "10.3 — NTDS.dit Adli Analizi ve Timeline",
+            "description": "Bir olay containment ([10.1](./10.1_IR_Playbook_Tespitten_Containment.md)) ve eradication ([10.2](./10.2_KRBTGT_Cift_Reset_ve_Ticket_Gecersizlestirme.md)) sonrasında iki soru cevaplanmalıdır: **\"Saldı",
+            "path": "2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.3_NTDS_Adli_Analiz_ve_Timeline.md",
+            "is_readme": false
+          },
+          {
+            "id": "bdc4ac67aa",
+            "title": "10.4 — Forest Recovery Süreci",
+            "description": "Bazı ihlaller o kadar derindir ki **kısmi temizlik güvenilmezdir**: saldırgan tüm DC'leri ele geçirmiş, krbtgt'yi ve NTDS'i çalmış, birden çok kalıcılık (Golden Ticket, Shadow Credentials, AdminSDHold",
+            "path": "2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/10.4_Forest_Recovery_Sureci.md",
+            "is_readme": false
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sistem_yoneticisi",
+    "name": "Sistem Yöneticisi (Altyapı)",
+    "subtitle": "Active Directory Mimarisi, Yönetim & Temeller",
+    "dir": "1-Sistem_Yoneticisi",
+    "color": "#10b981",
+    "featured_articles": [],
+    "modules": [
+      {
+        "id": "sistem_yoneticisi_Modul_01_Mimari_ve_Temeller",
+        "folder": "Modul_01_Mimari_ve_Temeller",
+        "title": "Modül 01: Mimari ve Temeller",
+        "path": "1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "9f8be651b5",
+            "title": "📋 Modül 01: Mimari ve Temeller - Genel Bakış",
+            "description": "Bir AD ortamına baktığında \"bu neden böyle kurulmuş, sınırlar nerede, kim neye hükmediyor?\" sorularını yanıtlayabileceksin. Özellikle tüm mimarinin dayandığı tek ilkeyi içselleştireceksin:",
+            "path": "1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "3b361daa57",
+            "title": "01.1 — Mantıksal Hiyerarşi: Forest, Tree, Domain, OU",
+            "description": "Active Directory'yi bir **kale ve krallık** olarak düşün. Bir krallığı yönetmek için üç şeye ihtiyacın var: sınırların nerede olduğunu bilmek (kim içeride/dışarıda), kimin kime hükmettiğini bilmek (yö",
+            "path": "1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.1_Mantiksal_Hiyerarsi.md",
+            "is_readme": false
+          },
+          {
+            "id": "8740d7978d",
+            "title": "01.2 — Schema, Global Catalog ve Partition (Naming Context) Yapısı",
+            "description": "AD aslında dağıtık, çoğaltmalı bir **LDAP veritabanıdır** (fiziksel dosyası `NTDS.dit` → [Modül 10](../Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/)). Her veritabanının üç şeye ihtiyacı vardır:",
+            "path": "1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.2_Schema_Global_Catalog_Partitionlar.md",
+            "is_readme": false
+          },
+          {
+            "id": "34fd782f2a",
+            "title": "01.3 — Forest ve Domain Fonksiyon Seviyeleri (Functional Levels)",
+            "description": "Bir AD ortamı yıllar boyunca farklı Windows Server sürümlerindeki DC'leri barındırır (2012 R2, 2016, 2019, 2022…). Her yeni sürüm, AD'ye yeni özellikler getirir — ama bu özelliklerin çoğu **tüm DC'ler",
+            "path": "1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.3_Fonksiyon_Seviyeleri.md",
+            "is_readme": false
+          },
+          {
+            "id": "8a7f0bc9b8",
+            "title": "01.4 — Trust (Güven) İlişkileri: Tasarım Perspektifi",
+            "description": "[01.1](./01.1_Mantiksal_Hiyerarsi.md)'de \"forest güvenlik sınırıdır\" dedik. Peki iki farklı domain — hatta iki farklı forest — birbirinin kullanıcılarına kaynak erişimi vermek isterse ne olur? Örneğin",
+            "path": "1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/01.4_Trust_Iliskileri.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_02_Fiziksel_Altyapi_ve_Replikasyon",
+        "folder": "Modul_02_Fiziksel_Altyapi_ve_Replikasyon",
+        "title": "Modül 02: Fiziksel Altyapi ve Replikasyon",
+        "path": "1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "635e163b8a",
+            "title": "📋 Modül 02: Fiziksel Altyapi ve Replikasyon - Genel Bakış",
+            "description": "Bir AD ortamının fiziksel omurgasını okuyabilecek ve sağlığını teşhis edebileceksin: Hangi DC nerede, istemci neden o DC'ye gidiyor, değişiklikler nasıl yayılıyor, hangi işler tek-yetkili (FSMO), ve r",
+            "path": "1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "f2cf6baa90",
+            "title": "02.1 — Domain Controller, Site'lar ve Subnet-Site Eşlemesi",
+            "description": "[Modül 01](../Modul_01_Mimari_ve_Temeller/)'de AD'nin **mantıksal** yapısını (forest/domain/OU) kurduk. Ama bu mantıksal yapı gerçek dünyada **fiziksel sunucular** ve **ağlar** üzerinde koşar. İstanbu",
+            "path": "1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.1_Domain_Controller_ve_Site_Topolojisi.md",
+            "is_readme": false
+          },
+          {
+            "id": "4255856577",
+            "title": "02.2 — Replikasyon: KCC, Bridgehead, Intrasite/Intersite",
+            "description": "AD **multi-master** bir dizindir: forest'taki (bir istisna dışında, bkz. [02.3 FSMO](./02.3_FSMO_Rolleri.md)) **her DC yazılabilir**. Bir kullanıcının parolasını Frankfurt'taki DC'de değiştirebilir, a",
+            "path": "1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.2_Replikasyon_KCC_ve_Bridgehead.md",
+            "is_readme": false
+          },
+          {
+            "id": "7ca360afd5",
+            "title": "02.3 — FSMO Rolleri, Yerleşimi ve PDC Emulator / NTP",
+            "description": "[02.2](./02.2_Replikasyon_KCC_ve_Bridgehead.md)'de \"AD multi-master'dır, her DC yazabilir\" dedik. Ama bazı işlemler için multi-master **tehlikelidir**. Örnek: İki farklı DC aynı anda yeni nesneler olu",
+            "path": "1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.3_FSMO_Rolleri.md",
+            "is_readme": false
+          },
+          {
+            "id": "bb5170d66b",
+            "title": "02.4 — RODC, USN Rollback, Tombstone ve Replikasyon Sağlığı",
+            "description": "Bu bölüm iki \"tehlike\" ve onların savunmasını birleştirir:",
+            "path": "1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.4_RODC_USN_Rollback_ve_Saglik.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_03_Nesne_ve_Kimlik_Yonetimi",
+        "folder": "Modul_03_Nesne_ve_Kimlik_Yonetimi",
+        "title": "Modül 03: Nesne ve Kimlik Yonetimi",
+        "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "54c1874cb7",
+            "title": "📋 Modül 03: Nesne ve Kimlik Yonetimi - Genel Bakış",
+            "description": "Kimin hangi isimle var olduğunu, hesapların hangi özniteliklerinin güvenlik kritik olduğunu, kaynak erişiminin AGDLP ile nasıl düzenlendiğini ve servis hesaplarının Kerberoasting'e karşı gMSA ile nası",
+            "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "bbe376482a",
+            "title": "03.1 — OU Tasarımı ve Yetki Devri (Delegation)",
+            "description": "[01.1](../Modul_01_Mimari_ve_Temeller/01.1_Mantiksal_Hiyerarsi.md)'de OU'nun iki amacını gördük: **GPO bağlama** ([Modül 04](../Modul_04_Grup_Ilkeleri_GPO/)) ve **yetki devri**. Bu dosya ikincisine od",
+            "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.1_OU_Tasarimi_ve_Yetki_Devri.md",
+            "is_readme": false
+          },
+          {
+            "id": "47a5a80628",
+            "title": "03.2 — Hesap Yönetimi: UPN vs sAMAccountName, userAccountControl ve Attribute Editor",
+            "description": "Bir kullanıcı \"kim olduğunu\" AD'ye birden çok isimle söyleyebilir: `CORP\\aliveli`, `aliveli@corp.local`, hatta tam DN. Bunlar aynı hesabın farklı **isimlendirme öznitelikleridir** ve her birinin tarih",
+            "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.2_Hesap_Yonetimi.md",
+            "is_readme": false
+          },
+          {
+            "id": "f1565bddd1",
+            "title": "03.3 — Grup Ustalığı: Türler, Kapsamlar ve AGDLP",
+            "description": "[03.1](./03.1_OU_Tasarimi_ve_Yetki_Devri.md)'de OU'nun *yönetim* için, grubun ise *kaynak erişimi* için nesne topladığını söyledik. Ama \"gruba kullanıcı ekle, gruba izin ver\" kadar basit değil: AD'de ",
+            "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.3_Grup_Ustaligi_AGDLP.md",
+            "is_readme": false
+          },
+          {
+            "id": "d45e56c038",
+            "title": "03.4 — Özel Hesaplar (MSA/gMSA/dMSA) ve Granüler Parola Politikaları (FGPP)",
+            "description": "İki ayrı ama akraba problem:",
+            "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.4_gMSA_ve_FGPP.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_04_Grup_Ilkeleri_GPO",
+        "folder": "Modul_04_Grup_Ilkeleri_GPO",
+        "title": "Modül 04: Grup Ilkeleri GPO",
+        "path": "1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "6494bacde8",
+            "title": "📋 Modül 04: Grup Ilkeleri GPO - Genel Bakış",
+            "description": "Bir ayarın nerede saklandığını (GPC/GPT), hangi sırayla ve hangi istisnalarla uygulandığını (LSDOU/Enforced/Block), nasıl ince hedeflendiğini (Security/WMI/ILT), pratikte neyin yapıldığını (güvenlik/A",
+            "path": "1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "6f5eb51b8c",
+            "title": "04.1 — GPO Mimarisi ve İşleyişi: LSDOU, GPC/GPT, Slow Link",
+            "description": "[01.1](../Modul_01_Mimari_ve_Temeller/01.1_Mantiksal_Hiyerarsi.md)'de OU'nun iki amacı vardı: yetki devri ([03.1](../Modul_03_Nesne_ve_Kimlik_Yonetimi/03.1_OU_Tasarimi_ve_Yetki_Devri.md)) ve **GPO bağ",
+            "path": "1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.1_GPO_Mimarisi_ve_Isleyis.md",
+            "is_readme": false
+          },
+          {
+            "id": "8c02a3667b",
+            "title": "04.2 — GPO Hedefleme ve Filtreleme: Security Filtering, WMI, Item-Level Targeting",
+            "description": "[04.1](./04.1_GPO_Mimarisi_ve_Isleyis.md)'de GPO'yu bir OU'ya bağladık — ama bir OU \"hepsi ya da hiçbiri\" kabadır. Gerçek hayatta daha ince hedefleme istersin: \"Bu GPO, Muhasebe OU'sundaki kullanıcıla",
+            "path": "1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.2_Hedefleme_ve_Filtreleme.md",
+            "is_readme": false
+          },
+          {
+            "id": "29f8b86275",
+            "title": "04.3 — Pratik Uygulamalar: Güvenlik Politikaları, ADMX/Central Store, GPP",
+            "description": "Mekanizmayı ([04.1](./04.1_GPO_Mimarisi_ve_Isleyis.md)/[04.2](./04.2_Hedefleme_ve_Filtreleme.md)) öğrendik; şimdi **GPO ile gerçekte ne yapılır?** Dört ana kullanım alanı:",
+            "path": "1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.3_Pratik_Uygulamalar_ADMX_GPP.md",
+            "is_readme": false
+          },
+          {
+            "id": "eb6bdced94",
+            "title": "04.4 — GPO Sorun Giderme ve Analiz: gpresult, RSoP, Modelleme",
+            "description": "GPO'nun en sık duyulan cümlesi: **\"Ayarı yaptım ama uygulanmıyor.\"** GPO işleyişi çok katmanlı olduğu için (LSDOU + Enforced/Block + Security/WMI filtreleme + replikasyon + CSE + slow link), bir ayarı",
+            "path": "1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/04.4_Sorun_Giderme_ve_Analiz.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_05_DNS_ve_Ad_Cozumleme",
+        "folder": "Modul_05_DNS_ve_Ad_Cozumleme",
+        "title": "Modül 05: DNS ve Ad Cozumleme",
+        "path": "1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "0925993e5d",
+            "title": "📋 Modül 05: DNS ve Ad Cozumleme - Genel Bakış",
+            "description": "AD-Integrated DNS'in nasıl çalıştığını, hangi SRV kayıtlarının hayati olduğunu, ölü kayıtların nasıl temizlendiğini (aging/scavenging), DNS'in nasıl sertleştirildiğini (secure updates + DNSSEC) ve bir",
+            "path": "1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "d4424071ce",
+            "title": "05.1 — AD-Integrated Zones ve Kritik SRV Kayıtları",
+            "description": "Active Directory, DNS olmadan **çalışamaz.** [02.1](../Modul_02_Fiziksel_Altyapi_ve_Replikasyon/02.1_Domain_Controller_ve_Site_Topolojisi.md)'deki DC Locator sürecini hatırla: bir istemci \"domain cont",
+            "path": "1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.1_AD_Integrated_Zones_ve_SRV.md",
+            "is_readme": false
+          },
+          {
+            "id": "9e9a956cd6",
+            "title": "05.2 — Aging ve Scavenging: Stale (Eski) Kayıtların Otomatik Temizliği",
+            "description": "Modern AD ortamında istemciler DNS kayıtlarını **dinamik olarak** kendileri oluşturur (DHCP'den IP alınca A kaydını günceller). Ama bir dizüstü bilgisayar hurdaya çıkınca, ya da IP değişince, **eski (",
+            "path": "1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.2_Aging_ve_Scavenging.md",
+            "is_readme": false
+          },
+          {
+            "id": "2e65b538f0",
+            "title": "05.3 — DNS Güvenliği: DNSSEC ve Secure Dynamic Updates",
+            "description": "DNS iki yönden manipüle edilebilir ve her biri farklı savunma ister:",
+            "path": "1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.3_DNSSEC_ve_Secure_Updates.md",
+            "is_readme": false
+          },
+          {
+            "id": "e53a91e06e",
+            "title": "05.4 — DNS Sorun Giderme: nslookup, Resolve-DnsName, dcdiag /test:dns",
+            "description": "AD'de \"oturum açamıyorum\", \"replikasyon çalışmıyor\", \"GPO gelmiyor\", \"trust kırıldı\" şikayetlerinin şaşırtıcı derecede büyük kısmının kök nedeni **DNS**tir. Çünkü AD'nin her parçası ([02.1](../Modul_0",
+            "path": "1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/05.4_Sorun_Giderme.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_06_Depolama_ve_Dosya_Servisleri",
+        "folder": "Modul_06_Depolama_ve_Dosya_Servisleri",
+        "title": "Modül 06: Depolama ve Dosya Servisleri",
+        "path": "1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "9590e9990c",
+            "title": "📋 Modül 06: Depolama ve Dosya Servisleri - Genel Bakış",
+            "description": "Fiziksel paylaşımların önüne konan sanal isim alanını (DFS-N), kopyaları senkron tutan motoru (DFS-R), disk/güvenlik yönetimini (FSRM) ve GPO'ların yaşadığı SYSVOL'ün nasıl replike olduğunu. Ana ilke:",
+            "path": "1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "f405c0d23f",
+            "title": "06.1 — DFS Namespaces (DFS-N) Tasarımı",
+            "description": "Kullanıcılar dosya paylaşımlarına genelde `\\\\FS01\\Muhasebe` gibi **fiziksel sunucu adıyla** bağlanır. Bu kırılgandır: sunucu değişirse (`FS01` → `FS05`), taşınırsa, ya da farklı lokasyonlarda kopyalar",
+            "path": "1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.1_DFS_Namespaces.md",
+            "is_readme": false
+          },
+          {
+            "id": "2d9064de4f",
+            "title": "06.2 — DFS-R Replikasyonu ve dfsrdiag Sağlık Kontrolü",
+            "description": "[06.1](./06.1_DFS_Namespaces.md)'de bir mantıksal klasörün birden çok fiziksel hedefi olabileceğini gördük (`\\\\FS01\\Muhasebe` + `\\\\FS05\\Muhasebe`). Peki bu iki kopya **nasıl aynı kalır?** Ankara'da bi",
+            "path": "1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.2_DFS_R_Replikasyon.md",
+            "is_readme": false
+          },
+          {
+            "id": "06d7599785",
+            "title": "06.3 — FSRM: Kota, Dosya Engelleme ve Depolama Raporları",
+            "description": "Dosya sunucuları kontrolsüz büyür: kullanıcılar sınırsız veri yığar, film/ISO gibi istenmeyen dosyalar paylaşımları doldurur, ve en tehlikelisi — **ransomware** dosyaları şifreleyip fidye notları bıra",
+            "path": "1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.3_FSRM_Kota_ve_Dosya_Engelleme.md",
+            "is_readme": false
+          },
+          {
+            "id": "8b8f2cc9cd",
+            "title": "06.4 — SYSVOL (DFS-R) ve GPO Dağıtımı İlişkisi",
+            "description": "[04.1](../Modul_04_Grup_Ilkeleri_GPO/04.1_GPO_Mimarisi_ve_Isleyis.md)'de bir GPO'nun iki yarısı olduğunu öğrendik: **GPC** (AD'de) + **GPT** (SYSVOL'de). GPT — yani asıl ayar dosyaları (`registry.pol`",
+            "path": "1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/06.4_SYSVOL_ve_GPO_Dagitimi.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_07_PKI_ve_Sertifika_Servisleri",
+        "folder": "Modul_07_PKI_ve_Sertifika_Servisleri",
+        "title": "Modül 07: PKI ve Sertifika Servisleri",
+        "path": "1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "95008fe0b2",
+            "title": "📋 Modül 07: PKI ve Sertifika Servisleri - Genel Bakış",
+            "description": "Güven zincirinin nasıl kurulduğunu, şablon yanlış yapılandırmalarının (ESC) neden domain'i düşürebildiğini, sertifikaların nasıl dağıtılıp iptal edildiğini ve güçlü eşleme (strong mapping) ile ESC sal",
+            "path": "1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "044a5177c1",
+            "title": "07.1 — PKI Mimarisi ve CA Hiyerarşisi (Root / Issuing)",
+            "description": "Sertifikalar dijital kimlik kartlarıdır: \"bu açık anahtar gerçekten bu kişiye/makineye/servise ait\" der. Ama bir kimlik kartı ancak **güvenilen bir makam** tarafından imzalanmışsa değerlidir. **PKI (P",
+            "path": "1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.1_PKI_Mimarisi_ve_CA_Hiyerarsisi.md",
+            "is_readme": false
+          },
+          {
+            "id": "83762657de",
+            "title": "07.2 — Sertifika Şablonları ve İzinler (ESC Yüzeyinin Temeli)",
+            "description": "Enterprise CA, sertifikaları **şablonlara (certificate templates)** göre verir. Şablon, \"bu tür sertifika kimlere, hangi amaçla, hangi kurallarla verilir\" reçetesidir: kim talep edebilir (izinler), se",
+            "path": "1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.2_Sertifika_Sablonlari_ve_Izinler.md",
+            "is_readme": false
+          },
+          {
+            "id": "88af2d73e2",
+            "title": "07.3 — Autoenrollment, CRL/CDP, OCSP ve AIA Yayını",
+            "description": "Sertifika altyapısının iki operasyonel problemi vardır:",
+            "path": "1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.3_Autoenrollment_CRL_OCSP.md",
+            "is_readme": false
+          },
+          {
+            "id": "fc1b5613ec",
+            "title": "07.4 — Sertifika Yaşam Döngüsü, Yenileme ve Güçlü Eşleme",
+            "description": "Bir sertifika doğduğu andan öldüğü ana kadar bir **yaşam döngüsünden** geçer: talep → verme → kullanım → yenileme → iptal/sona erme. Bu döngü yönetilmezse iki tür kesinti olur: (1) **süresi dolan** se",
+            "path": "1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/07.4_Sertifika_Yasam_Dongusu.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_08_Hibrit_Kimlik_ve_Federasyon",
+        "folder": "Modul_08_Hibrit_Kimlik_ve_Federasyon",
+        "title": "Modül 08: Hibrit Kimlik ve Federasyon",
+        "path": "1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "28ebfeefcd",
+            "title": "📋 Modül 08: Hibrit Kimlik ve Federasyon - Genel Bakış",
+            "description": "Nesnelerin buluta nasıl senkronlandığını, parolanın nerede doğrulandığını (PHS/PTA/Federation) ve bunun güvenlik etkisini, AD FS'in neden büyük bir saldırı yüzeyi olduğunu (Golden SAML) ve SSO mekaniz",
+            "path": "1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "f14c45f5c3",
+            "title": "08.1 — Entra ID Connect: Senkronizasyon Topolojileri",
+            "description": "Çoğu kurum artık **hibrittir**: hem şirket içi (on-premises) AD hem de bulutta **Microsoft Entra ID** (eski adıyla Azure AD) kullanır. Kullanıcı aynı hesapla hem yerel dosya sunucusuna hem Microsoft 3",
+            "path": "1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.1_Entra_Connect_Senkronizasyon.md",
+            "is_readme": false
+          },
+          {
+            "id": "8f01dbcefe",
+            "title": "08.2 — Hibrit Kimlik Doğrulama: PHS, PTA ve Federation",
+            "description": "Nesneleri buluta senkronladık ([08.1](./08.1_Entra_Connect_Senkronizasyon.md)) — ama kullanıcı bulut uygulamasına girerken **parolası nerede doğrulanacak?** Üç temel model vardır ve seçim, hem kullanı",
+            "path": "1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.2_Kimlik_Dogrulama_PHS_PTA_Federation.md",
+            "is_readme": false
+          },
+          {
+            "id": "4a3dbebda5",
+            "title": "08.3 — AD FS Mimarisi ve Operasyonu",
+            "description": "**AD FS (Active Directory Federation Services)**, on-prem AD kimliğini dış/bulut uygulamalarına **federation token** (SAML/WS-Fed/OAuth) olarak sunan bir kimlik sağlayıcıdır (IdP). Kullanıcı bir uygul",
+            "path": "1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.3_AD_FS_Mimarisi.md",
+            "is_readme": false
+          },
+          {
+            "id": "4f5d1e460c",
+            "title": "08.4 — Hibrit SSO ve Seamless SSO",
+            "description": "Hibrit ortamda kullanıcı ideal olarak **domain'e giriş yaptığında bulut uygulamalarına da tekrar parola sormadan** erişmeli (Single Sign-On). Bunu sağlayan mekanizma, cihazın **bulut kimliğine nasıl b",
+            "path": "1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/08.4_Hibrit_ve_Seamless_SSO.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_09_Otomasyon_ve_Arayuzler",
+        "folder": "Modul_09_Otomasyon_ve_Arayuzler",
+        "title": "Modül 09: Otomasyon ve Arayuzler",
+        "path": "1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "c6e82628b5",
+            "title": "📋 Modül 09: Otomasyon ve Arayuzler - Genel Bakış",
+            "description": "Tüm AD araçlarının altındaki ham dili (LDAP), onu verimli süren PowerShell modülünü, durumu koda döken DSC'yi ve dış sistemlerle (Graph API, İK/IGA, WAC) güvenli entegrasyonu. Ana ilke:",
+            "path": "1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "475d1f6578",
+            "title": "09.1 — LDAP Mimarisi, LDP.exe ve Sorgu Sözdizimi",
+            "description": "AD'nin kalbinde bir **LDAP (Lightweight Directory Access Protocol) dizini** vardır ([01.2](../Modul_01_Mimari_ve_Temeller/01.2_Schema_Global_Catalog_Partitionlar.md)). Tüm araçlar — `dsa.msc`, PowerSh",
+            "path": "1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.1_LDAP_Mimarisi_ve_Sorgulama.md",
+            "is_readme": false
+          },
+          {
+            "id": "09e5f0d965",
+            "title": "09.2 — PowerShell ActiveDirectory Modülü Ustalığı",
+            "description": "`dsa.msc` (GUI) 5000 kullanıcıyı tek tek düzenlemek için işe yaramaz. **PowerShell `ActiveDirectory` modülü**, AD yönetimini **otomatikleştirilebilir, tekrarlanabilir ve denetlenebilir** hale getirir.",
+            "path": "1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.2_PowerShell_AD_Modulu.md",
+            "is_readme": false
+          },
+          {
+            "id": "c5cf27b2df",
+            "title": "09.3 — Configuration as Code: PowerShell DSC ile AD Yönetimi",
+            "description": "[09.2](./09.2_PowerShell_AD_Modulu.md)'deki script'ler **imperatif**tir: \"şunu yap, sonra şunu yap.\" Ama script iki kez çalışırsa ne olur? Ya biri sunucuya elle girip ayarı değiştirirse (**configurati",
+            "path": "1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.3_Configuration_as_Code_DSC.md",
+            "is_readme": false
+          },
+          {
+            "id": "6d19cccecc",
+            "title": "09.4 — REST API / LDAP Entegrasyonu ve Windows Admin Center (WAC)",
+            "description": "AD, izole bir ada değildir: İK sistemleri, kimlik yönetişimi (IGA) platformları, self-servis portallar ve bulut uygulamaları AD ile **entegre** olmalı — kullanıcı işe alındığında otomatik hesap, işten",
+            "path": "1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/09.4_REST_API_ve_WAC.md",
+            "is_readme": false
+          }
+        ]
+      },
+      {
+        "id": "sistem_yoneticisi_Modul_10_Guvenlik_Yedekleme_ve_Kurtarma",
+        "folder": "Modul_10_Guvenlik_Yedekleme_ve_Kurtarma",
+        "title": "Modül 10: Guvenlik Yedekleme ve Kurtarma",
+        "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma",
+        "has_subcategories": false,
+        "subcategories": [],
+        "articles": [
+          {
+            "id": "20a36a8f86",
+            "title": "📋 Modül 10: Guvenlik Yedekleme ve Kurtarma - Genel Bakış",
+            "description": "AD'nin kalbini (NTDS.dit) korumayı ve bakımını, hangi felakette hangi kurtarmanın seçileceğini, varsayılan zafiyetleri kapatan hardening temellerini ve olan biteni görünür/kanıtlanabilir kılan denetim",
+            "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/README.md",
+            "is_readme": true
+          },
+          {
+            "id": "e3b94cf3a8",
+            "title": "10.1 — AD Veritabanı (NTDS.dit), SYSVOL ve ntdsutil ile Bakım",
+            "description": "Şimdiye kadar AD'yi mantıksal ve fiziksel katmanlarda gördük. Ama tüm bu forest/domain/nesne/parola verisi, her DC'de **tek bir dosyada** fiziksel olarak yaşar: **`NTDS.dit`**. Bu, AD'nin **kalbi** ve",
+            "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.1_NTDS_ve_ntdsutil.md",
+            "is_readme": false
+          },
+          {
+            "id": "6ccc3b4b55",
+            "title": "10.2 — Yedekleme ve Kurtarma: System State, Restore Türleri, Recycle Bin, Forest Recovery",
+            "description": "AD arızaları üç ölçekte gelir: **(1)** bir nesne yanlışlıkla silindi (bir kullanıcı/OU), **(2)** bir DC bozuldu/kayboldu, **(3)** tüm forest çöktü (ransomware, kütlesel bozulma). Her ölçeğin **farklı*",
+            "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.2_Yedekleme_ve_Kurtarma.md",
+            "is_readme": false
+          },
+          {
+            "id": "fcf351ff46",
+            "title": "10.3 — Hardening Temelleri: Protokol, Hesap ve Mimari Güvenliği",
+            "description": "Şimdiye kadar AD'yi **kurmayı** öğrendik. Bu dosya, \"kurdum, çalışıyor\" ile \"kurdum, **savunuldu**\" arasındaki farkı kapatır. Varsayılan AD, geriye dönük uyumluluk için birçok **zayıf ayarı açık** bır",
+            "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.3_Hardening_Temelleri.md",
+            "is_readme": false
+          },
+          {
+            "id": "fa0da7bf5d",
+            "title": "10.4 — Denetim ve Uyumluluk: SACL, Denetim Politikaları ve Standartlar",
+            "description": "Hardening ([10.3](./10.3_Hardening_Temelleri.md)) saldırıyı **zorlaştırır**; denetim (auditing) ise olan biteni **görünür** kılar ve **kanıtlar**. İki farklı ihtiyaç:",
+            "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.4_Denetim_ve_Uyumluluk.md",
+            "is_readme": false
+          }
+        ]
+      }
+    ]
+  }
+]
