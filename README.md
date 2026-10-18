@@ -1,104 +1,200 @@
-# Active Directory Ustalık Programı
+# 🛡️ Active Directory Ustalık Programı & Vault
 
-Bu proje, Active Directory (AD) altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, güvenliğini sağlamak ve saldırı/savunma boyutlarıyla kavramak için oluşturulmuş **kitap/eğitim niteliğinde kapsamlı bir dokümantasyon deposudur**. Aynı sistem, **üç farklı bakış açısıyla** ve bu kollar birbirine çapraz referans vererek işlenir: **Sistem Mimarı**, **Blue Team (Savunma)** ve **Red Team (Saldırı)**.
+[![GitHub Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/cihan-atas/Active-Directory/releases/tag/v1.0.0)
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK%20(v1.0.0)-success?logo=android&logoColor=white)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.0.0/ActiveDirectory_Vault_v1.0.0.apk)
+[![Architecture](https://img.shields.io/badge/Architecture-100%25%20Offline%20First-orange.svg)](#)
+[![Topics](https://img.shields.io/badge/Külliyat-316%20Doküman-purple.svg)](#)
+[![Operational Commands](https://img.shields.io/badge/Operasyonel%20Komut-3.333+-red.svg)](#)
+[![MITRE ATT&CK](https://img.shields.io/badge/Framework-MITRE%20ATT%26CK-informational.svg)](https://attack.mitre.org/)
+[![Status](https://img.shields.io/badge/Durum-Tamamlandı%20(v1.0)-brightgreen.svg)](#)
 
-# Active Directory Ustalık Programı
+Active Directory (AD) kurumsal altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, sertleştirmek ve saldırı/savunma simetrisiyle derinlemesine kavramak amacıyla inşa edilmiş **ansiklopedik eğitim külliyatı ve operasyonel cephanelik platformudur**.
 
-Bu proje, Active Directory (AD) altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, güvenliğini sağlamak ve saldırı/savunma boyutlarıyla kavramak için oluşturulmuş **ansiklopedik eğitim ve referans dokümantasyon deposudur**. Aynı sistem, **üç farklı bakış açısıyla** ve bu kollar birbirine çift yönlü çapraz referans vererek işlenir: **Sistem Mimarı**, **Blue Team (Savunma)** ve **Red Team (Saldırı & Araç Cephaneliği)**.
-
-> **Durum:** 🟢 **Tamamlandı** — 3 kol · 31 modül · **265+ konu ve araç kılavuzu** + 31 modül ve 18 kategori README'si.
-
----
-
-## 🎯 Temel Felsefe
-
-Bir konu üç açıdan da ele alınır ve birbirine bağlanır. Örneğin **Kerberos delegation**:
-
-- **Sistem Yöneticisi** → ne olduğunu, neden gerektiğini ve nasıl güvenle yapılandırıldığını anlatır.
-- **Red Team** → nasıl kötüye kullanıldığını (unconstrained / constrained / RBCD abuse) gösterir.
-- **Blue Team** → nasıl tespit ve önleneceğini (Event ID, Sigma, hardening) anlatır.
-
-Her Red tekniği, karşılık gelen Blue tespiti/önlemiyle **1:1 simetrik** eşleştirilmiştir (Red Modül N ↔ Blue Modül N), ayrıca **Modül 11** ile tüm bu saldırı tekniklerini sahada icra eden 145 aracın operasyonel komut rehberi sunulmuştur.
+Aynı sistem mimarisi, birbirine çift yönlü çapraz referanslar veren **üç farklı operasyonel perspektif** üzerinden ele alınır:
+- 🏗️ **Sistem Mimarı / Yöneticisi:** Kurulum, tasarım, replikasyon, kimlik ve orman yönetimi.
+- 🛡️ **Blue Team (Savunma):** Tehdit avcılığı, SIEM/Sigma kuralları, Event ID telemetrisi ve sıkılaştırma.
+- 🔴 **Red Team (Saldırı & Cephanelik):** Sızma teknikleri, yetki yükseltme, yanal hareket ve 146 araçlık operasyonel cephanelik.
 
 ---
 
-## 🗂️ Proje Yapısı
+## 📱 Active Directory Vault — Mobil ve Web Uygulaması
 
-| Kol | Klasör | Bakış Açısı | Modül Sayısı | Kapsam |
-|-----|--------|-------------|--------------|--------|
-| 🏗️ **Sistem Yöneticisi / Mimar** | [`1-Sistem_Yoneticisi`](1-Sistem_Yoneticisi/) | Kurma, yapılandırma, işletme | 10 Modül | Fiziksel altyapı, replikasyon, kimlik yönetimi, GPO, DNS, AD CS, hibrit Entra |
-| 🛡️ **Blue Team (Savunma)** | [`2-Blue_Team`](2-Blue_Team/) | İzleme, tespit, sıkılaştırma, kurtarma | 10 Modül | WEF, Sysmon, SIEM/Sigma, Credential Guard, Tiering, PKI güvenliği, DFIR |
-| 🔴 **Red Team (Saldırı & Cephanelik)** | [`3-Red_Team`](3-Red_Team/) | Keşif, sömürü, yanal hareket, cephanelik | 11 Modül | 10 Saldırı Aşaması + 18 Kategori ve 145 Araçlık Derin Cephanelik (Modül 11) |
+Projede yer alan tüm külliyat, sahadaki siber güvenlik operatörleri, pentester'lar ve sistem yöneticileri için **%100 Çevrimdışı (Offline-First)** çalışan modern bir uygulamaya dönüştürülmüştür.
 
----
+```
+┌────────────────────────────────────────────────────────────────────────┐
+│                        ACTIVE DIRECTORY VAULT                          │
+│   [ Hub ]     [ Red Team ]     [ Blue Team ]     [ SysAdmin ]          │
+├────────────────────────────────────────────────────────────────────────┤
+│  ⚡ KOMUT MOTORU      : 3.333+ Hazır Parametreli CLI Komutu            │
+│  🎯 PENTEST CHECKLIST : CRTP / OSCP / CEH Uyumlu 8 Faz, 45+ Madde      │
+│  🏆 GANİMET (LOOT)    : Hash, Bilet, IP ve Parola Defteri              │
+│  🎧 SESLİ DİNLEME     : Tüm Konular İçin Dahili TTS Motoru             │
+│  🔍 AKILLI ARAMA      : Milisaniyelik Çevrimdışı Tam Metin İndeksi     │
+│  🔗 SMART ROUTER      : Dahili Bağlantı Gezintisi & Dış Kaynak Pop-up  │
+└────────────────────────────────────────────────────────────────────────┘
+```
 
-## 📚 Modül Haritası
+### 📥 Kurulum ve Çalıştırma
 
-### 🏗️ Sistem Yöneticisi — Kurulum ve İşletme
-1. [Mimari ve Temeller](1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/) — Forest/Tree/Domain, Schema, GC, Fonksiyon Seviyeleri
-2. [Fiziksel Altyapı ve Replikasyon](1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/) — DC, Sites, KCC, FSMO, RODC
-3. [Nesne ve Kimlik Yönetimi](1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/) — OU/Delegation, Gruplar (AGDLP), gMSA, FGPP
-4. [Grup İlkeleri (GPO)](1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/) — LSDOU, filtreleme, GPP, Central Store
-5. [DNS ve Ad Çözümleme](1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/) — AD-Integrated Zones, SRV, DNSSEC
-6. [Depolama ve Dosya Servisleri](1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/) — DFS-N/DFS-R, FSRM
-7. [PKI ve Sertifika Servisleri (AD CS)](1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/) — Şablonlar, CRL, Autoenrollment
-8. [Hibrit Kimlik ve Federasyon](1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/) — Entra ID Connect, AD FS, SSO
-9. [Otomasyon ve Arayüzler](1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/) — PowerShell, DSC, LDAP/REST, WAC
-10. [Güvenlik, Yedekleme ve Kurtarma](1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/) — NTDS, `ntdsutil`, Restore, hardening
+#### 1. Android (APK)
+Uygulamayı harici hiçbir mağazaya veya internete ihtiyaç duymadan doğrudan telefonunuza ya da tabletinize yükleyebilirsiniz:
+* 📲 **Doğrudan İndir:** [ActiveDirectory_Vault_v1.0.0.apk (54 MB)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.0.0/ActiveDirectory_Vault_v1.0.0.apk)
+* **Manuel ADB Kurulumu:**
+  ```bash
+  adb install -r ActiveDirectory_Vault_v1.0.0.apk
+  ```
 
-### 🔴 Red Team — Saldırı Yaşam Döngüsü ve Araç Cephaneliği
-> ⚔️ **Uçtan Uca Senaryolar:** [Operasyonel Oyun Kitabı (Playbook)](3-Red_Team/PLAYBOOK.md) — Attack Chain zincirleri, Kerberos hata çözümü ve OPSEC ilkeleri.
+#### 2. Web Sürümü (Tarayıcı)
+Projeyi yerel ağınızda veya tarayıcınızda sıfır kurulumla başlatmak için:
+```bash
+# Web sürümünü derleyin (opsiyonel)
+./build_web.sh
 
-1. [Keşif ve Numaralandırma](3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/) — LDAP/BloodHound, ACL/SPN keşfi
-2. [İlk Erişim ve Yerleşme](3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/) — LLMNR/NBT-NS Poisoning, Password Spraying
-3. [Kimlik Bilgisi Erişimi](3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/) — Kerberoasting, AS-REP, LSASS, DPAPI
-4. [Yanal Hareket](3-Red_Team/Modul_04_Yanal_Hareket/) — PtH/PtT, Overpass-the-Hash, PsExec/WMI/WinRM
-5. [Yetki Yükseltme (ACL & GPO Abuse)](3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/) — DACL abuse, GPO abuse, Shadow Credentials
-6. [Kerberos Delegation Saldırıları](3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/) — Unconstrained/Constrained/RBCD, Bronze Bit
-7. [AD CS / PKI Saldırıları](3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/) — ESC1-8, Certifried, ForgeCert
-8. [Koersiyon ve NTLM Relay](3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/) — ntlmrelayx, PetitPotam, ESC8, KrbRelayUp
-9. [Domain Hakimiyeti ve Kalıcılık](3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/) — DCSync, Golden/Silver/Diamond, AdminSDHolder
-10. [Trust, Forest ve Hibrit Saldırılar](3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/) — SID History, cross-forest, Entra pivot, OPSEC
-11. [Araç Ustalığı ve Komut Notları](3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/) — **18 Kategori ve 145 Araçlık Tam Operasyonel Cephanelik** (CLI Bayrakları, Pratik Senaryolar, Troubleshooting, OPSEC/IOC ve Cheat Sheet'ler)
-
-### 🛡️ Blue Team — Savunma Yaşam Döngüsü (Red ile 1:1 Simetrik)
-1. [Görünürlük ve Log Yönetimi](2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/) ↔ Red 01 — WEF, Sysmon, Audit Policy
-2. [SIEM ve Tespit Mühendisliği](2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/) ↔ Red 02/03 — Sigma/Elastic/Splunk, Event ID kataloğu
-3. [Kimlik Bilgisi Koruması](2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/) ↔ Red 03 — Credential Guard, LAPS, Protected Users
-4. [Yanal Hareket Tespiti](2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/) ↔ Red 04 — PtH/PtT tespiti, honeytoken
-5. [Yetki ve ACL Sıkılaştırma](2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/) ↔ Red 05 — Tier Model, DACL hijyeni
-6. [Kerberos ve Delegation Sertleştirme](2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/) ↔ Red 06 — delegation temizliği, AES
-7. [AD CS / PKI Güvenliği](2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/) ↔ Red 07 — şablon denetimi, ESC önleme
-8. [Protokol Sertleştirme ve Relay Önleme](2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/) ↔ Red 08 — LDAP/SMB signing, EPA
-9. [Tehdit Avcılığı ve Değerlendirme](2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/) ↔ Red 09 — BloodHound, PingCastle, Purple Knight
-10. [Olay Müdahalesi, DFIR ve Kurtarma](2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/) ↔ Red 10 — IR playbook, KRBTGT reset, Forest Recovery
+# Yerel HTTP sunucusunu başlatın
+python3 -m http.server -d dist/web 8080
+```
+Tarayıcınızda açın: **`http://localhost:8080`**
 
 ---
 
-## ⚖️ YASAL UYARI VE SORUMLULUK REDDİ (DISCLAIMER)
+## 📊 Külliyat ve Cephanelik Metrikleri
 
-> **ÖNEMLİ:** Bu depoda yer alan tüm dokümantasyon, teknik analizler, saldırı komutları ve araç kullanım kılavuzları; **yalnızca yasal sınırlar dahilinde gerçekleştirilen sızma testleri, kırmızı takım tatbikatları, yetkili güvenlik denetimleri ve savunma mekanizmalarının geliştirilmesi** amacıyla hazırlanmıştır.
+Projenin derleme pipeline'ı tarafından taranan güncel operasyonel veriler:
+
+| Metrik | Sayısal Değer | Açıklama |
+| :--- | :--- | :--- |
+| **Operasyonel Kol (Pillars)** | **3 Kol** | Sistem Yöneticisi, Blue Team, Red Team |
+| **Modül Sayısı** | **31 Modül** | 10 Sistem + 10 Blue + 11 Red Team Modülü |
+| **Alt Araç Kategorisi** | **18 Kategori** | Modül 11 kapsamındaki derin araç sınıflandırması |
+| **Toplam Doküman & Kılavuz** | **316 Doküman** | Ansiklopedik derinlikte hazırlanmış markdown konuları |
+| **Toplam Satır Sayısı** | **85.432 Satır** | Pratik anlatım, kod blokları ve senaryolar |
+| **Toplam Kelime Hacmi** | **594.234 Kelime**| Kapsamlı teknik referans arşivi |
+| **Operasyonel Komut Kataloğu** | **3.333+ Komut** | Parametre çözümleyicili, kopyalamaya hazır komutlar |
+| **Desteklenen Araç Sayısı** | **146 Araç** | Impacket, Mimikatz, BloodHound, NetExec, Rubeus vb. |
+
+---
+
+## 🎯 1:1 Simetrik Savunma ve Saldırı Felsefesi
+
+Active Directory altyapısında hiçbir güvenlik olgusu tek taraflı değildir. Projedeki her Red Team saldırı tekniği, Blue Team tarafında **1:1 simetrik tespit ve önleme modülüyle** eşleştirilmiştir:
+
+$$\text{Red Team Modül } N \iff \text{Blue Team Modül } N$$
+
+*Örnek: **Kerberos Delegation***
+- **Sistem Yöneticisi (Modül 03 & 04):** Hizmet hesaplarının (gMSA, SPN) işlevini ve güvenli delegation ilkelerini açıklar.
+- **Red Team (Modül 06):** Unconstrained, Constrained, RBCD ve Shadow Credentials istismarlarını pratik komutlarla gösterir.
+- **Blue Team (Modül 06):** Event ID 4768/4769 log telemetrisi, `AccountNotDelegated` koruması ve Sigma kurallarıyla tespiti öğretir.
+- **Araç Cephaneliği (Modül 11):** Rubeus, Impacket, KrbRelayUp gibi araçların operasyonel parametrelerini listeler.
+
+---
+
+## 🗂️ Modül ve İçerik Haritası
+
+### 🏗️ 1. Sistem Yöneticisi (Kurulum, Mimari ve İşletim)
+[`1-Sistem_Yoneticisi/`](1-Sistem_Yoneticisi/)
+1. **[Mimari ve Temeller](1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/)** — Forest/Tree/Domain mantıksal hiyerarşisi, Schema, GC, Fonksiyonel Seviyeler.
+2. **[Fiziksel Altyapı ve Replikasyon](1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/)** — DC topolojisi, Sites & Subnets, KCC, FSMO Rolleri, RODC.
+3. **[Nesne ve Kimlik Yönetimi](1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/)** — OU mimarisi, Delegasyon, AGDLP gruplama, gMSA, FGPP parola politikaları.
+4. **[Grup İlkeleri (GPO)](1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/)** — LSDOU işleme sırası, WMI filtreleme, GPP, Central Store.
+5. **[DNS ve Ad Çözümleme](1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/)** — AD-Integrated Bölgeler, SRV kayıtları, Scavenging, DNSSEC.
+6. **[Depolama ve Dosya Servisleri](1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/)** — DFS-Namespaces, DFS-Replication, FSRM kotaları.
+7. **[PKI ve Sertifika Servisleri (AD CS)](1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/)** — İki katmanlı PKI, Enterprise CA, Şablonlar, CRL/OCSP, Autoenrollment.
+8. **[Hibrit Kimlik ve Federasyon](1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/)** — Microsoft Entra Connect (PHS/PTA), AD FS, Seamless SSO.
+9. **[Otomasyon ve Arayüzler](1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/)** — Active Directory PowerShell Module, DSC, ADSI/LDAP, Windows Admin Center.
+10. **[Güvenlik, Yedekleme ve Kurtarma](1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/)** — NTDS.dit bakımı, System State Backup, Tombstone, AD Recycle Bin, Kurtarma.
+
+---
+
+### 🛡️ 2. Blue Team (Tespit, İzleme, Sertleştirme ve DFIR)
+[`2-Blue_Team/`](2-Blue_Team/)
+1. **[Görünürlük ve Log Yönetimi](2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/)** ↔ Red 01 — Audit Policy, WEF (Windows Event Forwarding), Sysmon konfigürasyonu.
+2. **[SIEM ve Tespit Mühendisliği](2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/)** ↔ Red 02/03 — Sigma kural yazımı, MITRE ATT&CK telemetrisi, Event ID kataloğu.
+3. **[Kimlik Bilgisi Koruması](2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/)** ↔ Red 03 — Credential Guard, Remote Credential Guard, LAPS, Protected Users.
+4. **[Yanal Hareket Tespiti](2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/)** ↔ Red 04 — PtH, Overpass-the-Hash, PsExec, WMI/WinRM avcılığı, Honeytoken hesapları.
+5. **[Yetki ve ACL Sıkılaştırma](2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/)** ↔ Red 05 — Tiering / Enterprise Access Model, Privileged Access Workstations (PAW), DACL temizliği.
+6. **[Kerberos ve Delegation Sertleştirme](2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/)** ↔ Red 06 — Delegation denetimi, AES zorlaması, PAC Validation, Kerberos zırhı (FAST).
+7. **[AD CS / PKI Güvenliği](2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/)** ↔ Red 07 — Sertifika şablon denetimi, ESC1-ESC8 sıkılaştırması, Certify telemetrisi.
+8. **[Protokol Sertleştirme ve Relay Önleme](2-Blue_Team/Modul_08_Protokol_Sertlestirme_ve_Relay_Onleme/)** ↔ Red 08 — SMB Signing, LDAP Signing & Channel Binding, LLMNR/mDNS kapatma.
+9. **[Tehdit Avcılığı ve Risk Değerlendirmesi](2-Blue_Team/Modul_09_Tehdit_Avciligi_ve_Degerlendirme/)** ↔ Red 09 — PingCastle, Purple Knight, BloodHound Blue, baseline denetimi.
+10. **[Olay Müdahalesi, DFIR ve Kurtarma](2-Blue_Team/Modul_10_Olay_Mudahalesi_DFIR_ve_Kurtarma/)** ↔ Red 10 — KRBTGT çift resetleme prosedürü, Forest Recovery, NTDS adli incelemesi.
+
+---
+
+### 🔴 3. Red Team (Saldırı Yaşam Döngüsü ve Operasyonel Cephanelik)
+[`3-Red_Team/`](3-Red_Team/)
+> ⚔️ **Uçtan Uca Operasyon:** [Operasyonel Oyun Kitabı (PLAYBOOK.md)](3-Red_Team/PLAYBOOK.md) — 7 Aşamalı Attack Path, Kerberos Hata Kodları ve OPSEC Matrisi.
+
+1. **[Keşif ve Numaralandırma](3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/)** — Anonim/Kimlikli LDAP, BloodHound/SharpHound graf keşfi, SPN tarama.
+2. **[İlk Erişim ve Yerleşme](3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/)** — LLMNR/NBT-NS Poisoning (Responder), Password Spraying, Smart Card keşfi.
+3. **[Kimlik Bilgisi Erişimi](3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/)** — Kerberoasting, AS-REP Roasting, LSASS Memory Dump, DPAPI çıkarma.
+4. **[Yanal Hareket](3-Red_Team/Modul_04_Yanal_Hareket/)** — Pass-the-Hash (PtH), Overpass-the-Hash, Pass-the-Ticket (PtT), PsExec, WMI, WinRM.
+5. **[Yetki Yükseltme (ACL & GPO Abuse)](3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/)** — GenericAll, WriteDacl, Shadow Credentials (WHfB), GPO istismarı.
+6. **[Kerberos Delegation Saldırıları](3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/)** — Unconstrained, Constrained (S4U2Self/S4U2Proxy), RBCD, Bronze Bit.
+7. **[AD CS / PKI Saldırıları](3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/)** — ESC1'den ESC8'e sertifika şablon istismarları, Certifried, ForgeCert.
+8. **[Koersiyon ve NTLM Relay](3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/)** — PetitPotam, PrinterBug, ShadowCoerce, ntlmrelayx (AD CS & LDAP relay).
+9. **[Domain Hakimiyeti ve Kalıcılık](3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/)** — DCSync, Golden/Silver/Diamond Ticket, Skeleton Key, AdminSDHolder.
+10. **[Trust, Forest ve Hibrit Saldırılar](3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/)** — SID History abuse, Cross-forest Kerberos hop, Azure AD Connect sync hesabı çıkarma.
+11. **[Araç Ustalığı ve Komut Notları](3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/)** — **18 Kategori ve 146 Araçlık Tam Saha Cephaneliği**:
+    - *Kategori 01:* Temel İstemciler ve Ağ Protokolleri (`smbclient`, `enum4linux-ng`, `netexec`, `rpcclient`...)
+    - *Kategori 02:* LDAP Keşif ve Sorgu Araçları (`ldapsearch`, `windapsearch`, `ldapdomaindump`...)
+    - *Kategori 03:* Kerberos Saldırı Araçları (`Rubeus`, `getTGT`, `getST`, `kerbrute`...)
+    - *Kategori 04:* Graf Tabanlı Saldırı Yolu Analizi (`BloodHound`, `SharpHound`, `pyFiles`...)
+    - *Kategori 05:* Kimlik Bilgisi Çıkarma (`Mimikatz`, `secretsdump`, `pypykatz`, `Procdump`...)
+    - *Kategori 06:* Parola Püskürtme ve Kaba Kuvvet (`sprayhound`, `DomainPasswordSpray`...)
+    - *Kategori 07:* NTLM Relay ve Ağ Zehirleme (`Responder`, `ntlmrelayx`, `mitm6`...)
+    - *Kategori 08:* Kimlik Doğrulama Zorlama (Coercion) (`PetitPotam`, `Coercer`, `PrinterBug`...)
+    - *Kategori 09:* AD CS / PKI İstismar Araçları (`Certify`, `Certipy`, `ForgeCert`...)
+    - *Kategori 10:* Yanal Hareket ve Uzaktan Komut (`wmiexec`, `psexec`, `evil-winrm`, `smbexec`...)
+    - *Kategori 11:* Ayrıcalık Yükseltme ve ACL İstismarı (`PowerView`, `dacledit`, `Whisker`...)
+    - *Kategori 12:* Kalıcılık ve Gizli Kanallar (`mimikatz skeleton`, `DCSync`, `dnscat2`...)
+    - *Kategori 13:* Güven İlişkileri ve Cross-Forest (`SIDHistory`, `raiseChild`...)
+    - *Kategori 14:* Hibrit ve Azure / Entra ID (`ROADtools`, `AADInternals`...)
+    - *Kategori 15:* Sertleştirme ve Güvenlik Denetimi (`PingCastle`, `Purple Knight`, `ORADR`...)
+    - *Kategori 16:* Savunma ve Mavi Takım Telemetrisi (`Sysmon`, `Chainsaw`, `Hayabusa`...)
+    - *Kategori 17:* Tünelleme ve Proxy Araçları (`Chisel`, `Ligolo-ng`, `SocksOverRDP`...)
+    - *Kategori 18:* C2 Framework AD Eklentileri (`Cobalt Strike`, `Sliver`, `Havoc`...)
+
+---
+
+## 🛠️ Derleme ve Otomasyon Sistemi
+
+Proje, dokümantasyon güncellemelerini otomatik olarak parse edip derleyen betik altyapısına sahiptir:
+
+```bash
+# 1. Tüm Markdown Külliyatını Tara ve İndeksle
+python3 scripts/build_content.py app/assets/data
+
+# 2. Operasyonel Komutları ve Parametreleri Çıkar (3.333+ Komut)
+python3 scripts/extract_commands.py
+
+# 3. Yüksek Çözünürlüklü İkon ve Logoları Üret
+python3 scripts/generate_app_icons.py
+
+# 4. Android APK ve Web Sürümünü Paketle
+./build.sh
+```
+
+---
+
+## ⚖️ YASAL UYARI VE ETİK SINIRLAR (DISCLAIMER)
+
+> **DİKKAT:** Bu depoda sunulan tüm içerikler, teknik açıklamalar, istismar kodları ve komut dizilimleri; **yalnızca yasal yazılı izin belgesi bulunan sızma testleri, kırmızı takım tatbikatları, yetkili güvenlik denetimleri ve siber savunma yeteneklerinin artırılması** amacıyla hazırlanmıştır.
 >
-> 1. **İzin ve Onay:** Buradaki tekniklerin yazılı izin ve yetkilendirme belgesi bulunmayan bilişim sistemleri üzerinde uygulanması; 5237 Sayılı Türk Ceza Kanunu (Madde 243, 244, 245) ve uluslararası siber suç mevzuatları (CFAA vb.) kapsamında suç teşkil eder.
-> 2. **Sorumluluk Sınırı:** Proje yazarları ve katkıda bulunanlar; buradaki bilgilerin kötüye kullanılmasından, hedef sistemlerde meydana gelebilecek veri kayıplarından, kesintilerden veya yasal yaptırımlardan doğrudan ya da dolaylı olarak **sorumlu tutulamaz**.
-> 3. **Savunma Önceliği:** Tüm saldırı teknikleri; güvenlik analistlerinin, mavi takım uzmanlarının ve sistem yöneticilerinin Active Directory ortamlarını sıkılaştırması (hardening) ve saldırıları gerçek zamanlı tespit edebilmesi amacıyla simetrik olarak sunulmuştur.
+> 1. Yetkisiz sistemler üzerinde bu tekniklerin uygulanması 5237 Sayılı TCK (Madde 243-245) ve uluslararası bilişim suçları kanunları gereğince hapis cezası ile sonuçlanabilecek ağır suçlar teşkil eder.
+> 2. Proje yazarları ve katkıda bulunanlar, bilgilerin kötüye kullanılmasından veya sistemlerde oluşabilecek aksaklıklardan hiçbir koşulda sorumlu tutulamaz.
+> 3. Savunma ve sıkılaştırma yönergeleri her zaman önceliklidir.
 
 ---
 
-## 🌐 Yararlanılan Başlıca Açık Kaynaklar ve Teşekkür
+## 🌐 Yararlanılan Başlıca Açık Kaynaklar
 
-Bu çalışmanın hazırlanmasında, siber güvenlik ekosistemine yön veren ve Active Directory araştırmalarına öncülük eden aşağıdaki saygın açık kaynak projelerinden, araştırma makalelerinden ve dokümantasyonlardan istifade edilmiştir:
-
-- 🌐 [InternalAllTheThings — Swisskyrepo](https://swisskyrepo.github.io/InternalAllTheThings/active-directory/): Active Directory sömürü teknikleri, komut dizilimleri ve referans saldırı kılavuzları.
-- 🌐 [HackTricks Wiki — Carlos Polop](https://book.hacktricks.wiki/): Ağ, Active Directory ve ayrıcalık yükseltme tekniklerine dair ansiklopedik güvenlik rehberi.
-- 🌐 [The Hacker Recipes — Shutdown](https://www.thehacker.recipes/): Active Directory protokolleri, Kerberos ve AD CS mekanizmaları üzerine derinlemesine metodoloji arşivi.
-- 🌐 [SpecterOps Research](https://posts.specterops.io/): BloodHound graf teorisi, Certified Pre-Owned (AD CS) ve erişim kontrolü (ACL) araştırma raporları.
-- 🌐 [MITRE ATT&CK Framework](https://attack.mitre.org/): Taktik, teknik ve alt-teknik eşleştirmeleri.
-- 🌐 [Microsoft Open Specifications](https://learn.microsoft.com/en-us/openspecs/windows_protocols/): `[MS-ADTS]`, `[MS-KILE]`, `[MS-DRSR]`, `[MS-SFU]` protokol standartları ve teknik belgeleri.
+- 🌐 [InternalAllTheThings — Swisskyrepo](https://swisskyrepo.github.io/InternalAllTheThings/active-directory/): Sömürü teknikleri ve pratik komut dizilimleri.
+- 🌐 [HackTricks Wiki — Carlos Polop](https://book.hacktricks.wiki/): Ansiklopedik ayrıcalık yükseltme ve AD sömürü yöntemleri.
+- 🌐 [The Hacker Recipes — Shutdown](https://www.thehacker.recipes/): AD protokolleri ve PKI metodoloji arşivi.
+- 🌐 [SpecterOps Research](https://posts.specterops.io/): BloodHound graf teorisi ve AD CS araştırma makaleleri.
+- 🌐 [Microsoft Open Specifications](https://learn.microsoft.com/en-us/openspecs/windows_protocols/): `[MS-ADTS]`, `[MS-KILE]`, `[MS-DRSR]`, `[MS-SFU]` standartları.
 
 ---
 
-## 🎓 Kimler İçin?
-
-Kariyerini Microsoft kurumsal altyapıları üzerine kuran sistem yöneticileri, siber güvenlik uzmanları, altyapı mimarları, pentester'lar, tehdit avcıları ve SOC analistleri. Her dosya tek başına okunduğunda konuyu hem **öğretir**, hem **uygulatır**, hem de **savunma/saldırı boyutunu** eksiksiz gösterir.
-
+**⭐ Yıldız Vermeyi Unutmayın!** Bu çalışmayı faydalı bulduysanız projeye GitHub üzerinden yıldız vererek topluluğa ulaşmasına destek olabilirsiniz.
