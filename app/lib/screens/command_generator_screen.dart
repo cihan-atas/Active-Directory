@@ -46,6 +46,7 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
   final CommandService _service = CommandService();
   bool _isLoading = true;
   bool _isContextExpanded = false;
+  bool _isFiltersExpanded = false; // Mobilde ekran alanını ferah tutmak için varsayılan kompakt
 
   String _searchQuery = '';
   String _selectedCategory = 'Tümü';
@@ -54,6 +55,17 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
   String _selectedFilterType = 'all'; // all, favorites, custom
   OpsecTag _selectedOpsecTag = OpsecTag.all;
   CommandPillar _selectedPillar = CommandPillar.all;
+
+  /// Aktif gelişmiş filtre sayısını hesaplar (Platform, Kategori, Araç, OPSEC, Tip)
+  int get _activeAdvancedFilterCount {
+    int c = 0;
+    if (_selectedPlatform != 'Tümü') c++;
+    if (_selectedCategory != 'Tümü') c++;
+    if (_selectedTool != 'Tümü') c++;
+    if (_selectedFilterType != 'all') c++;
+    if (_selectedOpsecTag != OpsecTag.all) c++;
+    return c;
+  }
 
   // Popüler Araç Aileleri (Büyük/Küçük harf ve takma ad duyarsız)
   static final List<PopularToolInfo> popularToolList = [
@@ -136,6 +148,10 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
   late TextEditingController _searchController;
   Timer? _searchDebounceTimer;
 
+  // Sayfa Kaydırma & Başa Dön Kontrolleri
+  late final ScrollController _scrollController;
+  bool _showBackToTop = false;
+
   // Form Controller'ları
   late TextEditingController _domainController;
   late TextEditingController _netbiosController;
@@ -169,6 +185,18 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
     if (widget.initialPillar != null) {
       _selectedPillar = widget.initialPillar!;
     }
+    if ((widget.initialTool != null && widget.initialTool!.isNotEmpty) ||
+        (widget.initialCategory != null && widget.initialCategory!.isNotEmpty) ||
+        widget.initialOpsecTag != null) {
+      _isFiltersExpanded = true;
+    }
+    _scrollController = ScrollController();
+    _scrollController.addListener(() {
+      final show = _scrollController.hasClients && _scrollController.offset > 280;
+      if (show != _showBackToTop) {
+        setState(() => _showBackToTop = show);
+      }
+    });
     _initControllers(const TargetContext());
     _loadData();
   }
@@ -190,6 +218,7 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _searchDebounceTimer?.cancel();
     _searchController.dispose();
     _domainController.dispose();
@@ -475,12 +504,45 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppTheme.redTeam,
-        foregroundColor: Colors.white,
-        icon: const Icon(Icons.add),
-        label: const Text('Yeni Komut Ekle', style: TextStyle(fontWeight: FontWeight.bold)),
-        onPressed: () => _showAddEditCommandDialog(null),
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          // En Başa Dön (Scroll to Top) Butonu - Aşağı kaydırıldığında pürüzsüzce belirir
+          AnimatedScale(
+            scale: _showBackToTop ? 1.0 : 0.0,
+            duration: const Duration(milliseconds: 200),
+            curve: Curves.easeOutBack,
+            child: AnimatedOpacity(
+              opacity: _showBackToTop ? 1.0 : 0.0,
+              duration: const Duration(milliseconds: 180),
+              child: FloatingActionButton.small(
+                heroTag: 'fab_scroll_top',
+                backgroundColor: AppTheme.blueTeam,
+                foregroundColor: Colors.white,
+                tooltip: 'En Başa Dön (Filtreleri Göster)',
+                elevation: 4,
+                onPressed: () {
+                  _scrollController.animateTo(
+                    0,
+                    duration: const Duration(milliseconds: 350),
+                    curve: Curves.easeOutCubic,
+                  );
+                },
+                child: const Icon(Icons.arrow_upward, size: 20),
+              ),
+            ),
+          ),
+          const SizedBox(height: 10),
+          FloatingActionButton.extended(
+            heroTag: 'fab_add_command',
+            backgroundColor: AppTheme.redTeam,
+            foregroundColor: Colors.white,
+            icon: const Icon(Icons.add),
+            label: const Text('Yeni Komut Ekle', style: TextStyle(fontWeight: FontWeight.bold)),
+            onPressed: () => _showAddEditCommandDialog(null),
+          ),
+        ],
       ),
       body: _isLoading
           ? const Center(
@@ -493,31 +555,45 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
                 ],
               ),
             )
-          : Column(
-              children: [
-                // 1. Hedef Bağlamı ve Değişken Paneli (Açılır / Kapanır)
-                _buildTargetContextPanel(ctx),
+          : CustomScrollView(
+              controller: _scrollController,
+              cacheExtent: 600,
+              slivers: [
+                // 1. Hedef Parametreleri Paneli (Yalnızca AppBar'daki tune ikonuyla genişletildiğinde görünür)
+                if (_isContextExpanded)
+                  SliverToBoxAdapter(
+                    child: _buildTargetContextPanel(ctx),
+                  ),
 
-                // 2. Arama ve Filtre Kontrolleri
-                _buildSearchAndFilters(),
+                // 2. Arama ve Filtre Kontrolleri (Aşağı kaydırıldığında doğalca yukarı kayarak ekrandan çıkar)
+                SliverToBoxAdapter(
+                  child: _buildSearchAndFilters(),
+                ),
 
                 // 3. Canlı Filtre ve Sonuç Sayaç Çubuğu
-                _buildResultsBar(),
-
-                // 4. Komut Listesi
-                Expanded(
-                  child: _filteredCommands.isEmpty
-                      ? _buildEmptyState()
-                      : ListView.builder(
-                          padding: const EdgeInsets.fromLTRB(14, 10, 14, 80),
-                          cacheExtent: 600,
-                          itemCount: _filteredCommands.length,
-                          itemBuilder: (context, index) {
-                            final cmd = _filteredCommands[index];
-                            return _buildCommandCard(cmd, ctx);
-                          },
-                        ),
+                SliverToBoxAdapter(
+                  child: _buildResultsBar(),
                 ),
+
+                // 4. Komut Listesi (Tüm ekran komut kartlarına kalır)
+                if (_filteredCommands.isEmpty)
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: _buildEmptyState(),
+                  )
+                else
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(14, 4, 14, 80),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          final cmd = _filteredCommands[index];
+                          return _buildCommandCard(cmd, ctx);
+                        },
+                        childCount: _filteredCommands.length,
+                      ),
+                    ),
+                  ),
               ],
             ),
     );
@@ -899,118 +975,170 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
           ),
           const SizedBox(height: 8),
 
-          // Sütun / Rol Filtre Barı (Red, Blue, System, All)
-          _buildPillarFilterBar(),
-          const SizedBox(height: 8),
-
-          // Tip & Platform Filtre Çipleri
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                _buildFilterChip('Tümü (${_service.allCommands.length})', _selectedFilterType == 'all', () {
-                  setState(() {
-                    _selectedFilterType = 'all';
-                    _applyFilters();
-                  });
-                }),
-                const SizedBox(width: 6),
-                _buildFilterChip('⭐ Favoriler (${_service.favoriteCommands.length})', _selectedFilterType == 'favorites', () {
-                  setState(() {
-                    _selectedFilterType = 'favorites';
-                    _applyFilters();
-                  });
-                }),
-                const SizedBox(width: 6),
-                _buildFilterChip('👤 Özel (${_service.customCommands.length})', _selectedFilterType == 'custom', () {
-                  setState(() {
-                    _selectedFilterType = 'custom';
-                    _applyFilters();
-                  });
-                }),
-                const SizedBox(width: 12),
-                Container(height: 18, width: 1, color: AppTheme.border),
-                const SizedBox(width: 12),
-                _buildFilterChip('🐧 Linux ($_linuxCount)', _selectedPlatform == 'Linux', () {
-                  setState(() {
-                    _selectedPlatform = _selectedPlatform == 'Linux' ? 'Tümü' : 'Linux';
-                    _applyFilters();
-                  });
-                }),
-                const SizedBox(width: 6),
-                _buildFilterChip('⚡ PowerShell ($_powershellCount)', _selectedPlatform == 'PowerShell', () {
-                  setState(() {
-                    _selectedPlatform = _selectedPlatform == 'PowerShell' ? 'Tümü' : 'PowerShell';
-                    _applyFilters();
-                  });
-                }),
-                const SizedBox(width: 6),
-                _buildFilterChip('🪟 Windows CMD ($_windowsCmdCount)', _selectedPlatform == 'Windows CMD', () {
-                  setState(() {
-                    _selectedPlatform = _selectedPlatform == 'Windows CMD' ? 'Tümü' : 'Windows CMD';
-                    _applyFilters();
-                  });
-                }),
-              ],
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          // OPSEC Davranış ve Güvenlik Filtresi
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: OpsecTag.values.map((tag) {
-                final isSelected = _selectedOpsecTag == tag;
-                return Padding(
-                  padding: const EdgeInsets.only(right: 6),
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedOpsecTag = isSelected && tag != OpsecTag.all ? OpsecTag.all : tag;
-                        _applyFilters();
-                      });
-                    },
+          // Sütun / Rol Filtre Barı ve Gelişmiş Filtreleri Göster/Gizle Butonu
+          Row(
+            children: [
+              Expanded(child: _buildPillarFilterBar()),
+              const SizedBox(width: 6),
+              InkWell(
+                onTap: () => setState(() => _isFiltersExpanded = !_isFiltersExpanded),
+                borderRadius: BorderRadius.circular(16),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                  decoration: BoxDecoration(
+                    color: _activeAdvancedFilterCount > 0
+                        ? AppTheme.redTeam.withAlpha(50)
+                        : (_isFiltersExpanded ? Colors.white.withAlpha(20) : AppTheme.bgCard),
                     borderRadius: BorderRadius.circular(16),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: isSelected ? tag.color.withAlpha(35) : AppTheme.bgCard,
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(
-                          color: isSelected ? tag.color : AppTheme.border,
-                          width: isSelected ? 1.4 : 1.0,
-                        ),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(tag.icon, size: 12, color: isSelected ? tag.color : AppTheme.textMuted),
-                          const SizedBox(width: 5),
-                          Text(
-                            tag.label,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                              color: isSelected ? tag.color : AppTheme.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
+                    border: Border.all(
+                      color: _activeAdvancedFilterCount > 0 ? AppTheme.redTeam : AppTheme.border,
+                      width: _activeAdvancedFilterCount > 0 ? 1.5 : 1.0,
                     ),
                   ),
-                );
-              }).toList(),
-            ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        _isFiltersExpanded ? Icons.tune : Icons.filter_alt_outlined,
+                        size: 13,
+                        color: _activeAdvancedFilterCount > 0 ? AppTheme.redTeam : AppTheme.toolsAmber,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        _activeAdvancedFilterCount > 0
+                            ? 'Filtreler ($_activeAdvancedFilterCount)'
+                            : (_isFiltersExpanded ? 'Daralt' : 'Filtreler'),
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: _activeAdvancedFilterCount > 0 ? Colors.white : AppTheme.textSecondary,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Icon(
+                        _isFiltersExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                        size: 14,
+                        color: AppTheme.textMuted,
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
-          const SizedBox(height: 8),
 
-          // Kategori Seçici ve Hızlı Filtre Barı
-          _buildCategoryFilterBar(),
-          const SizedBox(height: 8),
+          if (_isFiltersExpanded) ...[
+            const SizedBox(height: 8),
 
-          // Araç Seçici ve Popüler Araçlar Barı
-          _buildToolFilterBar(),
+            // Tip & Platform Filtre Çipleri
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  _buildFilterChip('Tümü (${_service.allCommands.length})', _selectedFilterType == 'all', () {
+                    setState(() {
+                      _selectedFilterType = 'all';
+                      _applyFilters();
+                    });
+                  }),
+                  const SizedBox(width: 6),
+                  _buildFilterChip('⭐ Favoriler (${_service.favoriteCommands.length})', _selectedFilterType == 'favorites', () {
+                    setState(() {
+                      _selectedFilterType = 'favorites';
+                      _applyFilters();
+                    });
+                  }),
+                  const SizedBox(width: 6),
+                  _buildFilterChip('👤 Özel (${_service.customCommands.length})', _selectedFilterType == 'custom', () {
+                    setState(() {
+                      _selectedFilterType = 'custom';
+                      _applyFilters();
+                    });
+                  }),
+                  const SizedBox(width: 12),
+                  Container(height: 18, width: 1, color: AppTheme.border),
+                  const SizedBox(width: 12),
+                  _buildFilterChip('🐧 Linux ($_linuxCount)', _selectedPlatform == 'Linux', () {
+                    setState(() {
+                      _selectedPlatform = _selectedPlatform == 'Linux' ? 'Tümü' : 'Linux';
+                      _applyFilters();
+                    });
+                  }),
+                  const SizedBox(width: 6),
+                  _buildFilterChip('⚡ PowerShell ($_powershellCount)', _selectedPlatform == 'PowerShell', () {
+                    setState(() {
+                      _selectedPlatform = _selectedPlatform == 'PowerShell' ? 'Tümü' : 'PowerShell';
+                      _applyFilters();
+                    });
+                  }),
+                  const SizedBox(width: 6),
+                  _buildFilterChip('🪟 Windows CMD ($_windowsCmdCount)', _selectedPlatform == 'Windows CMD', () {
+                    setState(() {
+                      _selectedPlatform = _selectedPlatform == 'Windows CMD' ? 'Tümü' : 'Windows CMD';
+                      _applyFilters();
+                    });
+                  }),
+                ],
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // OPSEC Davranış ve Güvenlik Filtresi
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: OpsecTag.values.map((tag) {
+                  final isSelected = _selectedOpsecTag == tag;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 6),
+                    child: InkWell(
+                      onTap: () {
+                        setState(() {
+                          _selectedOpsecTag = isSelected && tag != OpsecTag.all ? OpsecTag.all : tag;
+                          _applyFilters();
+                        });
+                      },
+                      borderRadius: BorderRadius.circular(16),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: isSelected ? tag.color.withAlpha(35) : AppTheme.bgCard,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isSelected ? tag.color : AppTheme.border,
+                            width: isSelected ? 1.4 : 1.0,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(tag.icon, size: 12, color: isSelected ? tag.color : AppTheme.textMuted),
+                            const SizedBox(width: 5),
+                            Text(
+                              tag.label,
+                              style: TextStyle(
+                                fontSize: 11,
+                                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                                color: isSelected ? tag.color : AppTheme.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+            const SizedBox(height: 8),
+
+            // Kategori Seçici ve Hızlı Filtre Barı
+            _buildCategoryFilterBar(),
+            const SizedBox(height: 8),
+
+            // Araç Seçici ve Popüler Araçlar Barı
+            _buildToolFilterBar(),
+          ],
         ],
       ),
     );
@@ -2129,365 +2257,377 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
           width: cmd.isUserCreated ? 1.2 : 1.0,
         ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          // Üst Satır: Araç, Platform ve Rozetler
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 10, 8, 6),
-            child: Row(
-              children: [
-                // Araç Rozeti (Tıklanabilir Filtre)
-                Tooltip(
-                  message: '${cmd.tool} komutlarını filtrele',
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        _selectedTool = _selectedTool == cmd.tool ? 'Tümü' : cmd.tool;
-                        _applyFilters();
-                      });
-                    },
-                    borderRadius: BorderRadius.circular(6),
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                      decoration: BoxDecoration(
-                        color: _selectedTool == cmd.tool
-                            ? AppTheme.redTeam
-                            : AppTheme.redTeam.withAlpha(30),
+      child: Material(
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(12),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(12),
+          onTap: () => _showCommandDetailSheet(cmd, liveCommand),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Üst Satır: Araç, Platform ve Rozetler
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 8, 6),
+                child: Row(
+                  children: [
+                    // Araç Rozeti (Tıklanabilir Filtre)
+                    Tooltip(
+                      message: '${cmd.tool} komutlarını filtrele',
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _selectedTool = _selectedTool == cmd.tool ? 'Tümü' : cmd.tool;
+                            _applyFilters();
+                          });
+                        },
                         borderRadius: BorderRadius.circular(6),
-                        border: Border.all(
-                          color: _selectedTool == cmd.tool
-                              ? AppTheme.redTeam
-                              : AppTheme.redTeam.withAlpha(120),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: _selectedTool == cmd.tool
+                                ? AppTheme.redTeam
+                                : AppTheme.redTeam.withAlpha(30),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(
+                              color: _selectedTool == cmd.tool
+                                  ? AppTheme.redTeam
+                                  : AppTheme.redTeam.withAlpha(120),
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.handyman_rounded,
+                                size: 11,
+                                color: _selectedTool == cmd.tool ? Colors.white : AppTheme.redTeam,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                cmd.tool,
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: _selectedTool == cmd.tool ? Colors.white : AppTheme.redTeam,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.handyman_rounded,
-                            size: 11,
-                            color: _selectedTool == cmd.tool ? Colors.white : AppTheme.redTeam,
-                          ),
-                          const SizedBox(width: 4),
-                          Text(
-                            cmd.tool,
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: _selectedTool == cmd.tool ? Colors.white : AppTheme.redTeam,
-                            ),
-                          ),
-                        ],
+                    ),
+                    const SizedBox(width: 6),
+
+                    // Platform Rozeti
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: AppTheme.bgDark,
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: AppTheme.border),
+                      ),
+                      child: Text(
+                        cmd.platform,
+                        style: const TextStyle(fontSize: 10, color: AppTheme.textSecondary),
                       ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 6),
 
-                // Platform Rozeti
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: AppTheme.bgDark,
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppTheme.border),
-                  ),
-                  child: Text(
-                    cmd.platform,
-                    style: const TextStyle(fontSize: 10, color: AppTheme.textSecondary),
-                  ),
-                ),
-
-                if (cmd.isUserCreated) ...[
-                  const SizedBox(width: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppTheme.toolsAmber.withAlpha(30),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppTheme.toolsAmber),
-                    ),
-                    child: const Text(
-                      'ÖZEL',
-                      style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: AppTheme.toolsAmber),
-                    ),
-                  ),
-                ],
-
-                if (cmd.customCategory != null &&
-                    cmd.customCategory!.isNotEmpty &&
-                    cmd.customCategory != 'Genel' &&
-                    cmd.customCategory != cmd.category) ...[
-                  const SizedBox(width: 6),
-                  Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
-                    decoration: BoxDecoration(
-                      color: AppTheme.blueTeam.withAlpha(25),
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppTheme.blueTeam.withAlpha(100)),
-                    ),
-                    child: Text(
-                      '📁 ${cmd.customCategory}',
-                      style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: AppTheme.blueTeam),
-                    ),
-                  ),
-                ],
-
-                const Spacer(),
-
-                // Favori & Not Butonu
-                IconButton(
-                  icon: Icon(
-                    cmd.isFavorite ? Icons.star : Icons.star_border,
-                    color: cmd.isFavorite ? AppTheme.toolsAmber : AppTheme.textMuted,
-                    size: 20,
-                  ),
-                  tooltip: cmd.isFavorite ? 'Favoriyi & Notu Düzenle' : 'Favorilere Ekle',
-                  onPressed: () => _showFavoriteDialog(cmd),
-                ),
-              ],
-            ),
-          ),
-
-          // Başlık
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            child: Text(
-              cmd.title,
-              style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: Colors.white),
-            ),
-          ),
-          if (cmd.opsecTags.isNotEmpty) ...[
-            const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Wrap(
-                spacing: 5,
-                runSpacing: 4,
-                children: cmd.opsecTags.take(3).map((tag) {
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: tag.color.withAlpha(20),
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: tag.color.withAlpha(80)),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(tag.icon, size: 10, color: tag.color),
-                        const SizedBox(width: 4),
-                        Text(
-                          tag.label.replaceAll(RegExp(r'^[^\s]+\s*'), ''),
-                          style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: tag.color),
+                    if (cmd.isUserCreated) ...[
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                        decoration: BoxDecoration(
+                          color: AppTheme.toolsAmber.withAlpha(30),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: AppTheme.toolsAmber),
                         ),
-                      ],
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-          if (cmd.whatItDoes.isNotEmpty) ...[
-            const SizedBox(height: 5),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              child: Text(
-                cmd.whatItDoes.replaceAll(RegExp(r'^\*+\s*'), ''),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary, height: 1.35),
-              ),
-            ),
-          ],
-          const SizedBox(height: 8),
-
-          // Komut Kutusu (Monospace & Kopyalama)
-          Container(
-            margin: const EdgeInsets.symmetric(horizontal: 10),
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: const Color(0xFF0D1117),
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppTheme.borderHighlight),
-            ),
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: SelectableText(
-                    liveCommand,
-                    style: const TextStyle(
-                      fontFamily: 'monospace',
-                      fontSize: 12,
-                      color: Color(0xFF7EE787),
-                      height: 1.35,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                InkWell(
-                  onTap: () {
-                    Clipboard.setData(ClipboardData(text: liveCommand));
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Kopyalandı: $liveCommand'),
-                        backgroundColor: AppTheme.redTeam,
-                        duration: const Duration(seconds: 2),
+                        child: const Text(
+                          'ÖZEL',
+                          style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: AppTheme.toolsAmber),
+                        ),
                       ),
-                    );
-                  },
-                  borderRadius: BorderRadius.circular(6),
-                  child: Container(
-                    padding: const EdgeInsets.all(6),
-                    decoration: BoxDecoration(
-                      color: AppTheme.bgCard,
-                      borderRadius: BorderRadius.circular(6),
-                      border: Border.all(color: AppTheme.border),
-                    ),
-                    child: const Icon(Icons.copy, size: 16, color: Colors.white),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                    ],
 
-          // Hızlı Parametre Etiketleri
-          if (cmd.parameterList.isNotEmpty) ...[
-            Padding(
-              padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
-              child: Wrap(
-                spacing: 6,
-                runSpacing: 4,
-                children: cmd.parameterList.take(3).map((p) {
-                  final flag = p['flag'] ?? '';
-                  final desc = p['desc'] ?? '';
-                  return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: AppTheme.bgCard,
-                      borderRadius: BorderRadius.circular(4),
-                      border: Border.all(color: AppTheme.border),
-                    ),
-                    child: Text.rich(
-                      TextSpan(
-                        children: [
-                          TextSpan(
-                            text: flag,
-                            style: const TextStyle(
-                              fontFamily: 'monospace',
-                              fontWeight: FontWeight.bold,
-                              fontSize: 10,
-                              color: AppTheme.toolsAmber,
-                            ),
-                          ),
-                          if (desc.isNotEmpty) ...[
-                            const TextSpan(text: ' '),
-                            TextSpan(
-                              text: desc.length > 25 ? '${desc.substring(0, 25)}...' : desc,
-                              style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
-                            ),
-                          ],
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-
-          // Kullanıcı Özel Operasyon Notu (Varsa)
-          if (cmd.userNote != null && cmd.userNote!.isNotEmpty) ...[
-            Container(
-              margin: const EdgeInsets.fromLTRB(10, 6, 10, 0),
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
-              decoration: BoxDecoration(
-                color: const Color(0xFF282110),
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(color: AppTheme.toolsAmber.withAlpha(140)),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.only(top: 1),
-                    child: Icon(Icons.sticky_note_2, size: 14, color: AppTheme.toolsAmber),
-                  ),
-                  const SizedBox(width: 6),
-                  Expanded(
-                    child: Text(
-                      'Not: ${cmd.userNote}',
-                      style: const TextStyle(fontSize: 11.5, color: Color(0xFFFFD54F), fontStyle: FontStyle.italic),
-                    ),
-                  ),
-                  InkWell(
-                    onTap: () => _showFavoriteDialog(cmd),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 4),
-                      child: Icon(Icons.edit, size: 13, color: AppTheme.toolsAmber),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-
-          // Alt Çubuk: Ne Yapar Kısa Özet ve Detay Butonu
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 10, 8),
-            child: Row(
-              children: [
-                if (cmd.eventIds.isNotEmpty) ...[
-                  Wrap(
-                    spacing: 4,
-                    children: cmd.eventIds.take(2).map((id) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                    if (cmd.customCategory != null &&
+                        cmd.customCategory!.isNotEmpty &&
+                        cmd.customCategory != 'Genel' &&
+                        cmd.customCategory != cmd.category) ...[
+                      const SizedBox(width: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                         decoration: BoxDecoration(
                           color: AppTheme.blueTeam.withAlpha(25),
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: AppTheme.blueTeam.withAlpha(80)),
+                          borderRadius: BorderRadius.circular(6),
+                          border: Border.all(color: AppTheme.blueTeam.withAlpha(100)),
                         ),
                         child: Text(
-                          'ID $id',
-                          style: const TextStyle(fontSize: 10, color: AppTheme.blueTeam, fontWeight: FontWeight.bold),
+                          '📁 ${cmd.customCategory}',
+                          style: const TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: AppTheme.blueTeam),
+                        ),
+                      ),
+                    ],
+
+                    const Spacer(),
+
+                    // Favori & Not Butonu
+                    IconButton(
+                      icon: Icon(
+                        cmd.isFavorite ? Icons.star : Icons.star_border,
+                        color: cmd.isFavorite ? AppTheme.toolsAmber : AppTheme.textMuted,
+                        size: 20,
+                      ),
+                      tooltip: cmd.isFavorite ? 'Favoriyi & Notu Düzenle' : 'Favorilere Ekle',
+                      onPressed: () => _showFavoriteDialog(cmd),
+                    ),
+                  ],
+                ),
+              ),
+
+              // Başlık
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  cmd.title,
+                  style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: Colors.white),
+                ),
+              ),
+              if (cmd.opsecTags.isNotEmpty) ...[
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Wrap(
+                    spacing: 5,
+                    runSpacing: 4,
+                    children: cmd.opsecTags.take(3).map((tag) {
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: tag.color.withAlpha(20),
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: tag.color.withAlpha(80)),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(tag.icon, size: 10, color: tag.color),
+                            const SizedBox(width: 4),
+                            Text(
+                              tag.label.replaceAll(RegExp(r'^[^\s]+\s*'), ''),
+                              style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: tag.color),
+                            ),
+                          ],
                         ),
                       );
                     }).toList(),
                   ),
-                  const SizedBox(width: 8),
-                ],
-                const Spacer(),
-                if (cmd.isUserCreated) ...[
-                  IconButton(
-                    icon: const Icon(Icons.edit, size: 16, color: AppTheme.textSecondary),
-                    tooltip: 'Düzenle',
-                    onPressed: () => _showAddEditCommandDialog(cmd),
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, size: 16, color: AppTheme.redTeam),
-                    tooltip: 'Sil',
-                    onPressed: () async {
-                      await _service.deleteCustomCommand(cmd.id);
-                      setState(() {});
-                    },
-                  ),
-                ],
-                TextButton.icon(
-                  style: TextButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    visualDensity: VisualDensity.compact,
-                  ),
-                  icon: const Icon(Icons.info_outline, size: 14, color: AppTheme.blueTeam),
-                  label: const Text('Detay & Parametreler', style: TextStyle(fontSize: 11.5, color: AppTheme.blueTeam)),
-                  onPressed: () => _showCommandDetailSheet(cmd, liveCommand),
                 ),
               ],
-            ),
+              if (cmd.whatItDoes.isNotEmpty) ...[
+                const SizedBox(height: 5),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    cmd.whatItDoes.replaceAll(RegExp(r'^\*+\s*'), ''),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 12, color: AppTheme.textSecondary, height: 1.35),
+                  ),
+                ),
+              ],
+              const SizedBox(height: 8),
+
+              // Komut Kutusu (Monospace & Kopyalama) — Kod alanına tıklandığında detay modalı tetiklenmesin
+              GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () {},
+                child: Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF0D1117),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: AppTheme.borderHighlight),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: SelectableText(
+                          liveCommand,
+                          style: const TextStyle(
+                            fontFamily: 'monospace',
+                            fontSize: 12,
+                            color: Color(0xFF7EE787),
+                            height: 1.35,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      InkWell(
+                        onTap: () {
+                          Clipboard.setData(ClipboardData(text: liveCommand));
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Kopyalandı: $liveCommand'),
+                              backgroundColor: AppTheme.redTeam,
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        borderRadius: BorderRadius.circular(6),
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: AppTheme.bgCard,
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: AppTheme.border),
+                          ),
+                          child: const Icon(Icons.copy, size: 16, color: Colors.white),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+
+              // Hızlı Parametre Etiketleri
+              if (cmd.parameterList.isNotEmpty) ...[
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+                  child: Wrap(
+                    spacing: 6,
+                    runSpacing: 4,
+                    children: cmd.parameterList.take(3).map((p) {
+                      final flag = p['flag'] ?? '';
+                      final desc = p['desc'] ?? '';
+                      return Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: AppTheme.bgCard,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: AppTheme.border),
+                        ),
+                        child: Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: flag,
+                                style: const TextStyle(
+                                  fontFamily: 'monospace',
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 10,
+                                  color: AppTheme.toolsAmber,
+                                ),
+                              ),
+                              if (desc.isNotEmpty) ...[
+                                const TextSpan(text: ' '),
+                                TextSpan(
+                                  text: desc.length > 25 ? '${desc.substring(0, 25)}...' : desc,
+                                  style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
+                                ),
+                              ],
+                            ],
+                          ),
+                        ),
+                      );
+                    }).toList(),
+                  ),
+                ),
+              ],
+
+              // Kullanıcı Özel Operasyon Notu (Varsa)
+              if (cmd.userNote != null && cmd.userNote!.isNotEmpty) ...[
+                Container(
+                  margin: const EdgeInsets.fromLTRB(10, 6, 10, 0),
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF282110),
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: AppTheme.toolsAmber.withAlpha(140)),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.only(top: 1),
+                        child: Icon(Icons.sticky_note_2, size: 14, color: AppTheme.toolsAmber),
+                      ),
+                      const SizedBox(width: 6),
+                      Expanded(
+                        child: Text(
+                          'Not: ${cmd.userNote}',
+                          style: const TextStyle(fontSize: 11.5, color: Color(0xFFFFD54F), fontStyle: FontStyle.italic),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () => _showFavoriteDialog(cmd),
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 4),
+                          child: Icon(Icons.edit, size: 13, color: AppTheme.toolsAmber),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+
+              // Alt Çubuk: Ne Yapar Kısa Özet ve Detay Butonu
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 10, 8),
+                child: Row(
+                  children: [
+                    if (cmd.eventIds.isNotEmpty) ...[
+                      Wrap(
+                        spacing: 4,
+                        children: cmd.eventIds.take(2).map((id) {
+                          return Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppTheme.blueTeam.withAlpha(25),
+                              borderRadius: BorderRadius.circular(4),
+                              border: Border.all(color: AppTheme.blueTeam.withAlpha(80)),
+                            ),
+                            child: Text(
+                              'ID $id',
+                              style: const TextStyle(fontSize: 10, color: AppTheme.blueTeam, fontWeight: FontWeight.bold),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(width: 8),
+                    ],
+                    const Spacer(),
+                    if (cmd.isUserCreated) ...[
+                      IconButton(
+                        icon: const Icon(Icons.edit, size: 16, color: AppTheme.textSecondary),
+                        tooltip: 'Düzenle',
+                        onPressed: () => _showAddEditCommandDialog(cmd),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.delete, size: 16, color: AppTheme.redTeam),
+                        tooltip: 'Sil',
+                        onPressed: () async {
+                          await _service.deleteCustomCommand(cmd.id);
+                          setState(() {});
+                        },
+                      ),
+                    ],
+                    TextButton.icon(
+                      style: TextButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        visualDensity: VisualDensity.compact,
+                      ),
+                      icon: const Icon(Icons.info_outline, size: 14, color: AppTheme.blueTeam),
+                      label: const Text('Detay & Parametreler', style: TextStyle(fontSize: 11.5, color: AppTheme.blueTeam)),
+                      onPressed: () => _showCommandDetailSheet(cmd, liveCommand),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
