@@ -1,12 +1,12 @@
 # 🛡️ Active Directory Ustalık Programı & Vault
 
-[![GitHub Release](https://img.shields.io/badge/Release-v1.0.0-blue.svg)](https://github.com/cihan-atas/Active-Directory/releases/tag/v1.0.0)
-[![Download APK](https://img.shields.io/badge/Download-Android%20APK%20(v1.0.0)-success?logo=android&logoColor=white)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.0.0/ActiveDirectory_Vault_v1.0.0.apk)
+[![GitHub Release](https://img.shields.io/badge/Release-v1.1.0-blue.svg)](https://github.com/cihan-atas/Active-Directory/releases/tag/v1.1.0)
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK%20(v1.1.0)-success?logo=android&logoColor=white)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.1.0/ActiveDirectory_Vault_v1.1.0.apk)
 [![Architecture](https://img.shields.io/badge/Architecture-100%25%20Offline%20First-orange.svg)](#)
 [![Topics](https://img.shields.io/badge/Külliyat-316%20Doküman-purple.svg)](#)
 [![Operational Commands](https://img.shields.io/badge/Operasyonel%20Komut-3.333+-red.svg)](#)
 [![MITRE ATT&CK](https://img.shields.io/badge/Framework-MITRE%20ATT%26CK-informational.svg)](https://attack.mitre.org/)
-[![Status](https://img.shields.io/badge/Durum-Tamamlandı%20(v1.0)-brightgreen.svg)](#)
+[![Status](https://img.shields.io/badge/Durum-Tamamlandı%20(v1.1)-brightgreen.svg)](#)
 
 Active Directory (AD) kurumsal altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, sertleştirmek ve saldırı/savunma simetrisiyle derinlemesine kavramak amacıyla inşa edilmiş **ansiklopedik eğitim külliyatı ve operasyonel cephanelik platformudur**.
 
@@ -26,7 +26,11 @@ Projede yer alan tüm külliyat, sahadaki siber güvenlik operatörleri, pentest
 │                        ACTIVE DIRECTORY VAULT                          │
 │   [ Hub ]     [ Red Team ]     [ Blue Team ]     [ SysAdmin ]          │
 ├────────────────────────────────────────────────────────────────────────┤
-│  ⚡ KOMUT MOTORU      : 3.333+ Hazır Parametreli CLI Komutu            │
+│  ⚡ KOMUT MOTORU      : 3.333+ Hazır Parametreli CLI Komutu & Debounce │
+│  🎟 BİLET ÇÖZÜMLEME   : .kirbi & .ccache Base64 Kerberos Inspector     │
+│  🗺 MITRE MATRİSİ     : İnteraktif Isı Haritası & Taktik Navigatörü    │
+│  📊 YETENEK RADARI    : Sınav Karnesi & Konu Bazlı Radar Grafiği       │
+│  🤖 AI SORU MOTORU    : Yapay Zeka ile Dinamik Sınav Sorusu Üretimi    │
 │  🎯 PENTEST CHECKLIST : CRTP / OSCP / CEH Uyumlu 8 Faz, 45+ Madde      │
 │  🏆 GANİMET (LOOT)    : Hash, Bilet, IP ve Parola Defteri              │
 │  🧠 LAB & SINAV       : 122 Soru Bankası & 10 Karar Ağacı Senaryosu    │
@@ -40,10 +44,10 @@ Projede yer alan tüm külliyat, sahadaki siber güvenlik operatörleri, pentest
 
 #### 1. Android (APK)
 Uygulamayı harici hiçbir mağazaya veya internete ihtiyaç duymadan doğrudan telefonunuza ya da tabletinize yükleyebilirsiniz:
-* 📲 **Doğrudan İndir:** [ActiveDirectory_Vault_v1.0.0.apk (54 MB)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.0.0/ActiveDirectory_Vault_v1.0.0.apk)
+* 📲 **Doğrudan İndir:** [ActiveDirectory_Vault_v1.1.0.apk (56 MB)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.1.0/ActiveDirectory_Vault_v1.1.0.apk)
 * **Manuel ADB Kurulumu:**
   ```bash
-  adb install -r ActiveDirectory_Vault_v1.0.0.apk
+  adb install -r ActiveDirectory_Vault_v1.1.0.apk
   ```
 
 #### 2. Web Sürümü (Tarayıcı)
