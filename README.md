@@ -29,7 +29,8 @@ Projede yer alan tüm külliyat, sahadaki siber güvenlik operatörleri, pentest
 │  ⚡ KOMUT MOTORU      : 3.333+ Hazır Parametreli CLI Komutu            │
 │  🎯 PENTEST CHECKLIST : CRTP / OSCP / CEH Uyumlu 8 Faz, 45+ Madde      │
 │  🏆 GANİMET (LOOT)    : Hash, Bilet, IP ve Parola Defteri              │
-│  🎧 SESLİ DİNLEME     : Tüm Konular İçin Dahili TTS Motoru             │
+│  🧠 LAB & SINAV       : 122 Soru Bankası & 10 Karar Ağacı Senaryosu    │
+│  🎧 GELİŞMİŞ TTS      : 5 Ses Profili & Kesintisiz Dinamik Hız (2.5x)  │
 │  🔍 AKILLI ARAMA      : Milisaniyelik Çevrimdışı Tam Metin İndeksi     │
 │  🔗 SMART ROUTER      : Dahili Bağlantı Gezintisi & Dış Kaynak Pop-up  │
 └────────────────────────────────────────────────────────────────────────┘
