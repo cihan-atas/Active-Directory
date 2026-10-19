@@ -3,8 +3,10 @@ import 'package:flutter/services.dart';
 import '../models/quiz_models.dart';
 import '../services/content_service.dart';
 import '../services/quiz_service.dart';
+import '../services/ai_service.dart';
 import '../theme/app_theme.dart';
 import 'article_screen.dart';
+import 'ai_setup_screen.dart';
 
 /// Active Directory Lab Simülatörü ve Test Modu (Interactive Lab & Quiz Engine)
 /// CRTP, CRTE ve OSCP sınavlarına hazırlık için 100+ soru, açıklamalı çözüm
@@ -126,6 +128,417 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
     });
   }
 
+  void _showAiQuizGeneratorModal() {
+    final aiService = AiService();
+    final hasKey = aiService.activeKey != null;
+
+    QuizCategory? selectedCategory = _filterCategory;
+    QuizDifficulty selectedDifficulty = QuizDifficulty.intermediate;
+    int selectedCount = 5;
+    final topicController = TextEditingController();
+    bool isGenerating = false;
+    String? errorMessage;
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppTheme.bgDark,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (modalContext, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                bottom: MediaQuery.of(modalContext).viewInsets.bottom,
+                left: 16,
+                right: 16,
+                top: 16,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    // Tutamaç
+                    Center(
+                      child: Container(
+                        width: 40,
+                        height: 4,
+                        decoration: BoxDecoration(
+                          color: AppTheme.border,
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 14),
+
+                    // Başlık ve Rozet
+                    Row(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF8B5CF6), Color(0xFF3B82F6)],
+                            ),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: const Icon(Icons.auto_awesome, color: Colors.white, size: 20),
+                        ),
+                        const SizedBox(width: 12),
+                        const Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'AI Sınav & Soru Üretici',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                'Dinamik, senaryo odaklı taze sınav soruları',
+                                style: TextStyle(fontSize: 11, color: AppTheme.textMuted),
+                              ),
+                            ],
+                          ),
+                        ),
+                        if (hasKey)
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.sysAdmin.withAlpha(25),
+                              borderRadius: BorderRadius.circular(6),
+                              border: Border.all(color: AppTheme.sysAdmin.withAlpha(90)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                const Icon(Icons.bolt, color: AppTheme.sysAdmin, size: 12),
+                                const SizedBox(width: 4),
+                                Text(
+                                  aiService.activeKey?.provider.label ?? 'Aktif',
+                                  style: const TextStyle(
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.sysAdmin,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    if (!hasKey) ...[
+                      // API Anahtarı Yok Uyarısı
+                      Container(
+                        padding: const EdgeInsets.all(14),
+                        decoration: BoxDecoration(
+                          color: AppTheme.bgCard,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: AppTheme.toolsAmber.withAlpha(120)),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: const [
+                                Icon(Icons.vpn_key, color: AppTheme.toolsAmber, size: 20),
+                                SizedBox(width: 8),
+                                Text(
+                                  'API Anahtarı Gerekli',
+                                  style: TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 6),
+                            const Text(
+                              'AI ile dinamik soru üretebilmek için Groq (Ücretsiz & Ultra Hızlı), Google Gemini veya OpenRouter API anahtarınızı eklemeniz gerekir.',
+                              style: TextStyle(fontSize: 12, color: AppTheme.textSecondary, height: 1.3),
+                            ),
+                            const SizedBox(height: 12),
+                            SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppTheme.toolsAmber,
+                                  foregroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+                                ),
+                                icon: const Icon(Icons.key, size: 16),
+                                label: const Text('Anahtar Ekle (Ayarlar)', style: TextStyle(fontWeight: FontWeight.bold)),
+                                onPressed: () {
+                                  Navigator.pop(ctx);
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (_) => const AiSetupScreen()),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                    ] else ...[
+                      // 1. Kategori Seçimi
+                      const Text(
+                        'KATEGORİ',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.textMuted),
+                      ),
+                      const SizedBox(height: 6),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: AppTheme.bgCard,
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(color: AppTheme.border),
+                        ),
+                        child: DropdownButtonHideUnderline(
+                          child: DropdownButton<QuizCategory?>(
+                            value: selectedCategory,
+                            isExpanded: true,
+                            dropdownColor: AppTheme.bgCard,
+                            items: [
+                              const DropdownMenuItem<QuizCategory?>(
+                                value: null,
+                                child: Text(
+                                  '🌟 Tüm Konular (Karma AD Seti)',
+                                  style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: AppTheme.toolsAmber),
+                                ),
+                              ),
+                              ...QuizCategory.values.map((cat) {
+                                return DropdownMenuItem<QuizCategory?>(
+                                  value: cat,
+                                  child: Text(
+                                    cat.label,
+                                    style: const TextStyle(fontSize: 13, color: Colors.white),
+                                  ),
+                                );
+                              }),
+                            ],
+                            onChanged: (cat) {
+                              setModalState(() => selectedCategory = cat);
+                            },
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 2. Zorluk Düzeyi
+                      const Text(
+                        'ZORLUK DÜZEYİ',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.textMuted),
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: QuizDifficulty.values.map((diff) {
+                          final isSelected = selectedDifficulty == diff;
+                          final color = Color(diff.colorHex);
+                          return Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 3),
+                              child: ChoiceChip(
+                                label: Text(
+                                  diff.label.split(' ').first,
+                                  style: TextStyle(
+                                    fontSize: 11,
+                                    fontWeight: FontWeight.bold,
+                                    color: isSelected ? Colors.white : AppTheme.textMuted,
+                                  ),
+                                ),
+                                selected: isSelected,
+                                selectedColor: color,
+                                backgroundColor: AppTheme.bgCard,
+                                side: BorderSide(color: isSelected ? color : AppTheme.border),
+                                onSelected: (_) {
+                                  setModalState(() => selectedDifficulty = diff);
+                                },
+                              ),
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 3. Soru Sayısı
+                      const Text(
+                        'SORU SAYISI',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.textMuted),
+                      ),
+                      const SizedBox(height: 6),
+                      Row(
+                        children: [3, 5, 10].map((cnt) {
+                          final isSelected = selectedCount == cnt;
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 8),
+                            child: ChoiceChip(
+                              label: Text(
+                                '$cnt Soru',
+                                style: TextStyle(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: isSelected ? Colors.white : AppTheme.textMuted,
+                                ),
+                              ),
+                              selected: isSelected,
+                              selectedColor: AppTheme.blueTeam,
+                              backgroundColor: AppTheme.bgCard,
+                              side: BorderSide(color: isSelected ? AppTheme.blueTeam : AppTheme.border),
+                              onSelected: (_) {
+                                setModalState(() => selectedCount = cnt);
+                              },
+                            ),
+                          );
+                        }).toList(),
+                      ),
+                      const SizedBox(height: 14),
+
+                      // 4. Özel Konu / Senaryo Odağı (İsteğe Bağlı)
+                      const Text(
+                        'ÖZEL KONU VEYA TEKNİK ODAK (İsteğe Bağlı)',
+                        style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.textMuted),
+                      ),
+                      const SizedBox(height: 6),
+                      TextField(
+                        controller: topicController,
+                        style: const TextStyle(fontSize: 13, color: Colors.white),
+                        decoration: InputDecoration(
+                          hintText: 'Örn: PetitPotam & NTLM Relay, Kerberoasting, BloodHound...',
+                          hintStyle: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                          filled: true,
+                          fillColor: AppTheme.bgCard,
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: AppTheme.border),
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: AppTheme.border),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            borderSide: const BorderSide(color: AppTheme.blueTeam),
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+
+                      if (errorMessage != null) ...[
+                        Container(
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: AppTheme.redTeam.withAlpha(20),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(color: AppTheme.redTeam.withAlpha(80)),
+                          ),
+                          child: Text(
+                            errorMessage!,
+                            style: const TextStyle(fontSize: 11, color: AppTheme.redTeam),
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                      ],
+
+                      // Başlat Butonu
+                      SizedBox(
+                        width: double.infinity,
+                        height: 46,
+                        child: ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFF8B5CF6),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                          ),
+                          icon: isGenerating
+                              ? const SizedBox(
+                                  width: 16,
+                                  height: 16,
+                                  child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                                )
+                              : const Icon(Icons.auto_awesome, size: 18),
+                          label: Text(
+                            isGenerating
+                                ? 'Sorular Üretiliyor... (AI Düşünüyor)'
+                                : '$selectedCount Soru Üret ve Sınavı Başlat',
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                          ),
+                          onPressed: isGenerating
+                              ? null
+                              : () async {
+                                  final messenger = ScaffoldMessenger.of(context);
+                                  setModalState(() {
+                                    isGenerating = true;
+                                    errorMessage = null;
+                                  });
+                                  try {
+                                    final questions = await aiService.generateQuizQuestions(
+                                      category: selectedCategory,
+                                      difficulty: selectedDifficulty,
+                                      count: selectedCount,
+                                      customTopic: topicController.text.trim().isEmpty ? null : topicController.text.trim(),
+                                    );
+
+                                    if (questions.isEmpty) {
+                                      throw Exception('AI soru üretemedi.');
+                                    }
+
+                                    // Özel sorular listesine kaydet
+                                    await _service.addCustomQuestions(questions);
+
+                                    if (ctx.mounted) {
+                                      Navigator.pop(ctx);
+                                    }
+                                    if (!mounted) return;
+                                    setState(() {
+                                      _activeQuestions = questions;
+                                      _currentIndex = 0;
+                                      _selectedOptionIndex = null;
+                                      _hasAnsweredCurrent = false;
+                                      _sessionCorrect = 0;
+                                      _isExamFinished = false;
+                                      _tabController.index = 0;
+                                    });
+
+                                    messenger.showSnackBar(
+                                      SnackBar(
+                                        content: Text('✨ ${questions.length} adet AI sorusu hazırlandı! Başarılar!'),
+                                        backgroundColor: const Color(0xFF8B5CF6),
+                                        behavior: SnackBarBehavior.floating,
+                                      ),
+                                    );
+                                  } catch (e) {
+                                    setModalState(() {
+                                      isGenerating = false;
+                                      errorMessage = e.toString().replaceFirst('Exception: ', '');
+                                    });
+                                  }
+                                },
+                        ),
+                      ),
+                    ],
+                    const SizedBox(height: 20),
+                  ],
+                ),
+              ),
+            );
+          },
+        );
+      },
+    );
+  }
+
   void _onAnswerSelected(int optionIndex) {
     if (_hasAnsweredCurrent || _activeQuestions.isEmpty) return;
 
@@ -169,7 +582,7 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             Text(
-              '${_service.allQuestions.length} Soru · 4 Karar Ağacı · CRTP / OSCP',
+              '${_service.allQuestions.length} Soru · ${_service.allScenarios.length} Karar Ağacı · CRTP / OSCP',
               style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
             ),
           ],
@@ -190,11 +603,18 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
           ],
         ),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.auto_awesome, color: Color(0xFFA78BFA)),
+            tooltip: 'AI ile Soru Üret',
+            onPressed: _showAiQuizGeneratorModal,
+          ),
           PopupMenuButton<String>(
             icon: const Icon(Icons.more_vert, color: AppTheme.textSecondary),
             tooltip: 'Sınav Seçenekleri',
             onSelected: (val) {
-              if (val == 'new_exam_20') {
+              if (val == 'ai_generate') {
+                _showAiQuizGeneratorModal();
+              } else if (val == 'new_exam_20') {
                 _startNewExam(count: 20);
               } else if (val == 'new_exam_10') {
                 _startNewExam(count: 10);
@@ -205,6 +625,17 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
               }
             },
             itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'ai_generate',
+                child: Row(
+                  children: [
+                    Icon(Icons.auto_awesome, color: Color(0xFF8B5CF6), size: 18),
+                    SizedBox(width: 8),
+                    Text('AI ile Soru / Sınav Üret'),
+                  ],
+                ),
+              ),
+              const PopupMenuDivider(),
               const PopupMenuItem(
                 value: 'new_exam_20',
                 child: Row(
@@ -290,11 +721,24 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
                 style: TextStyle(fontSize: 12, color: AppTheme.textSecondary),
               ),
               const SizedBox(height: 20),
-              ElevatedButton.icon(
-                style: ElevatedButton.styleFrom(backgroundColor: AppTheme.redTeam),
-                icon: const Icon(Icons.refresh),
-                label: const Text('20 Soruluk Sınav Başlat'),
-                onPressed: () => _startNewExam(count: 20),
+              Wrap(
+                alignment: WrapAlignment.center,
+                spacing: 10,
+                runSpacing: 10,
+                children: [
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(backgroundColor: AppTheme.redTeam),
+                    icon: const Icon(Icons.refresh),
+                    label: const Text('20 Soruluk Sınav'),
+                    onPressed: () => _startNewExam(count: 20),
+                  ),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF8B5CF6)),
+                    icon: const Icon(Icons.auto_awesome),
+                    label: const Text('AI ile Soru Üret'),
+                    onPressed: _showAiQuizGeneratorModal,
+                  ),
+                ],
               ),
             ],
           ),
@@ -307,9 +751,12 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
     final catColor = Color(question.category.colorHex);
     final diffColor = Color(question.difficulty.colorHex);
 
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16.0),
-      child: Column(
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 850),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           // Üst İlerleme ve Sayaç Çubuğu
@@ -546,6 +993,8 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
           ],
         ],
       ),
+    ),
+    ),
     );
   }
 
@@ -553,7 +1002,10 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
   // GÖRÜNÜM 2: KONU VE KATEGORİ SEÇİCİ
   // =========================================================================
   Widget _buildCategoryBrowserView() {
-    return ListView(
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 950),
+        child: ListView(
       padding: const EdgeInsets.all(16),
       children: [
         // İstatistik Özeti
@@ -575,6 +1027,125 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
           ),
         ),
         const SizedBox(height: 16),
+
+        // 🤖 AI İle Soru & Sınav Hazırlama Banner'ı
+        InkWell(
+          onTap: _showAiQuizGeneratorModal,
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            padding: const EdgeInsets.all(14),
+            decoration: BoxDecoration(
+              gradient: const LinearGradient(
+                colors: [Color(0xFF2E1B4E), Color(0xFF131A26)],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+              borderRadius: BorderRadius.circular(14),
+              border: Border.all(color: const Color(0xFF8B5CF6).withAlpha(160), width: 1.2),
+              boxShadow: [
+                BoxShadow(
+                  color: const Color(0xFF8B5CF6).withAlpha(30),
+                  blurRadius: 10,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+            ),
+            child: Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF8B5CF6).withAlpha(35),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: const Color(0xFF8B5CF6)),
+                  ),
+                  child: const Icon(Icons.auto_awesome, color: Color(0xFFA78BFA), size: 24),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Text(
+                            'AI İLE ÖZEL SINAV HAZIRLA',
+                            style: TextStyle(
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.8,
+                              color: Colors.white,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFF8B5CF6),
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text('YENİ', style: TextStyle(fontSize: 9, fontWeight: FontWeight.bold, color: Colors.white)),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 3),
+                      const Text(
+                        'İstediğin konuda veya zorlukta sınırsız senaryo sorusu üret',
+                        style: TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+                const Icon(Icons.chevron_right, color: Color(0xFFA78BFA)),
+              ],
+            ),
+          ),
+        ),
+        const SizedBox(height: 16),
+
+        if (_service.customQuestions.isNotEmpty) ...[
+          Card(
+            color: const Color(0xFF1E1B2E),
+            margin: const EdgeInsets.only(bottom: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+              side: BorderSide(color: const Color(0xFF8B5CF6).withAlpha(100)),
+            ),
+            child: ListTile(
+              leading: Container(
+                width: 10,
+                height: 10,
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: Color(0xFFA78BFA)),
+              ),
+              title: const Text(
+                '🤖 AI ve Özel Üretilen Sorular',
+                style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white),
+              ),
+              trailing: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                decoration: BoxDecoration(
+                  color: const Color(0xFF8B5CF6).withAlpha(30),
+                  borderRadius: BorderRadius.circular(6),
+                ),
+                child: Text(
+                  '${_service.customQuestions.length} Soru',
+                  style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Color(0xFFA78BFA)),
+                ),
+              ),
+              onTap: () {
+                setState(() {
+                  _filterCategory = null;
+                  _activeQuestions = _service.customQuestions;
+                  _currentIndex = 0;
+                  _selectedOptionIndex = null;
+                  _hasAnsweredCurrent = false;
+                  _isExamFinished = false;
+                  _tabController.index = 0;
+                });
+              },
+            ),
+          ),
+        ],
 
         const Text(
           'KATEGORİYE GÖRE ÇALIŞMA SETLERİ',
@@ -620,6 +1191,8 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
           );
         }),
       ],
+    ),
+    ),
     );
   }
 
@@ -927,8 +1500,10 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
             ),
             const SizedBox(height: 24),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              alignment: WrapAlignment.center,
+              spacing: 10,
+              runSpacing: 10,
               children: [
                 OutlinedButton.icon(
                   style: OutlinedButton.styleFrom(
@@ -940,7 +1515,6 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
                   onPressed: () => _startNewExam(count: total),
                 ),
                 if (_service.wrongCount > 0) ...[
-                  const SizedBox(width: 12),
                   ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppTheme.redTeam,
@@ -951,6 +1525,15 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
                     onPressed: _startWrongReview,
                   ),
                 ],
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF8B5CF6),
+                    foregroundColor: Colors.white,
+                  ),
+                  icon: const Icon(Icons.auto_awesome, size: 16),
+                  label: const Text('✨ AI ile Soru Üret'),
+                  onPressed: _showAiQuizGeneratorModal,
+                ),
               ],
             ),
           ],

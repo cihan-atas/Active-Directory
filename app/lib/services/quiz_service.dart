@@ -11,8 +11,10 @@ class QuizService extends ChangeNotifier {
   QuizService._internal();
 
   static const String _storageKey = 'ad_vault_quiz_state_v1';
+  static const String _customQuestionsKey = 'ad_vault_quiz_custom_questions_v1';
 
   final List<QuizQuestion> _allQuestions = kDefaultQuizQuestions;
+  final List<QuizQuestion> _customQuestions = <QuizQuestion>[];
   final List<DecisionTreeScenario> _allScenarios = kDefaultDecisionScenarios;
 
   final Set<String> _wrongQuestionIds = <String>{};
@@ -23,7 +25,9 @@ class QuizService extends ChangeNotifier {
   int _totalCorrect = 0;
   bool _isInitialized = false;
 
-  List<QuizQuestion> get allQuestions => List.unmodifiable(_allQuestions);
+  List<QuizQuestion> get allQuestions => List.unmodifiable([..._allQuestions, ..._customQuestions]);
+  List<QuizQuestion> get staticQuestions => List.unmodifiable(_allQuestions);
+  List<QuizQuestion> get customQuestions => List.unmodifiable(_customQuestions);
   List<DecisionTreeScenario> get allScenarios => List.unmodifiable(_allScenarios);
   int get totalAnswered => _totalAnswered;
   int get totalCorrect => _totalCorrect;
@@ -37,6 +41,19 @@ class QuizService extends ChangeNotifier {
 
     try {
       final prefs = await SharedPreferences.getInstance();
+      
+      // Özel / AI tarafından üretilmiş soruları yükle
+      final customRaw = prefs.getString(_customQuestionsKey);
+      if (customRaw != null && customRaw.trim().isNotEmpty) {
+        final List<dynamic> list = jsonDecode(customRaw);
+        _customQuestions.clear();
+        for (final item in list) {
+          try {
+            _customQuestions.add(QuizQuestion.fromJson(item as Map<String, dynamic>));
+          } catch (_) {}
+        }
+      }
+
       final raw = prefs.getString(_storageKey);
       if (raw != null && raw.trim().isNotEmpty) {
         final Map<String, dynamic> data = jsonDecode(raw);
@@ -91,28 +108,50 @@ class QuizService extends ChangeNotifier {
 
   /// Yanlış yapılan soruları listeler
   List<QuizQuestion> getWrongQuestions() {
-    return _allQuestions.where((q) => _wrongQuestionIds.contains(q.id)).toList();
+    return allQuestions.where((q) => _wrongQuestionIds.contains(q.id)).toList();
   }
 
   /// Yer imlerine eklenen soruları listeler
   List<QuizQuestion> getBookmarkedQuestions() {
-    return _allQuestions.where((q) => _bookmarkedQuestionIds.contains(q.id)).toList();
+    return allQuestions.where((q) => _bookmarkedQuestionIds.contains(q.id)).toList();
   }
 
   /// Kategoriye göre soruları getirir
   List<QuizQuestion> getQuestionsByCategory(QuizCategory category) {
-    return _allQuestions.where((q) => q.category == category).toList();
+    return allQuestions.where((q) => q.category == category).toList();
   }
 
   /// Zorluğa göre soruları getirir
   List<QuizQuestion> getQuestionsByDifficulty(QuizDifficulty difficulty) {
-    return _allQuestions.where((q) => q.difficulty == difficulty).toList();
+    return allQuestions.where((q) => q.difficulty == difficulty).toList();
   }
 
   /// Rastgele sınav seti oluşturur (Örn: 20 soru)
   List<QuizQuestion> getRandomExamSet({int count = 20}) {
-    final list = List<QuizQuestion>.from(_allQuestions)..shuffle();
+    final list = List<QuizQuestion>.from(allQuestions)..shuffle();
     return list.take(count).toList();
+  }
+
+  /// Yeni üretilen AI / Özel soruları ekler ve kaydeder
+  Future<void> addCustomQuestions(List<QuizQuestion> questions) async {
+    for (final q in questions) {
+      if (!_customQuestions.any((existing) => existing.id == q.id)) {
+        _customQuestions.add(q);
+      }
+    }
+    await _saveCustomQuestions();
+    notifyListeners();
+  }
+
+  /// Özel soruyu siler
+  Future<void> removeCustomQuestion(String id) async {
+    _customQuestions.removeWhere((q) => q.id == id);
+    _wrongQuestionIds.remove(id);
+    _bookmarkedQuestionIds.remove(id);
+    _userAnswers.remove(id);
+    await _saveCustomQuestions();
+    await _save();
+    notifyListeners();
   }
 
   /// Tüm istatistikleri sıfırlar
@@ -135,5 +174,11 @@ class QuizService extends ChangeNotifier {
       'userAnswers': _userAnswers,
     };
     await prefs.setString(_storageKey, jsonEncode(data));
+  }
+
+  Future<void> _saveCustomQuestions() async {
+    final prefs = await SharedPreferences.getInstance();
+    final list = _customQuestions.map((q) => q.toJson()).toList();
+    await prefs.setString(_customQuestionsKey, jsonEncode(list));
   }
 }

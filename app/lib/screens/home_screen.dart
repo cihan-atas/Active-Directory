@@ -209,11 +209,14 @@ class HomeScreen extends StatelessWidget {
             ],
           ),
           bottomNavigationBar: const TtsPlayerBar(),
-          body: SingleChildScrollView(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
+          body: Center(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 1000),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
                 // Arama Çubuğu
                 InkWell(
                   onTap: () {
@@ -611,14 +614,17 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
 
-                GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1.35,
-                  children: [
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final isWide = constraints.maxWidth >= 600;
+                    return GridView.count(
+                      crossAxisCount: isWide ? 3 : 2,
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12,
+                      childAspectRatio: isWide ? 1.6 : 1.35,
+                      children: [
                     // 1. Cephanelik (Modül 11)
                     _buildHubTile(
                       context: context,
@@ -718,7 +724,9 @@ class HomeScreen extends StatelessWidget {
                       },
                     ),
                   ],
-                ),
+                );
+              },
+            ),
                 const SizedBox(height: 14),
 
                 // AI Asistan & Anahtar Yönetimi Hızlı Erişim Kartı
@@ -909,7 +917,9 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
           ),
-        );
+        ),
+      ),
+    );
       },
     );
   }

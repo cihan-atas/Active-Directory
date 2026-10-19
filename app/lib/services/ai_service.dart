@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import '../models/quiz_models.dart';
 
 enum AiProvider {
   gemini('Google Gemini', 'https://aistudio.google.com/app/apikey', 'AIza / AQ.'),
@@ -588,6 +589,142 @@ Cevaplarında komut parametrelerini, Windows Event ID'lerini ve OPSEC risklerini
     }
 
     return 'Sağlayıcıdaki modellerden yanıt alınamadı.\nSon Hata: ${lastError ?? "Bilinmeyen hata"}\n\nİpucu: Model veya kota hatası aldıysanız, "Model Seç" menüsünden hesabınızda aktif olan alternatif modelleri (örneğin "qwen/qwen3.8-27b" veya "openai/gpt-oss-20b") seçebilirsiniz.';
+  }
+
+  /// AI ile Dinamik ve Özelleştirilmiş Sınav Soruları Üretir
+  Future<List<QuizQuestion>> generateQuizQuestions({
+    QuizCategory? category,
+    required QuizDifficulty difficulty,
+    required int count,
+    String? customTopic,
+  }) async {
+    final keyObj = activeKey;
+    if (keyObj == null) {
+      throw Exception('Lütfen önce "Ayarlar -> AI Anahtar Yönetimi" menüsünden bir API anahtarı ekleyin.');
+    }
+
+    final categoryLabel = category != null ? '${category.label} (${category.name})' : 'Karma Active Directory Konuları (Keşif, Kerberos, AD CS, ACL/GPO, Delegasyon, Yanal Hareket, Mavi Takım, Sistem)';
+
+    final systemInstruction = '''Sen kıdemli bir Active Directory Siber Güvenlik Uzmanısın ve CRTP / CRTE / OSCP sertifikasyonları için baş soru hazırlayıcısısın.
+Görevin, belirtilen kriterlere uygun 4 seçenekli sınav soruları üretmektir.
+Çıktın SADECE ve SADECE geçerli bir JSON array olmalıdır. Başka hiçbir açıklama, selamlama metni veya markdown yazma.
+
+JSON Şeması:
+[
+  {
+    "category": "kerberos", // veya adcs, recon, aclGpo, credentialAccess, blueTeam vb.
+    "question": "Soru metni... (Operasyonel ve senaryo odaklı, gerekiyorsa komut veya çıktı içeren)",
+    "options": [
+      "A şıkkı metni",
+      "B şıkkı metni",
+      "C şıkkı metni",
+      "D şıkkı metni"
+    ],
+    "correctIndex": 0,
+    "explanation": "Detaylı teknik açıklama: Doğru şıkkın neden doğru olduğu, kullanılan protokol/mekanizma ve yanlış şıkların neden elendiği.",
+    "mitreId": "T1558.003"
+  }
+]
+''';
+
+    final prompt = '''Lütfen aşağıdaki kriterlere uygun $count adet 4 seçenekli Active Directory çoktan seçmeli sorusu üret:
+- Kategori: $categoryLabel
+- Zorluk Seviyesi: ${difficulty.label}
+${(customTopic != null && customTopic.trim().isNotEmpty) ? "- Özel Odak / Konu: ${customTopic.trim()}" : "- Odak: Belirtilen kategorinin en kritik operasyonel senaryoları, saldırı teknikleri, EDR/OPSEC sonuçları veya tespit mekanizmaları"}
+- Soru Sayısı: $count adet
+
+Kurallar:
+1. Sorular gerçek dünya sızma testi veya savunma senaryolarına dayanmalı, pratik ve teknik olmalıdır.
+2. Her sorunun tam olarak 4 seçeneği olmalı ve 'correctIndex' 0, 1, 2 veya 3 olmalıdır.
+3. 'explanation' alanı öğrenmeyi pekiştirecek derinlikte ve Türkçe olmalıdır.
+4. 'mitreId' geçerli bir MITRE ATT&CK tekniği olmalıdır (örn: T1087, T1558, T1078, T1484 vb.).
+5. ÇIKTI YALNIZCA VE YALNIZCA GEÇERLİ JSON ARRAY OLMALIDIR.''';
+
+    final modelsToTry = <String>[];
+    if (keyObj.selectedModel != null && keyObj.models.contains(keyObj.selectedModel)) {
+      modelsToTry.add(keyObj.selectedModel!);
+    }
+    for (final m in keyObj.models) {
+      if (!modelsToTry.contains(m)) modelsToTry.add(m);
+    }
+    if (modelsToTry.isEmpty) {
+      modelsToTry.add(keyObj.activeModel);
+    }
+
+    String? lastError;
+    for (final model in modelsToTry) {
+      try {
+        final rawResponse = await _dispatchCall(
+          provider: keyObj.provider,
+          key: keyObj.key,
+          model: model,
+          prompt: prompt,
+          context: '',
+          system: systemInstruction,
+        );
+        _lastUsedModel = model;
+
+        final cleanedJson = _extractJsonArray(rawResponse);
+        final dynamic decoded = json.decode(cleanedJson);
+        if (decoded is! List) continue;
+
+        final result = <QuizQuestion>[];
+        for (int i = 0; i < decoded.length; i++) {
+          final item = decoded[i] as Map<String, dynamic>;
+          final opts = (item['options'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [];
+          if (opts.length < 2) continue;
+
+          final cIndex = (item['correctIndex'] as num?)?.toInt() ?? 0;
+          final validIndex = (cIndex >= 0 && cIndex < opts.length) ? cIndex : 0;
+
+          final catName = item['category']?.toString().toLowerCase();
+          final qCategory = (category != null)
+              ? category
+              : QuizCategory.values.firstWhere(
+                  (c) => c.name.toLowerCase() == catName,
+                  orElse: () => QuizCategory.values[i % QuizCategory.values.length],
+                );
+
+          result.add(QuizQuestion(
+            id: 'q_ai_${DateTime.now().millisecondsSinceEpoch}_$i',
+            category: qCategory,
+            difficulty: difficulty,
+            question: item['question']?.toString() ?? 'Soru yüklenemedi',
+            options: opts,
+            correctIndex: validIndex,
+            explanation: item['explanation']?.toString() ?? 'Açıklama bulunamadı.',
+            mitreId: item['mitreId']?.toString() ?? 'T1078',
+            relatedDocPath: null,
+          ));
+        }
+
+        if (result.isNotEmpty) {
+          return result;
+        }
+      } catch (e) {
+        lastError = e.toString();
+        continue;
+      }
+    }
+
+    throw Exception(lastError ?? 'AI soru üretimi başarısız oldu.');
+  }
+
+  /// Markdown bloklarını temizleyip saf JSON dizisi aralığını yakalar
+  String _extractJsonArray(String raw) {
+    String text = raw.trim();
+    if (text.startsWith('```')) {
+      final lines = text.split('\n');
+      if (lines.first.startsWith('```')) lines.removeAt(0);
+      if (lines.isNotEmpty && lines.last.startsWith('```')) lines.removeLast();
+      text = lines.join('\n').trim();
+    }
+    final firstBracket = text.indexOf('[');
+    final lastBracket = text.lastIndexOf(']');
+    if (firstBracket != -1 && lastBracket != -1 && lastBracket > firstBracket) {
+      return text.substring(firstBracket, lastBracket + 1);
+    }
+    return text;
   }
 
   Future<String> _dispatchCall({

@@ -1,11 +1,11 @@
 {
-    "name": "active_directory_vault",
-    "short_name": "active_directory_vault",
+    "name": "Active Directory Vault & Handbook",
+    "short_name": "AD Vault",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0D1117",
+    "theme_color": "#0D1117",
+    "description": "Active Directory %100 Çevrimdışı Ansiklopedi, Komut Cephaneliği, Sızma Testi Simülatörü ve AI Soru Motoru.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [

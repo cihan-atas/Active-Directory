@@ -51,6 +51,58 @@ class QuizQuestion {
     required this.mitreId,
     this.relatedDocPath,
   });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'category': category.name,
+    'difficulty': difficulty.name,
+    'question': question,
+    'options': options,
+    'correctIndex': correctIndex,
+    'explanation': explanation,
+    'mitreId': mitreId,
+    'relatedDocPath': relatedDocPath,
+  };
+
+  factory QuizQuestion.fromJson(Map<String, dynamic> json) => QuizQuestion(
+    id: json['id'] as String? ?? 'q_ai_${DateTime.now().millisecondsSinceEpoch}',
+    category: QuizCategory.values.firstWhere(
+      (c) => c.name == json['category'],
+      orElse: () => QuizCategory.recon,
+    ),
+    difficulty: QuizDifficulty.values.firstWhere(
+      (d) => d.name == json['difficulty'],
+      orElse: () => QuizDifficulty.intermediate,
+    ),
+    question: json['question'] as String? ?? '',
+    options: (json['options'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+    correctIndex: json['correctIndex'] as int? ?? 0,
+    explanation: json['explanation'] as String? ?? '',
+    mitreId: json['mitreId'] as String? ?? 'T1078',
+    relatedDocPath: json['relatedDocPath'] as String?,
+  );
+
+  QuizQuestion copyWith({
+    String? id,
+    QuizCategory? category,
+    QuizDifficulty? difficulty,
+    String? question,
+    List<String>? options,
+    int? correctIndex,
+    String? explanation,
+    String? mitreId,
+    String? relatedDocPath,
+  }) => QuizQuestion(
+    id: id ?? this.id,
+    category: category ?? this.category,
+    difficulty: difficulty ?? this.difficulty,
+    question: question ?? this.question,
+    options: options ?? this.options,
+    correctIndex: correctIndex ?? this.correctIndex,
+    explanation: explanation ?? this.explanation,
+    mitreId: mitreId ?? this.mitreId,
+    relatedDocPath: relatedDocPath ?? this.relatedDocPath,
+  );
 }
 
 /// Senaryo Bazlı Karar Ağacı Düğümü (Decision Tree Node)
