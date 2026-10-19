@@ -5,6 +5,7 @@ import '../services/command_service.dart';
 import '../services/scratchpad_service.dart';
 import '../theme/app_theme.dart';
 import 'command_generator_screen.dart';
+import 'ticket_inspector_screen.dart';
 
 /// Operasyonel Ganimet ve Karalama Defteri Ekranı (Scratchpad Screen)
 /// Sızma testlerinde elde edilen kimlik bilgileri, hedef IP'ler,
@@ -87,6 +88,16 @@ class _ScratchpadScreenState extends State<ScratchpadScreen> {
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.confirmation_number_outlined, color: AppTheme.toolsAmber),
+            tooltip: 'Kerberos Bilet Çözümleyici (Inspector)',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const TicketInspectorScreen()),
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.ios_share, color: AppTheme.toolsAmber),
             tooltip: 'Rapor ve Dışa Aktarma (Export)',
             onPressed: () => _showExportSheet(context),
@@ -102,9 +113,24 @@ class _ScratchpadScreenState extends State<ScratchpadScreen> {
                   context,
                   MaterialPageRoute(builder: (_) => const CommandGeneratorScreen()),
                 );
+              } else if (val == 'ticket_inspector') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const TicketInspectorScreen()),
+                );
               }
             },
             itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'ticket_inspector',
+                child: Row(
+                  children: [
+                    Icon(Icons.confirmation_number_outlined, color: AppTheme.toolsAmber, size: 18),
+                    SizedBox(width: 8),
+                    Text('Kerberos Bilet Çözümleyici'),
+                  ],
+                ),
+              ),
               const PopupMenuItem(
                 value: 'jump_generator',
                 child: Row(
@@ -498,6 +524,23 @@ class _ScratchpadScreenState extends State<ScratchpadScreen> {
                     },
                   ),
                 ),
+                if (item.category == LootCategory.kerberosTicket) ...[
+                  IconButton(
+                    icon: const Icon(Icons.analytics_outlined, size: 19, color: AppTheme.toolsAmber),
+                    tooltip: 'Bileti Görsel Olarak Çözümle (Inspector)',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => TicketInspectorScreen(
+                            initialRawTicket: item.primaryValue,
+                            initialTitle: item.title,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ],
                 const SizedBox(width: 8),
                 IconButton(
                   icon: const Icon(Icons.edit_outlined, size: 18, color: AppTheme.textSecondary),

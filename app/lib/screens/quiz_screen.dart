@@ -7,6 +7,7 @@ import '../services/ai_service.dart';
 import '../theme/app_theme.dart';
 import 'article_screen.dart';
 import 'ai_setup_screen.dart';
+import 'quiz_scorecard_screen.dart';
 
 /// Active Directory Lab Simülatörü ve Test Modu (Interactive Lab & Quiz Engine)
 /// CRTP, CRTE ve OSCP sınavlarına hazırlık için 100+ soru, açıklamalı çözüm
@@ -604,6 +605,30 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
         ),
         actions: [
           IconButton(
+            icon: const Icon(Icons.radar, color: AppTheme.toolsAmber),
+            tooltip: 'Sınav Karnesi & Yetenek Radarı',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => QuizScorecardScreen(
+                    onStartCustomExam: (title, list) {
+                      setState(() {
+                        _activeQuestions = list;
+                        _currentIndex = 0;
+                        _selectedOptionIndex = null;
+                        _hasAnsweredCurrent = false;
+                        _sessionCorrect = 0;
+                        _isExamFinished = false;
+                        _tabController.index = 0;
+                      });
+                    },
+                  ),
+                ),
+              );
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.auto_awesome, color: Color(0xFFA78BFA)),
             tooltip: 'AI ile Soru Üret',
             onPressed: _showAiQuizGeneratorModal,
@@ -612,7 +637,26 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
             icon: const Icon(Icons.more_vert, color: AppTheme.textSecondary),
             tooltip: 'Sınav Seçenekleri',
             onSelected: (val) {
-              if (val == 'ai_generate') {
+              if (val == 'scorecard') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => QuizScorecardScreen(
+                      onStartCustomExam: (title, list) {
+                        setState(() {
+                          _activeQuestions = list;
+                          _currentIndex = 0;
+                          _selectedOptionIndex = null;
+                          _hasAnsweredCurrent = false;
+                          _sessionCorrect = 0;
+                          _isExamFinished = false;
+                          _tabController.index = 0;
+                        });
+                      },
+                    ),
+                  ),
+                );
+              } else if (val == 'ai_generate') {
                 _showAiQuizGeneratorModal();
               } else if (val == 'new_exam_20') {
                 _startNewExam(count: 20);
@@ -625,6 +669,16 @@ class _QuizScreenState extends State<QuizScreen> with SingleTickerProviderStateM
               }
             },
             itemBuilder: (_) => [
+              const PopupMenuItem(
+                value: 'scorecard',
+                child: Row(
+                  children: [
+                    Icon(Icons.radar, color: AppTheme.toolsAmber, size: 18),
+                    SizedBox(width: 8),
+                    Text('Sınav Karnesi & Yetenek Radarı'),
+                  ],
+                ),
+              ),
               const PopupMenuItem(
                 value: 'ai_generate',
                 child: Row(

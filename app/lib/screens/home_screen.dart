@@ -15,6 +15,9 @@ import 'checklist_screen.dart';
 import 'command_generator_screen.dart';
 import 'quiz_screen.dart';
 import 'scratchpad_screen.dart';
+import 'ticket_inspector_screen.dart';
+import 'mitre_matrix_screen.dart';
+import 'quiz_scorecard_screen.dart';
 import '../services/command_service.dart';
 import '../services/scratchpad_service.dart';
 import '../widgets/tts_bar.dart';
@@ -136,10 +139,20 @@ class HomeScreen extends StatelessWidget {
                       context,
                       MaterialPageRoute(builder: (_) => const GlossaryScreen()),
                     );
-                  } else if (val == 'ai') {
+                  } else if (val == 'mitre') {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (_) => const AiSetupScreen()),
+                      MaterialPageRoute(builder: (_) => const MitreMatrixScreen()),
+                    );
+                  } else if (val == 'ticket_inspector') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const TicketInspectorScreen()),
+                    );
+                  } else if (val == 'scorecard') {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const QuizScorecardScreen()),
                     );
                   }
                 },
@@ -151,6 +164,26 @@ class HomeScreen extends StatelessWidget {
                         Icon(Icons.terminal, color: AppTheme.redTeam, size: 18),
                         SizedBox(width: 10),
                         Text('Komut Oluşturucu'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'mitre',
+                    child: Row(
+                      children: [
+                        Icon(Icons.hub_outlined, color: AppTheme.redTeam, size: 18),
+                        SizedBox(width: 10),
+                        Text('MITRE ATT&CK Matrisi'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'ticket_inspector',
+                    child: Row(
+                      children: [
+                        Icon(Icons.confirmation_number_outlined, color: AppTheme.toolsAmber, size: 18),
+                        SizedBox(width: 10),
+                        Text('Kerberos Bilet Çözümleyici'),
                       ],
                     ),
                   ),
@@ -181,6 +214,16 @@ class HomeScreen extends StatelessWidget {
                         Icon(Icons.quiz_outlined, color: AppTheme.toolsAmber, size: 18),
                         SizedBox(width: 10),
                         Text('AD Lab & Sınav Simülatörü'),
+                      ],
+                    ),
+                  ),
+                  const PopupMenuItem(
+                    value: 'scorecard',
+                    child: Row(
+                      children: [
+                        Icon(Icons.radar, color: AppTheme.toolsAmber, size: 18),
+                        SizedBox(width: 10),
+                        Text('Yetenek Radarı & Karne'),
                       ],
                     ),
                   ),
@@ -616,14 +659,14 @@ class HomeScreen extends StatelessWidget {
 
                 LayoutBuilder(
                   builder: (context, constraints) {
-                    final isWide = constraints.maxWidth >= 600;
+                    final isWide = constraints.maxWidth >= 700;
                     return GridView.count(
-                      crossAxisCount: isWide ? 3 : 2,
+                      crossAxisCount: isWide ? 4 : 2,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       crossAxisSpacing: 12,
                       mainAxisSpacing: 12,
-                      childAspectRatio: isWide ? 1.6 : 1.35,
+                      childAspectRatio: isWide ? 1.45 : 1.35,
                       children: [
                     // 1. Cephanelik (Modül 11)
                     _buildHubTile(
@@ -719,6 +762,38 @@ class HomeScreen extends StatelessWidget {
                           context,
                           MaterialPageRoute(
                             builder: (_) => const GlossaryScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    // 7. MITRE ATT&CK Matrisi
+                    _buildHubTile(
+                      context: context,
+                      title: 'MITRE Matrisi',
+                      subtitle: 'Isı Haritası & Taktikler',
+                      icon: Icons.hub_outlined,
+                      color: const Color(0xFFEF4444),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const MitreMatrixScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    // 8. Kerberos Bilet Çözümleyici
+                    _buildHubTile(
+                      context: context,
+                      title: 'Bilet Çözümleyici',
+                      subtitle: 'Kirbi & CCache Inspector',
+                      icon: Icons.confirmation_number_outlined,
+                      color: AppTheme.toolsAmber,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const TicketInspectorScreen(),
                           ),
                         );
                       },

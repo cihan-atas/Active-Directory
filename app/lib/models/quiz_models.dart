@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 /// Soru Zorluk Düzeyi
 enum QuizDifficulty {
   beginner('Başlangıç', 0xFF10B981), // Emerald
@@ -26,6 +28,33 @@ enum QuizCategory {
   final String label;
   final int colorHex;
   const QuizCategory(this.label, this.colorHex);
+
+  IconData get icon {
+    switch (this) {
+      case QuizCategory.recon:
+        return Icons.search;
+      case QuizCategory.initialAccess:
+        return Icons.vpn_key_outlined;
+      case QuizCategory.credentialAccess:
+        return Icons.lock_open;
+      case QuizCategory.kerberos:
+        return Icons.confirmation_number_outlined;
+      case QuizCategory.aclGpo:
+        return Icons.security;
+      case QuizCategory.adcs:
+        return Icons.badge;
+      case QuizCategory.relayCoercion:
+        return Icons.swap_horiz;
+      case QuizCategory.lateralMovement:
+        return Icons.send_rounded;
+      case QuizCategory.dominance:
+        return Icons.military_tech;
+      case QuizCategory.blueTeam:
+        return Icons.shield;
+      case QuizCategory.sysAdmin:
+        return Icons.dns;
+    }
+  }
 }
 
 /// Çoktan Seçmeli Test Sorusu

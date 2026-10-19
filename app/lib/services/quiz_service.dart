@@ -164,6 +164,42 @@ class QuizService extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Tüm kategoriler için yetenek ve açık analizi (Skill Gap Analysis) hesaplar
+  List<CategorySkillStats> getSkillGapAnalysis() {
+    final list = <CategorySkillStats>[];
+    for (final cat in QuizCategory.values) {
+      final catQuestions = allQuestions.where((q) => q.category == cat).toList();
+      final total = catQuestions.length;
+      int answered = 0;
+      int correct = 0;
+      int wrong = 0;
+
+      for (final q in catQuestions) {
+        if (_userAnswers.containsKey(q.id)) {
+          answered++;
+          if (_userAnswers[q.id] == q.correctIndex) {
+            correct++;
+          } else {
+            wrong++;
+          }
+        }
+      }
+
+      final percent = answered > 0 ? ((correct / answered) * 100.0) : 0.0;
+      list.add(
+        CategorySkillStats(
+          category: cat,
+          totalQuestions: total,
+          answeredCount: answered,
+          correctCount: correct,
+          wrongCount: wrong,
+          scorePercent: percent,
+        ),
+      );
+    }
+    return list;
+  }
+
   Future<void> _save() async {
     final prefs = await SharedPreferences.getInstance();
     final data = {
@@ -181,4 +217,27 @@ class QuizService extends ChangeNotifier {
     final list = _customQuestions.map((q) => q.toJson()).toList();
     await prefs.setString(_customQuestionsKey, jsonEncode(list));
   }
+}
+
+/// Kategori Yetenek ve Açık Analizi Modeli (Skill Gap Stats)
+class CategorySkillStats {
+  final QuizCategory category;
+  final int totalQuestions;
+  final int answeredCount;
+  final int correctCount;
+  final int wrongCount;
+  final double scorePercent;
+
+  CategorySkillStats({
+    required this.category,
+    required this.totalQuestions,
+    required this.answeredCount,
+    required this.correctCount,
+    required this.wrongCount,
+    required this.scorePercent,
+  });
+
+  bool get hasAttempted => answeredCount > 0;
+  bool get isWeak => hasAttempted ? scorePercent < 60.0 : true;
+  bool get isMaster => hasAttempted && scorePercent >= 80.0;
 }

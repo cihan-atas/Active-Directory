@@ -17,6 +17,9 @@ import 'quiz_screen.dart';
 import 'scenarios_screen.dart';
 import 'scratchpad_screen.dart';
 import 'search_screen.dart';
+import 'ticket_inspector_screen.dart';
+import 'mitre_matrix_screen.dart';
+import 'quiz_scorecard_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -318,6 +321,45 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(builder: (_) => const ScenariosScreen()),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.hub, color: AppTheme.redTeam),
+                  title: const Text('🗺 MITRE ATT&CK Matris Navigatörü', style: TextStyle(color: Colors.white, fontSize: 13.5)),
+                  subtitle: const Text('Isı haritası, araçlar, komutlar ve Blue Team tespit kurallarıyla tüm AD teknikleri', style: TextStyle(fontSize: 11.5, color: AppTheme.textSecondary)),
+                  trailing: const Icon(Icons.chevron_right, color: AppTheme.textMuted),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const MitreMatrixScreen()),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.confirmation_number_outlined, color: AppTheme.toolsAmber),
+                  title: const Text('🎟 Kerberos Bilet Çözümleyici (Inspector)', style: TextStyle(color: Colors.white, fontSize: 13.5)),
+                  subtitle: const Text('Base64 .kirbi, CCache ve terminal biletlerini istemci tarafında görsel kimlik kartına dönüştürün', style: TextStyle(fontSize: 11.5, color: AppTheme.textSecondary)),
+                  trailing: const Icon(Icons.chevron_right, color: AppTheme.textMuted),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const TicketInspectorScreen()),
+                    );
+                  },
+                ),
+                const Divider(height: 1),
+                ListTile(
+                  leading: const Icon(Icons.radar, color: Color(0xFF10B981)),
+                  title: const Text('📊 Sınav Karnesi & Yetenek Radar Grafiği', style: TextStyle(color: Colors.white, fontSize: 13.5)),
+                  subtitle: const Text('11 kategoride eksik olduğunuz konuları radar grafiğinde görün ve zayıf konulara odaklanın', style: TextStyle(fontSize: 11.5, color: AppTheme.textSecondary)),
+                  trailing: const Icon(Icons.chevron_right, color: AppTheme.textMuted),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const QuizScorecardScreen()),
                     );
                   },
                 ),

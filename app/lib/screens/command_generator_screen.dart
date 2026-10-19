@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/command_model.dart';
@@ -8,10 +9,37 @@ import 'article_screen.dart';
 import 'scratchpad_screen.dart';
 
 class CommandGeneratorScreen extends StatefulWidget {
-  const CommandGeneratorScreen({super.key});
+  final String? initialSearchQuery;
+  final String? initialTool;
+  final String? initialCategory;
+  final OpsecTag? initialOpsecTag;
+
+  final CommandPillar? initialPillar;
+
+  const CommandGeneratorScreen({
+    super.key,
+    this.initialSearchQuery,
+    this.initialTool,
+    this.initialCategory,
+    this.initialOpsecTag,
+    this.initialPillar,
+  });
 
   @override
   State<CommandGeneratorScreen> createState() => _CommandGeneratorScreenState();
+}
+
+/// Popüler Araç Ailesi Tanımı ve Akıllı Filtre Eşleyicisi
+class PopularToolInfo {
+  final String key;
+  final String label;
+  final bool Function(String tool) matcher;
+
+  const PopularToolInfo({
+    required this.key,
+    required this.label,
+    required this.matcher,
+  });
 }
 
 class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
@@ -21,8 +49,92 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
 
   String _searchQuery = '';
   String _selectedCategory = 'Tümü';
+  String _selectedTool = 'Tümü';
   String _selectedPlatform = 'Tümü';
   String _selectedFilterType = 'all'; // all, favorites, custom
+  OpsecTag _selectedOpsecTag = OpsecTag.all;
+  CommandPillar _selectedPillar = CommandPillar.all;
+
+  // Popüler Araç Aileleri (Büyük/Küçük harf ve takma ad duyarsız)
+  static final List<PopularToolInfo> popularToolList = [
+    PopularToolInfo(
+      key: 'Mimikatz',
+      label: 'Mimikatz',
+      matcher: (t) => t.toLowerCase().contains('mimikatz'),
+    ),
+    PopularToolInfo(
+      key: 'BloodHound',
+      label: 'BloodHound',
+      matcher: (t) {
+        final l = t.toLowerCase();
+        return l.contains('hound') || l.contains('bloodhound');
+      },
+    ),
+    PopularToolInfo(
+      key: 'Certipy',
+      label: 'Certipy',
+      matcher: (t) => t.toLowerCase().contains('certipy'),
+    ),
+    PopularToolInfo(
+      key: 'Rubeus',
+      label: 'Rubeus',
+      matcher: (t) => t.toLowerCase().contains('rubeus'),
+    ),
+    PopularToolInfo(
+      key: 'NetExec',
+      label: 'NetExec (nxc)',
+      matcher: (t) {
+        final l = t.toLowerCase();
+        return l == 'nxc' || l.contains('netexec');
+      },
+    ),
+    PopularToolInfo(
+      key: 'Impacket',
+      label: 'Impacket',
+      matcher: (t) => t.toLowerCase().contains('impacket'),
+    ),
+    PopularToolInfo(
+      key: 'PowerView',
+      label: 'PowerView',
+      matcher: (t) {
+        final l = t.toLowerCase();
+        return l.contains('powerview') || l.startsWith('get-domain') || l.startsWith('find-domain');
+      },
+    ),
+    PopularToolInfo(
+      key: 'Hashcat',
+      label: 'Hashcat',
+      matcher: (t) => t.toLowerCase().contains('hashcat'),
+    ),
+    PopularToolInfo(
+      key: 'bloodyAD',
+      label: 'bloodyAD',
+      matcher: (t) => t.toLowerCase().contains('bloodyad'),
+    ),
+    PopularToolInfo(
+      key: 'Responder',
+      label: 'Responder',
+      matcher: (t) => t.toLowerCase().contains('responder'),
+    ),
+  ];
+
+  // Performans İçin Önbelleklenmiş (Cached / Pre-computed) Durum Değişkenleri
+  List<VaultCommand> _filteredCommands = [];
+  Map<String, int> _toolCounts = {};
+  List<String> _tools = ['Tümü'];
+  Map<String, int> _popularToolCounts = {};
+  Map<String, int> _categoryCounts = {};
+  List<String> _categories = ['Tümü'];
+  int _redTeamCount = 0;
+  int _blueTeamCount = 0;
+  int _systemCount = 0;
+  int _linuxCount = 0;
+  int _powershellCount = 0;
+  int _windowsCmdCount = 0;
+
+  // Arama & Debounce Kontrolleri
+  late TextEditingController _searchController;
+  Timer? _searchDebounceTimer;
 
   // Form Controller'ları
   late TextEditingController _domainController;
@@ -41,6 +153,22 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
   @override
   void initState() {
     super.initState();
+    if (widget.initialSearchQuery != null && widget.initialSearchQuery!.isNotEmpty) {
+      _searchQuery = widget.initialSearchQuery!;
+    }
+    _searchController = TextEditingController(text: _searchQuery);
+    if (widget.initialTool != null && widget.initialTool!.isNotEmpty) {
+      _selectedTool = widget.initialTool!;
+    }
+    if (widget.initialCategory != null && widget.initialCategory!.isNotEmpty) {
+      _selectedCategory = widget.initialCategory!;
+    }
+    if (widget.initialOpsecTag != null) {
+      _selectedOpsecTag = widget.initialOpsecTag!;
+    }
+    if (widget.initialPillar != null) {
+      _selectedPillar = widget.initialPillar!;
+    }
     _initControllers(const TargetContext());
     _loadData();
   }
@@ -62,6 +190,8 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
 
   @override
   void dispose() {
+    _searchDebounceTimer?.cancel();
+    _searchController.dispose();
     _domainController.dispose();
     _netbiosController.dispose();
     _dcIpController.dispose();
@@ -77,10 +207,23 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
     super.dispose();
   }
 
+  /// 180ms Debounced Arama Girişi (60 FPS Pürüzsüz Yazım Deneyimi)
+  void _onSearchChanged(String val) {
+    _searchDebounceTimer?.cancel();
+    _searchDebounceTimer = Timer(const Duration(milliseconds: 180), () {
+      if (!mounted) return;
+      setState(() {
+        _searchQuery = val;
+        _applyFilters();
+      });
+    });
+  }
+
   Future<void> _loadData() async {
     setState(() => _isLoading = true);
     await _service.init();
     _updateControllersFromService();
+    _initPrecomputedData();
     if (mounted) {
       setState(() => _isLoading = false);
     }
@@ -121,38 +264,161 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
     setState(() {});
   }
 
-  List<VaultCommand> get _filteredCommands {
-    return _service.allCommands.where((cmd) {
-      // 1. Tip Filtresi (Favori / Özel / Tümü)
-      if (_selectedFilterType == 'favorites' && !cmd.isFavorite) return false;
-      if (_selectedFilterType == 'custom' && !cmd.isUserCreated) return false;
+  void _initPrecomputedData() {
+    final allCmds = _service.allCommands;
 
-      // 2. Platform Filtresi
-      if (_selectedPlatform != 'Tümü') {
-        if (_selectedPlatform == 'Linux' && !cmd.platform.toLowerCase().contains('linux')) return false;
-        if (_selectedPlatform == 'PowerShell' && !cmd.platform.toLowerCase().contains('powershell')) return false;
-        if (_selectedPlatform == 'Windows CMD' && !cmd.platform.toLowerCase().contains('windows')) return false;
+    // 1. Araç Sayımları & Sıralı Liste
+    final tMap = <String, int>{};
+    for (var c in allCmds) {
+      final t = c.tool.trim();
+      if (t.isNotEmpty) {
+        tMap[t] = (tMap[t] ?? 0) + 1;
+      }
+    }
+    _toolCounts = tMap;
+
+    final sortedTools = tMap.keys.toList()
+      ..sort((a, b) {
+        final countA = tMap[a] ?? 0;
+        final countB = tMap[b] ?? 0;
+        if (countA != countB) return countB.compareTo(countA);
+        return a.compareTo(b);
+      });
+    _tools = ['Tümü', ...sortedTools];
+
+    // 2. Popüler Araç Ailesi Sayımları (Mimikatz, BloodHound, Certipy vb.)
+    final pMap = <String, int>{};
+    for (final p in popularToolList) {
+      pMap[p.key] = allCmds.where((c) => p.matcher(c.tool)).length;
+    }
+    _popularToolCounts = pMap;
+
+    // 3. Kategori Sayımları & Listesi
+    final catMap = <String, int>{};
+    final catSet = <String>{'Tümü'};
+    for (var uCat in _service.userCategories) {
+      if (uCat.trim().isNotEmpty) catSet.add(uCat.trim());
+    }
+    for (var c in allCmds) {
+      final cat = c.category.trim();
+      if (cat.isNotEmpty) {
+        catMap[cat] = (catMap[cat] ?? 0) + 1;
+        catSet.add(cat);
+      }
+      if (c.customCategory != null && c.customCategory!.trim().isNotEmpty) {
+        final custCat = c.customCategory!.trim();
+        catMap[custCat] = (catMap[custCat] ?? 0) + 1;
+        catSet.add(custCat);
+      }
+    }
+    _categoryCounts = catMap;
+    _categories = catSet.toList();
+
+    // 4. Sütun (Pillar) Sayımları
+    int red = 0, blue = 0, sys = 0;
+    for (var c in allCmds) {
+      switch (c.pillar) {
+        case CommandPillar.redTeam:
+          red++;
+          break;
+        case CommandPillar.blueTeam:
+          blue++;
+          break;
+        case CommandPillar.system:
+          sys++;
+          break;
+        default:
+          break;
+      }
+    }
+    _redTeamCount = red;
+    _blueTeamCount = blue;
+    _systemCount = sys;
+
+    // 5. Platform Sayımları
+    int lnx = 0, ps = 0, win = 0;
+    for (var c in allCmds) {
+      final plat = c.platform.toLowerCase();
+      if (plat.contains('linux')) lnx++;
+      if (plat.contains('powershell')) ps++;
+      if (plat.contains('windows')) win++;
+    }
+    _linuxCount = lnx;
+    _powershellCount = ps;
+    _windowsCmdCount = win;
+
+    // İlk filtrelemeyi hesapla
+    _applyFilters();
+  }
+
+  /// Akıllı Araç Eşleyicisi (Takma Ad, Büyük/Küçük Harf ve Aile Desteği)
+  bool _matchesTool(String cmdTool, String selectedTool) {
+    if (selectedTool == 'Tümü') return true;
+
+    // 1. Popüler Araç Ailesi Kontrolü
+    for (final p in popularToolList) {
+      if (p.key.toLowerCase() == selectedTool.toLowerCase() ||
+          p.label.toLowerCase() == selectedTool.toLowerCase()) {
+        return p.matcher(cmdTool);
+      }
+    }
+
+    // 2. Normal Araç Adı Eşleşmesi
+    final c = cmdTool.trim().toLowerCase();
+    final s = selectedTool.trim().toLowerCase();
+    return c == s || c.contains(s) || s.contains(c);
+  }
+
+  /// Filtreleri Tek Seferde Çalıştır ve _filteredCommands Listesini Sakla
+  void _applyFilters() {
+    final allCmds = _service.allCommands;
+    final q = _searchQuery.trim().toLowerCase();
+    final hasSearch = q.isNotEmpty;
+    final isFav = _selectedFilterType == 'favorites';
+    final isCustom = _selectedFilterType == 'custom';
+    final hasPlatform = _selectedPlatform != 'Tümü';
+    final hasCategory = _selectedCategory != 'Tümü';
+    final hasTool = _selectedTool != 'Tümü';
+    final hasOpsec = _selectedOpsecTag != OpsecTag.all;
+    final hasPillar = _selectedPillar != CommandPillar.all;
+
+    if (!hasSearch && !isFav && !isCustom && !hasPlatform && !hasCategory && !hasTool && !hasOpsec && !hasPillar) {
+      _filteredCommands = List.of(allCmds);
+      return;
+    }
+
+    _filteredCommands = allCmds.where((cmd) {
+      if (hasPillar && cmd.pillar != _selectedPillar) return false;
+      if (isFav && !cmd.isFavorite) return false;
+      if (isCustom && !cmd.isUserCreated) return false;
+
+      if (hasPlatform) {
+        final p = cmd.platform.toLowerCase();
+        if (_selectedPlatform == 'Linux' && !p.contains('linux')) return false;
+        if (_selectedPlatform == 'PowerShell' && !p.contains('powershell')) return false;
+        if (_selectedPlatform == 'Windows CMD' && !p.contains('windows')) return false;
       }
 
-      // 3. Kategori Filtresi
-      if (_selectedCategory != 'Tümü' &&
-          cmd.category != _selectedCategory &&
-          cmd.customCategory != _selectedCategory) {
-        return false;
-      }
-
-      // 4. Arama Sorgusu
-      if (_searchQuery.trim().isNotEmpty) {
-        final q = _searchQuery.toLowerCase();
-        final inTitle = cmd.title.toLowerCase().contains(q);
-        final inTool = cmd.tool.toLowerCase().contains(q);
-        final inCmd = cmd.rawCommand.toLowerCase().contains(q) || cmd.template.toLowerCase().contains(q);
-        final inWhat = cmd.whatItDoes.toLowerCase().contains(q);
-        final inParams = cmd.parameters.toLowerCase().contains(q);
-        final inEvent = cmd.eventIds.any((e) => e.contains(q));
-        final inNote = cmd.userNote != null && cmd.userNote!.toLowerCase().contains(q);
-        if (!inTitle && !inTool && !inCmd && !inWhat && !inParams && !inEvent && !inNote) {
+      if (hasCategory) {
+        if (cmd.category != _selectedCategory && cmd.customCategory != _selectedCategory) {
           return false;
+        }
+      }
+
+      if (hasTool) {
+        if (!_matchesTool(cmd.tool, _selectedTool)) {
+          return false;
+        }
+      }
+
+      if (hasOpsec) {
+        if (!cmd.opsecTags.contains(_selectedOpsecTag)) return false;
+      }
+
+      if (hasSearch) {
+        if (!cmd.searchCorpus.contains(q)) {
+          final inNote = cmd.userNote != null && cmd.userNote!.toLowerCase().contains(q);
+          if (!inNote) return false;
         }
       }
 
@@ -162,54 +428,12 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
 
   bool get _isFilterActive =>
       _searchQuery.trim().isNotEmpty ||
+      _selectedPillar != CommandPillar.all ||
       _selectedPlatform != 'Tümü' ||
       _selectedCategory != 'Tümü' ||
-      _selectedFilterType != 'all';
-
-  Map<String, int> get _categoryCounts {
-    final map = <String, int>{};
-    for (var c in _service.allCommands) {
-      final cat = c.category.trim();
-      if (cat.isNotEmpty) {
-        map[cat] = (map[cat] ?? 0) + 1;
-      }
-      if (c.customCategory != null &&
-          c.customCategory!.trim().isNotEmpty &&
-          c.customCategory!.trim() != cat) {
-        final custCat = c.customCategory!.trim();
-        map[custCat] = (map[custCat] ?? 0) + 1;
-      }
-    }
-    return map;
-  }
-
-  int get _linuxCount => _service.allCommands
-      .where((c) => c.platform.toLowerCase().contains('linux'))
-      .length;
-
-  int get _powershellCount => _service.allCommands
-      .where((c) => c.platform.toLowerCase().contains('powershell'))
-      .length;
-
-  int get _windowsCmdCount => _service.allCommands
-      .where((c) => c.platform.toLowerCase().contains('windows'))
-      .length;
-
-  List<String> get _categories {
-    final set = <String>{'Tümü'};
-    for (var uCat in _service.userCategories) {
-      if (uCat.trim().isNotEmpty) set.add(uCat.trim());
-    }
-    for (var c in _service.allCommands) {
-      if (c.category.trim().isNotEmpty) {
-        set.add(c.category.trim());
-      }
-      if (c.customCategory != null && c.customCategory!.trim().isNotEmpty) {
-        set.add(c.customCategory!.trim());
-      }
-    }
-    return set.toList();
-  }
+      _selectedTool != 'Tümü' ||
+      _selectedFilterType != 'all' ||
+      _selectedOpsecTag != OpsecTag.all;
 
   @override
   Widget build(BuildContext context) {
@@ -286,6 +510,7 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
                       ? _buildEmptyState()
                       : ListView.builder(
                           padding: const EdgeInsets.fromLTRB(14, 10, 14, 80),
+                          cacheExtent: 600,
                           itemCount: _filteredCommands.length,
                           itemBuilder: (context, index) {
                             final cmd = _filteredCommands[index];
@@ -645,15 +870,23 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
         children: [
           // Arama Girişi
           TextField(
+            controller: _searchController,
             style: const TextStyle(color: Colors.white, fontSize: 13),
             decoration: InputDecoration(
               hintText: 'Komut, araç, Event ID veya açıklama ara...',
               hintStyle: const TextStyle(color: AppTheme.textMuted, fontSize: 13),
               prefixIcon: const Icon(Icons.search, color: AppTheme.textMuted, size: 20),
-              suffixIcon: _searchQuery.isNotEmpty
+              suffixIcon: _searchController.text.isNotEmpty
                   ? IconButton(
                       icon: const Icon(Icons.clear, size: 18),
-                      onPressed: () => setState(() => _searchQuery = ''),
+                      onPressed: () {
+                        _searchDebounceTimer?.cancel();
+                        _searchController.clear();
+                        setState(() {
+                          _searchQuery = '';
+                          _applyFilters();
+                        });
+                      },
                     )
                   : null,
               filled: true,
@@ -662,8 +895,12 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
               contentPadding: const EdgeInsets.symmetric(vertical: 10),
               border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
             ),
-            onChanged: (val) => setState(() => _searchQuery = val),
+            onChanged: _onSearchChanged,
           ),
+          const SizedBox(height: 8),
+
+          // Sütun / Rol Filtre Barı (Red, Blue, System, All)
+          _buildPillarFilterBar(),
           const SizedBox(height: 8),
 
           // Tip & Platform Filtre Çipleri
@@ -672,38 +909,182 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
             child: Row(
               children: [
                 _buildFilterChip('Tümü (${_service.allCommands.length})', _selectedFilterType == 'all', () {
-                  setState(() => _selectedFilterType = 'all');
+                  setState(() {
+                    _selectedFilterType = 'all';
+                    _applyFilters();
+                  });
                 }),
                 const SizedBox(width: 6),
                 _buildFilterChip('⭐ Favoriler (${_service.favoriteCommands.length})', _selectedFilterType == 'favorites', () {
-                  setState(() => _selectedFilterType = 'favorites');
+                  setState(() {
+                    _selectedFilterType = 'favorites';
+                    _applyFilters();
+                  });
                 }),
                 const SizedBox(width: 6),
                 _buildFilterChip('👤 Özel (${_service.customCommands.length})', _selectedFilterType == 'custom', () {
-                  setState(() => _selectedFilterType = 'custom');
+                  setState(() {
+                    _selectedFilterType = 'custom';
+                    _applyFilters();
+                  });
                 }),
                 const SizedBox(width: 12),
                 Container(height: 18, width: 1, color: AppTheme.border),
                 const SizedBox(width: 12),
                 _buildFilterChip('🐧 Linux ($_linuxCount)', _selectedPlatform == 'Linux', () {
-                  setState(() => _selectedPlatform = _selectedPlatform == 'Linux' ? 'Tümü' : 'Linux');
+                  setState(() {
+                    _selectedPlatform = _selectedPlatform == 'Linux' ? 'Tümü' : 'Linux';
+                    _applyFilters();
+                  });
                 }),
                 const SizedBox(width: 6),
                 _buildFilterChip('⚡ PowerShell ($_powershellCount)', _selectedPlatform == 'PowerShell', () {
-                  setState(() => _selectedPlatform = _selectedPlatform == 'PowerShell' ? 'Tümü' : 'PowerShell');
+                  setState(() {
+                    _selectedPlatform = _selectedPlatform == 'PowerShell' ? 'Tümü' : 'PowerShell';
+                    _applyFilters();
+                  });
                 }),
                 const SizedBox(width: 6),
                 _buildFilterChip('🪟 Windows CMD ($_windowsCmdCount)', _selectedPlatform == 'Windows CMD', () {
-                  setState(() => _selectedPlatform = _selectedPlatform == 'Windows CMD' ? 'Tümü' : 'Windows CMD');
+                  setState(() {
+                    _selectedPlatform = _selectedPlatform == 'Windows CMD' ? 'Tümü' : 'Windows CMD';
+                    _applyFilters();
+                  });
                 }),
               ],
             ),
           ),
           const SizedBox(height: 8),
 
+          // OPSEC Davranış ve Güvenlik Filtresi
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: OpsecTag.values.map((tag) {
+                final isSelected = _selectedOpsecTag == tag;
+                return Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedOpsecTag = isSelected && tag != OpsecTag.all ? OpsecTag.all : tag;
+                        _applyFilters();
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(16),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: isSelected ? tag.color.withAlpha(35) : AppTheme.bgCard,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: isSelected ? tag.color : AppTheme.border,
+                          width: isSelected ? 1.4 : 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(tag.icon, size: 12, color: isSelected ? tag.color : AppTheme.textMuted),
+                          const SizedBox(width: 5),
+                          Text(
+                            tag.label,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                              color: isSelected ? tag.color : AppTheme.textSecondary,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+          const SizedBox(height: 8),
+
           // Kategori Seçici ve Hızlı Filtre Barı
           _buildCategoryFilterBar(),
+          const SizedBox(height: 8),
+
+          // Araç Seçici ve Popüler Araçlar Barı
+          _buildToolFilterBar(),
         ],
+      ),
+    );
+  }
+
+  /// Sütun / Rol Filtre Barı (Red, Blue, System, All)
+  Widget _buildPillarFilterBar() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: CommandPillar.values.map((p) {
+          final isSelected = _selectedPillar == p;
+          final count = switch (p) {
+            CommandPillar.all => _service.allCommands.length,
+            CommandPillar.redTeam => _redTeamCount,
+            CommandPillar.blueTeam => _blueTeamCount,
+            CommandPillar.system => _systemCount,
+          };
+
+          return Padding(
+            padding: const EdgeInsets.only(right: 6),
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _selectedPillar = isSelected && p != CommandPillar.all ? CommandPillar.all : p;
+                  _applyFilters();
+                });
+              },
+              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                decoration: BoxDecoration(
+                  color: isSelected ? p.color.withAlpha(40) : AppTheme.bgCard,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isSelected ? p.color : AppTheme.border,
+                    width: isSelected ? 1.5 : 1.0,
+                  ),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(p.icon, size: 13, color: isSelected ? p.color : AppTheme.textMuted),
+                    const SizedBox(width: 5),
+                    Text(
+                      p.label,
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                        color: isSelected ? Colors.white : AppTheme.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(width: 5),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.5, vertical: 1.5),
+                      decoration: BoxDecoration(
+                        color: isSelected ? p.color.withAlpha(50) : Colors.white.withAlpha(12),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '$count',
+                        style: TextStyle(
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.bold,
+                          color: isSelected ? p.color : AppTheme.textMuted,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
@@ -785,7 +1166,12 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
         if (isCustomSelected) ...[
           const SizedBox(width: 6),
           InkWell(
-            onTap: () => setState(() => _selectedCategory = 'Tümü'),
+            onTap: () {
+              setState(() {
+                _selectedCategory = 'Tümü';
+                _applyFilters();
+              });
+            },
             borderRadius: BorderRadius.circular(8),
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 7.5),
@@ -836,6 +1222,385 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
           ),
         ),
       ],
+    );
+  }
+
+  /// Modern Araç Seçim ve Popüler Araçlar Hızlı Erişim Barı
+  Widget _buildToolFilterBar() {
+    final activeCount = _selectedTool == 'Tümü'
+        ? _service.allCommands.length
+        : (_popularToolCounts[_selectedTool] ?? _toolCounts[_selectedTool] ?? _filteredCommands.length);
+    final isToolSelected = _selectedTool != 'Tümü';
+
+    return Row(
+      children: [
+        // 1. Ana Araç Seçici Butonu
+        InkWell(
+          onTap: _showToolSelectorModal,
+          borderRadius: BorderRadius.circular(10),
+          child: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7.5),
+            decoration: BoxDecoration(
+              color: isToolSelected ? AppTheme.redTeam.withAlpha(45) : AppTheme.bgCard,
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(
+                color: isToolSelected ? AppTheme.redTeam : AppTheme.border,
+                width: isToolSelected ? 1.5 : 1.0,
+              ),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.handyman_rounded,
+                  size: 15,
+                  color: isToolSelected ? AppTheme.redTeam : AppTheme.toolsAmber,
+                ),
+                const SizedBox(width: 6),
+                ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 130),
+                  child: Text(
+                    isToolSelected ? _selectedTool : '🛠️ Araç (${_tools.length - 1})',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: isToolSelected ? FontWeight.bold : FontWeight.w600,
+                      color: isToolSelected ? Colors.white : AppTheme.textPrimary,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.5, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isToolSelected ? AppTheme.redTeam.withAlpha(60) : Colors.white.withAlpha(15),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Text(
+                    '$activeCount',
+                    style: TextStyle(
+                      fontSize: 10,
+                      fontWeight: FontWeight.bold,
+                      color: isToolSelected ? Colors.white : AppTheme.textMuted,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 3),
+                Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  size: 17,
+                  color: isToolSelected ? AppTheme.redTeam : AppTheme.textMuted,
+                ),
+              ],
+            ),
+          ),
+        ),
+
+        // Eğer seçili bir araç varsa, "Tümü"ne dönme sıfırlama butonu
+        if (isToolSelected) ...[
+          const SizedBox(width: 6),
+          InkWell(
+            onTap: () {
+              setState(() {
+                _selectedTool = 'Tümü';
+                _applyFilters();
+              });
+            },
+            borderRadius: BorderRadius.circular(8),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 7.5),
+              decoration: BoxDecoration(
+                color: AppTheme.redTeam.withAlpha(30),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(color: AppTheme.redTeam.withAlpha(100)),
+              ),
+              child: const Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(Icons.close, size: 13, color: AppTheme.redTeam),
+                  SizedBox(width: 3),
+                  Text('Tümü', style: TextStyle(fontSize: 11, color: AppTheme.redTeam, fontWeight: FontWeight.bold)),
+                ],
+              ),
+            ),
+          ),
+        ],
+
+        const SizedBox(width: 8),
+
+        // Popüler Araçlar Yatay Kaydırılabilir Çipleri (Doğru komut sayaçları ile)
+        Expanded(
+          child: SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: popularToolList.map((p) {
+                final isSelected = _selectedTool.toLowerCase() == p.key.toLowerCase() ||
+                    _selectedTool.toLowerCase() == p.label.toLowerCase();
+                final count = _popularToolCounts[p.key] ?? 0;
+
+                return Padding(
+                  padding: const EdgeInsets.only(right: 6),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedTool = isSelected ? 'Tümü' : p.key;
+                        _applyFilters();
+                      });
+                    },
+                    borderRadius: BorderRadius.circular(8),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5.5),
+                      decoration: BoxDecoration(
+                        color: isSelected ? AppTheme.redTeam.withAlpha(45) : AppTheme.bgCard,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: isSelected ? AppTheme.redTeam : AppTheme.border.withAlpha(120),
+                          width: isSelected ? 1.4 : 1.0,
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            p.label,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+                              color: isSelected ? Colors.white : AppTheme.textSecondary,
+                            ),
+                          ),
+                          const SizedBox(width: 5),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 4.5, vertical: 1),
+                            decoration: BoxDecoration(
+                              color: isSelected ? AppTheme.redTeam.withAlpha(70) : Colors.white.withAlpha(14),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              '$count',
+                              style: TextStyle(
+                                fontSize: 9.5,
+                                color: isSelected ? Colors.white : AppTheme.toolsAmber,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  /// Araç Cephaneliği Modal Bottom Sheet
+  void _showToolSelectorModal() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppTheme.bgDark,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (modalCtx) {
+        String searchQuery = '';
+
+        return StatefulBuilder(
+          builder: (ctx, setModalState) {
+            final allTools = _tools;
+
+            final filteredTools = allTools.where((tool) {
+              if (tool == 'Tümü') {
+                return searchQuery.isEmpty;
+              }
+              if (searchQuery.isNotEmpty && !tool.toLowerCase().contains(searchQuery.toLowerCase())) {
+                return false;
+              }
+              return true;
+            }).toList();
+
+            return DraggableScrollableSheet(
+              initialChildSize: 0.80,
+              minChildSize: 0.45,
+              maxChildSize: 0.94,
+              expand: false,
+              builder: (_, scrollController) {
+                return Container(
+                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 16),
+                  child: Column(
+                    children: [
+                      // Sürükleme Tutamacı
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          margin: const EdgeInsets.only(bottom: 12),
+                          decoration: BoxDecoration(
+                            color: Colors.white24,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+
+                      // Başlık Satırı
+                      Row(
+                        children: [
+                          const Icon(Icons.handyman_rounded, color: AppTheme.redTeam, size: 22),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Araç Cephaneliği & Filtresi',
+                                  style: TextStyle(
+                                    fontSize: 16.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                Text(
+                                  '${_tools.length - 1} Araç · ${_service.allCommands.length} Operasyonel Komut',
+                                  style: const TextStyle(fontSize: 11.5, color: AppTheme.textMuted),
+                                ),
+                              ],
+                            ),
+                          ),
+                          IconButton(
+                            icon: const Icon(Icons.close, color: AppTheme.textMuted, size: 20),
+                            onPressed: () => Navigator.pop(modalCtx),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+
+                      // Arama Kutusu
+                      TextField(
+                        style: const TextStyle(color: Colors.white, fontSize: 13),
+                        decoration: InputDecoration(
+                          hintText: 'Araç ara... (örn: certipy, rubeus, mimikatz)',
+                          hintStyle: const TextStyle(color: AppTheme.textMuted, fontSize: 12.5),
+                          prefixIcon: const Icon(Icons.search, color: AppTheme.textMuted, size: 18),
+                          suffixIcon: searchQuery.isNotEmpty
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear, size: 16),
+                                  onPressed: () => setModalState(() => searchQuery = ''),
+                                )
+                              : null,
+                          filled: true,
+                          fillColor: AppTheme.bgCard,
+                          isDense: true,
+                          contentPadding: const EdgeInsets.symmetric(vertical: 8),
+                          border: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: BorderSide.none),
+                        ),
+                        onChanged: (val) => setModalState(() => searchQuery = val),
+                      ),
+                      const SizedBox(height: 10),
+
+                      // Araç Listesi
+                      Expanded(
+                        child: filteredTools.isEmpty
+                            ? Center(
+                                child: Text(
+                                  '"$searchQuery" ile eşleşen araç bulunamadı.',
+                                  style: const TextStyle(color: AppTheme.textMuted, fontSize: 13),
+                                ),
+                              )
+                            : ListView.builder(
+                                controller: scrollController,
+                                itemCount: filteredTools.length,
+                                itemBuilder: (context, index) {
+                                  final tool = filteredTools[index];
+                                  final isSel = _selectedTool == tool;
+                                  final count = tool == 'Tümü'
+                                      ? _service.allCommands.length
+                                      : (_toolCounts[tool] ?? 0);
+
+                                  return Padding(
+                                    padding: const EdgeInsets.only(bottom: 6),
+                                    child: Material(
+                                      color: isSel ? AppTheme.redTeam.withAlpha(35) : AppTheme.bgCard,
+                                      borderRadius: BorderRadius.circular(10),
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedTool = tool;
+                                            _applyFilters();
+                                          });
+                                          Navigator.pop(modalCtx);
+                                        },
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(10),
+                                            border: Border.all(
+                                              color: isSel ? AppTheme.redTeam : AppTheme.border.withAlpha(60),
+                                              width: isSel ? 1.5 : 1,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                tool == 'Tümü' ? Icons.apps : Icons.terminal,
+                                                size: 17,
+                                                color: isSel ? AppTheme.redTeam : AppTheme.toolsAmber,
+                                              ),
+                                              const SizedBox(width: 10),
+                                              Expanded(
+                                                child: Text(
+                                                  tool == 'Tümü' ? 'Tüm Araçlar' : tool,
+                                                  style: TextStyle(
+                                                    fontSize: 13,
+                                                    fontWeight: isSel ? FontWeight.bold : FontWeight.w500,
+                                                    color: isSel ? Colors.white : AppTheme.textPrimary,
+                                                  ),
+                                                ),
+                                              ),
+                                              Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2.5),
+                                                decoration: BoxDecoration(
+                                                  color: isSel ? AppTheme.redTeam.withAlpha(50) : Colors.black38,
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  border: Border.all(
+                                                    color: isSel ? AppTheme.redTeam : Colors.white12,
+                                                  ),
+                                                ),
+                                                child: Text(
+                                                  '$count komut',
+                                                  style: TextStyle(
+                                                    fontSize: 11,
+                                                    fontWeight: isSel ? FontWeight.bold : FontWeight.normal,
+                                                    color: isSel ? Colors.white : AppTheme.textMuted,
+                                                  ),
+                                                ),
+                                              ),
+                                              if (isSel) ...[
+                                                const SizedBox(width: 8),
+                                                const Icon(Icons.check_circle, size: 16, color: AppTheme.redTeam),
+                                              ],
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 
@@ -1042,7 +1807,10 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
                                       borderRadius: BorderRadius.circular(10),
                                       child: InkWell(
                                         onTap: () {
-                                          setState(() => _selectedCategory = cat);
+                                          setState(() {
+                                            _selectedCategory = cat;
+                                            _applyFilters();
+                                          });
                                           Navigator.pop(modalCtx);
                                         },
                                         borderRadius: BorderRadius.circular(10),
@@ -1207,11 +1975,17 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
                     style: TextStyle(fontSize: 11.5, color: AppTheme.redTeam, fontWeight: FontWeight.bold),
                   ),
                   onPressed: () {
+                    _searchDebounceTimer?.cancel();
+                    _searchController.clear();
                     setState(() {
                       _searchQuery = '';
+                      _selectedPillar = CommandPillar.all;
                       _selectedCategory = 'Tümü';
+                      _selectedTool = 'Tümü';
                       _selectedPlatform = 'Tümü';
                       _selectedFilterType = 'all';
+                      _selectedOpsecTag = OpsecTag.all;
+                      _applyFilters();
                     });
                   },
                 ),
@@ -1228,22 +2002,62 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
                 if (_searchQuery.trim().isNotEmpty)
                   _buildActiveFilterPill(
                     'Arama: "${_searchQuery.trim()}"',
-                    () => setState(() => _searchQuery = ''),
+                    () {
+                      _searchDebounceTimer?.cancel();
+                      _searchController.clear();
+                      setState(() {
+                        _searchQuery = '';
+                        _applyFilters();
+                      });
+                    },
+                  ),
+                if (_selectedPillar != CommandPillar.all)
+                  _buildActiveFilterPill(
+                    'Sütun: ${_selectedPillar.label}',
+                    () => setState(() {
+                      _selectedPillar = CommandPillar.all;
+                      _applyFilters();
+                    }),
                   ),
                 if (_selectedFilterType != 'all')
                   _buildActiveFilterPill(
                     _selectedFilterType == 'favorites' ? '⭐ Favoriler' : '👤 Özel Komutlarım',
-                    () => setState(() => _selectedFilterType = 'all'),
+                    () => setState(() {
+                      _selectedFilterType = 'all';
+                      _applyFilters();
+                    }),
                   ),
                 if (_selectedPlatform != 'Tümü')
                   _buildActiveFilterPill(
                     'Platform: $_selectedPlatform',
-                    () => setState(() => _selectedPlatform = 'Tümü'),
+                    () => setState(() {
+                      _selectedPlatform = 'Tümü';
+                      _applyFilters();
+                    }),
                   ),
                 if (_selectedCategory != 'Tümü')
                   _buildActiveFilterPill(
                     'Kategori: $_selectedCategory',
-                    () => setState(() => _selectedCategory = 'Tümü'),
+                    () => setState(() {
+                      _selectedCategory = 'Tümü';
+                      _applyFilters();
+                    }),
+                  ),
+                if (_selectedTool != 'Tümü')
+                  _buildActiveFilterPill(
+                    '🛠️ Araç: $_selectedTool',
+                    () => setState(() {
+                      _selectedTool = 'Tümü';
+                      _applyFilters();
+                    }),
+                  ),
+                if (_selectedOpsecTag != OpsecTag.all)
+                  _buildActiveFilterPill(
+                    'OPSEC: ${_selectedOpsecTag.label}',
+                    () => setState(() {
+                      _selectedOpsecTag = OpsecTag.all;
+                      _applyFilters();
+                    }),
                   ),
               ],
             ),
@@ -1323,17 +2137,50 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
             padding: const EdgeInsets.fromLTRB(12, 10, 8, 6),
             child: Row(
               children: [
-                // Araç Rozeti
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: AppTheme.redTeam.withAlpha(30),
+                // Araç Rozeti (Tıklanabilir Filtre)
+                Tooltip(
+                  message: '${cmd.tool} komutlarını filtrele',
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        _selectedTool = _selectedTool == cmd.tool ? 'Tümü' : cmd.tool;
+                        _applyFilters();
+                      });
+                    },
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: AppTheme.redTeam.withAlpha(100)),
-                  ),
-                  child: Text(
-                    cmd.tool,
-                    style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: AppTheme.redTeam),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                      decoration: BoxDecoration(
+                        color: _selectedTool == cmd.tool
+                            ? AppTheme.redTeam
+                            : AppTheme.redTeam.withAlpha(30),
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(
+                          color: _selectedTool == cmd.tool
+                              ? AppTheme.redTeam
+                              : AppTheme.redTeam.withAlpha(120),
+                        ),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.handyman_rounded,
+                            size: 11,
+                            color: _selectedTool == cmd.tool ? Colors.white : AppTheme.redTeam,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            cmd.tool,
+                            style: TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: _selectedTool == cmd.tool ? Colors.white : AppTheme.redTeam,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 ),
                 const SizedBox(width: 6),
@@ -1411,6 +2258,37 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
               style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
+          if (cmd.opsecTags.isNotEmpty) ...[
+            const SizedBox(height: 5),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Wrap(
+                spacing: 5,
+                runSpacing: 4,
+                children: cmd.opsecTags.take(3).map((tag) {
+                  return Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: tag.color.withAlpha(20),
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: tag.color.withAlpha(80)),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(tag.icon, size: 10, color: tag.color),
+                        const SizedBox(width: 4),
+                        Text(
+                          tag.label.replaceAll(RegExp(r'^[^\s]+\s*'), ''),
+                          style: TextStyle(fontSize: 9.5, fontWeight: FontWeight.bold, color: tag.color),
+                        ),
+                      ],
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
           if (cmd.whatItDoes.isNotEmpty) ...[
             const SizedBox(height: 5),
             Padding(
@@ -2379,11 +3257,17 @@ class _CommandGeneratorScreenState extends State<CommandGeneratorScreen> {
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppTheme.redTeam),
             onPressed: () {
+              _searchDebounceTimer?.cancel();
+              _searchController.clear();
               setState(() {
                 _searchQuery = '';
                 _selectedCategory = 'Tümü';
+                _selectedTool = 'Tümü';
                 _selectedPlatform = 'Tümü';
                 _selectedFilterType = 'all';
+                _selectedPillar = CommandPillar.all;
+                _selectedOpsecTag = OpsecTag.all;
+                _applyFilters();
               });
             },
             child: const Text('Filtreleri Temizle'),

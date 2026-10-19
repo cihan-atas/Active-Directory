@@ -1,4 +1,52 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+
+/// Operasyonel Komut OPSEC ve Davranış Etiketleri
+enum OpsecTag {
+  all(id: 'all', label: 'Tüm Komutlar', icon: Icons.all_inclusive, colorHex: 0xFFF59E0B),
+  stealth(id: 'stealth', label: '🟢 EDR Sessiz (Stealth)', icon: Icons.visibility_off, colorHex: 0xFF10B981),
+  noisy(id: 'noisy', label: '🔴 Gürültülü (Noisy)', icon: Icons.volume_up, colorHex: 0xFFEF4444),
+  readOnly(id: 'readonly', label: '🛡️ Parola Değiştirmez', icon: Icons.shield, colorHex: 0xFF3B82F6),
+  offline(id: 'offline', label: '⛏️ Offline Kırma', icon: Icons.lock_open, colorHex: 0xFF8B5CF6),
+  lateral(id: 'lateral', label: '⚡ Yanal Hareket', icon: Icons.swap_horiz, colorHex: 0xFFEC4899),
+  adcs(id: 'adcs', label: '📜 AD CS / Sertifika', icon: Icons.badge, colorHex: 0xFF06B6D4);
+
+  final String id;
+  final String label;
+  final IconData icon;
+  final int colorHex;
+
+  const OpsecTag({
+    required this.id,
+    required this.label,
+    required this.icon,
+    required this.colorHex,
+  });
+
+  Color get color => Color(colorHex);
+}
+
+/// Active Directory Vault Ana Sütunları (Pillars)
+enum CommandPillar {
+  all(id: 'all', label: 'Tümü', icon: Icons.all_inclusive, colorHex: 0xFFF59E0B),
+  redTeam(id: 'red', label: '🔴 Red Team', icon: Icons.security, colorHex: 0xFFEF4444),
+  blueTeam(id: 'blue', label: '🔵 Blue Team', icon: Icons.shield, colorHex: 0xFF3B82F6),
+  system(id: 'system', label: '🟢 Sistem Yöneticisi', icon: Icons.admin_panel_settings, colorHex: 0xFF10B981);
+
+  final String id;
+  final String label;
+  final IconData icon;
+  final int colorHex;
+
+  const CommandPillar({
+    required this.id,
+    required this.label,
+    required this.icon,
+    required this.colorHex,
+  });
+
+  Color get color => Color(colorHex);
+}
 
 /// Operasyonel Hedef Bağlamı ve Değişkenleri
 class TargetContext {
@@ -154,6 +202,11 @@ class VaultCommand {
   String? userNote;
   String? customCategory;
 
+  /// Performans için önbelleklenmiş küçük harfli arama indeksi
+  late final String searchCorpus =
+      '$title $tool $rawCommand $template $whatItDoes $whenToUse $parameters ${eventIds.join(" ")}'
+          .toLowerCase();
+
   VaultCommand({
     required this.id,
     required this.tool,
@@ -196,6 +249,106 @@ class VaultCommand {
     result = result.replaceAll('{{template}}', ctx.templateName);
 
     return result;
+  }
+
+  /// Komutun operasyonel güvenlik (OPSEC) ve davranış etiketlerini dinamik hesaplar
+  List<OpsecTag> get opsecTags {
+    final tags = <OpsecTag>[];
+    final fullText = '${rawCommand.toLowerCase()} ${tool.toLowerCase()} ${opsec.toLowerCase()} ${whatItDoes.toLowerCase()}';
+
+    // 1. EDR Sessiz (Stealth / Low Noise)
+    if (fullText.contains('ldapsearch') ||
+        fullText.contains('get-domainuser') ||
+        fullText.contains('get-domaingroup') ||
+        fullText.contains('nltest') ||
+        fullText.contains('dsquery') ||
+        fullText.contains('certutil -dump') ||
+        fullText.contains('sessiz') ||
+        fullText.contains('düşük iz') ||
+        fullText.contains('read-only')) {
+      tags.add(OpsecTag.stealth);
+    }
+
+    // 2. Gürültülü (Noisy / Network Scan)
+    if (fullText.contains('crackmapexec') ||
+        fullText.contains('netexec') ||
+        fullText.contains('nmap') ||
+        fullText.contains('masscan') ||
+        fullText.contains('spray') ||
+        fullText.contains('responder') ||
+        fullText.contains('mitm6') ||
+        fullText.contains('brute') ||
+        fullText.contains('kerbrute') ||
+        fullText.contains('taram')) {
+      tags.add(OpsecTag.noisy);
+    }
+
+    // 3. Parola Değiştirmez (Read-Only / Safe)
+    if (!fullText.contains('net user /add') &&
+        !fullText.contains('set-domainuserpassword') &&
+        !fullText.contains('changepassword') &&
+        !fullText.contains('delete') &&
+        !fullText.contains('remove')) {
+      tags.add(OpsecTag.readOnly);
+    }
+
+    // 4. Offline Kırma
+    if (fullText.contains('hashcat') ||
+        fullText.contains('john') ||
+        fullText.contains('tgsrepcrack') ||
+        fullText.contains('asreproast') ||
+        fullText.contains('kirbikator') ||
+        fullText.contains('kırma') ||
+        fullText.contains('wordlist')) {
+      tags.add(OpsecTag.offline);
+    }
+
+    // 5. Yanal Hareket
+    if (fullText.contains('psexec') ||
+        fullText.contains('wmiexec') ||
+        fullText.contains('smbexec') ||
+        fullText.contains('winrm') ||
+        fullText.contains('dcomexec') ||
+        fullText.contains('atexec') ||
+        fullText.contains('evil-winrm') ||
+        fullText.contains('pass-the-hash')) {
+      tags.add(OpsecTag.lateral);
+    }
+
+    // 6. AD CS / Sertifika
+    if (fullText.contains('certipy') ||
+        fullText.contains('certify') ||
+        fullText.contains('forgecert') ||
+        fullText.contains('pkinit') ||
+        fullText.contains('gettgtpkinit') ||
+        fullText.contains('sertifika')) {
+      tags.add(OpsecTag.adcs);
+    }
+
+    return tags;
+  }
+
+  /// Komutun ait olduğu ana sütun (Pillar: Red Team, Blue Team, Sistem Yöneticisi)
+  CommandPillar get pillar {
+    if (docPath != null && docPath!.isNotEmpty) {
+      final p = docPath!.toLowerCase().replaceAll('\\', '/');
+      if (p.startsWith('3-red_team') || p.contains('/red_team') || p.contains('3-red')) {
+        return CommandPillar.redTeam;
+      }
+      if (p.startsWith('2-blue_team') || p.contains('/blue_team') || p.contains('2-blue')) {
+        return CommandPillar.blueTeam;
+      }
+      if (p.startsWith('1-sistem_yoneticisi') || p.contains('/sistem_yoneticisi') || p.contains('1-sistem')) {
+        return CommandPillar.system;
+      }
+    }
+    final c = category.toLowerCase();
+    if (c.startsWith('red team') || c.contains('red team')) return CommandPillar.redTeam;
+    if (c.startsWith('blue team') || c.contains('blue team')) return CommandPillar.blueTeam;
+    if (c.startsWith('sistem') || c.contains('sistem yöneticisi') || c.contains('sysadmin')) {
+      return CommandPillar.system;
+    }
+    return CommandPillar.redTeam;
   }
 
   Map<String, dynamic> toJson() => {
