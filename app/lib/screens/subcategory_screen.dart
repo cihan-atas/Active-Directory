@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/content_models.dart';
+import '../services/app_state.dart';
 import '../theme/app_theme.dart';
 import 'article_screen.dart';
 
@@ -20,6 +21,7 @@ class SubCategoryScreen extends StatefulWidget {
 }
 
 class _SubCategoryScreenState extends State<SubCategoryScreen> {
+  final AppState _appState = AppState();
   String _filter = '';
 
   @override
@@ -81,20 +83,23 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                     itemBuilder: (context, index) {
                       final item = filteredArticles[index];
                       final isReadme = item.isReadme;
+                      final isRead = _appState.isRead(item.id);
 
                       return Card(
                         color: isReadme ? AppTheme.bgCardHover : AppTheme.bgCard,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                           side: BorderSide(
-                            color: isReadme ? widget.pillarColor.withAlpha(120) : AppTheme.border,
-                            width: isReadme ? 1.2 : 1,
+                            color: isRead
+                                ? AppTheme.sysAdmin.withAlpha(90)
+                                : (isReadme ? widget.pillarColor.withAlpha(120) : AppTheme.border),
+                            width: isRead || isReadme ? 1.2 : 1,
                           ),
                         ),
                         child: InkWell(
                           borderRadius: BorderRadius.circular(10),
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => ArticleScreen(
@@ -103,6 +108,7 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                                 ),
                               ),
                             );
+                            if (mounted) setState(() {});
                           },
                           child: Padding(
                             padding: const EdgeInsets.all(14.0),
@@ -112,14 +118,20 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(8),
                                   decoration: BoxDecoration(
-                                    color: (isReadme ? widget.pillarColor : AppTheme.blueTeam)
-                                        .withAlpha(30),
+                                    color: isRead
+                                        ? AppTheme.sysAdmin.withAlpha(30)
+                                        : (isReadme ? widget.pillarColor : AppTheme.blueTeam)
+                                            .withAlpha(30),
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Icon(
-                                    isReadme ? Icons.auto_stories : Icons.terminal,
+                                    isRead
+                                        ? Icons.check_circle
+                                        : (isReadme ? Icons.auto_stories : Icons.terminal),
                                     size: 18,
-                                    color: isReadme ? widget.pillarColor : AppTheme.blueTeam,
+                                    color: isRead
+                                        ? AppTheme.sysAdmin
+                                        : (isReadme ? widget.pillarColor : AppTheme.blueTeam),
                                   ),
                                 ),
                                 const SizedBox(width: 12),
@@ -154,6 +166,32 @@ class _SubCategoryScreenState extends State<SubCategoryScreen> {
                                   ),
                                 ),
                                 const SizedBox(width: 8),
+                                if (isRead) ...[
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                                    decoration: BoxDecoration(
+                                      color: AppTheme.sysAdmin.withAlpha(25),
+                                      borderRadius: BorderRadius.circular(6),
+                                      border: Border.all(color: AppTheme.sysAdmin.withAlpha(120)),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: const [
+                                        Icon(Icons.check_circle, size: 12, color: AppTheme.sysAdmin),
+                                        SizedBox(width: 4),
+                                        Text(
+                                          'Okundu',
+                                          style: TextStyle(
+                                            fontSize: 10.5,
+                                            color: AppTheme.sysAdmin,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(width: 6),
+                                ],
                                 const Icon(
                                   Icons.chevron_right,
                                   color: AppTheme.textMuted,

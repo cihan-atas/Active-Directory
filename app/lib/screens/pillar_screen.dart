@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import '../models/content_models.dart';
+import '../services/app_state.dart';
 import '../theme/app_theme.dart';
 import 'article_screen.dart';
 import 'subcategory_screen.dart';
 
-class PillarScreen extends StatelessWidget {
+class PillarScreen extends StatefulWidget {
   final Pillar pillar;
 
   const PillarScreen({super.key, required this.pillar});
 
+  @override
+  State<PillarScreen> createState() => _PillarScreenState();
+}
+
+class _PillarScreenState extends State<PillarScreen> {
+  final AppState _appState = AppState();
+
   Color _getColor() {
-    switch (pillar.id) {
+    switch (widget.pillar.id) {
       case 'red_team':
         return AppTheme.redTeam;
       case 'blue_team':
@@ -29,14 +37,14 @@ class PillarScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppTheme.bgDark,
       appBar: AppBar(
-        title: Text(pillar.name),
+        title: Text(widget.pillar.name),
       ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           // 1. Öne Çıkan Rehberler ve Oyun Kitapları (Örn: Red Team PLAYBOOK.md)
-          if (pillar.featuredArticles.isNotEmpty) ...[
-            ...pillar.featuredArticles.map((feat) {
+          if (widget.pillar.featuredArticles.isNotEmpty) ...[
+            ...widget.pillar.featuredArticles.map((feat) {
               return Container(
                 margin: const EdgeInsets.only(bottom: 14),
                 decoration: BoxDecoration(
@@ -141,11 +149,15 @@ class PillarScreen extends StatelessWidget {
           ],
 
           // 2. Modüller Listesi
-          ...pillar.modules.map((mod) {
+          ...widget.pillar.modules.map((mod) {
             final hasSub = mod.hasSubcategories;
+            final readInMod = mod.articles.where((a) => _appState.isRead(a.id)).length;
+            final totalInMod = mod.articles.length;
+            final isAllModRead = totalInMod > 0 && readInMod == totalInMod;
+
             final itemCount = hasSub
                 ? (mod.articles.isNotEmpty ? 'Rehber & ${mod.subcategories.length} Kategori' : '${mod.subcategories.length} Kategori')
-                : '${mod.articles.length} Konu';
+                : (readInMod > 0 ? '$readInMod/$totalInMod Tamamlandı' : '$totalInMod Konu');
 
             return Padding(
               padding: const EdgeInsets.only(bottom: 12),
@@ -153,7 +165,10 @@ class PillarScreen extends StatelessWidget {
                 color: AppTheme.bgCard,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
-                  side: const BorderSide(color: AppTheme.border, width: 1),
+                  side: BorderSide(
+                    color: isAllModRead ? AppTheme.blueTeam : AppTheme.border,
+                    width: isAllModRead ? 1.5 : 1,
+                  ),
                 ),
                 child: ExpansionTile(
                   shape: const Border(),
@@ -303,17 +318,18 @@ class PillarScreen extends StatelessWidget {
                               const Icon(Icons.chevron_right, size: 18, color: AppTheme.textMuted),
                             ],
                           ),
-                          onTap: () {
-                            Navigator.push(
+                          onTap: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => SubCategoryScreen(
                                   subcategory: subcat,
-                                  pillarId: pillar.id,
+                                  pillarId: widget.pillar.id,
                                   pillarColor: pillarColor,
                                 ),
                               ),
                             );
+                            if (mounted) setState(() {});
                           },
                         );
                       }),
@@ -321,12 +337,17 @@ class PillarScreen extends StatelessWidget {
                       // Konular (Modül 01-10)
                       ...mod.articles.map((art) {
                         final isReadme = art.isReadme;
+                        final isRead = _appState.isRead(art.id);
                         return ListTile(
                           dense: true,
                           contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 2),
                           leading: Icon(
-                            isReadme ? Icons.auto_stories : Icons.article_outlined,
-                            color: isReadme ? pillarColor : AppTheme.blueTeam,
+                            isRead
+                                ? Icons.check_circle
+                                : (isReadme ? Icons.auto_stories : Icons.article_outlined),
+                            color: isRead
+                                ? AppTheme.sysAdmin
+                                : (isReadme ? pillarColor : AppTheme.blueTeam),
                             size: 16,
                           ),
                           title: Text(
@@ -345,10 +366,40 @@ class PillarScreen extends StatelessWidget {
                                   style: const TextStyle(fontSize: 11, color: AppTheme.textMuted),
                                 )
                               : null,
-                          trailing:
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (isRead) ...[
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.sysAdmin.withAlpha(25),
+                                    borderRadius: BorderRadius.circular(5),
+                                    border: Border.all(color: AppTheme.sysAdmin.withAlpha(100)),
+                                  ),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: const [
+                                      Icon(Icons.check_circle, size: 11, color: AppTheme.sysAdmin),
+                                      SizedBox(width: 3),
+                                      Text(
+                                        'Okundu',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: AppTheme.sysAdmin,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                              ],
                               const Icon(Icons.chevron_right, size: 18, color: AppTheme.textMuted),
-                          onTap: () {
-                            Navigator.push(
+                            ],
+                          ),
+                          onTap: () async {
+                            await Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (_) => ArticleScreen(
@@ -357,6 +408,7 @@ class PillarScreen extends StatelessWidget {
                                 ),
                               ),
                             );
+                            if (mounted) setState(() {});
                           },
                         );
                       }),

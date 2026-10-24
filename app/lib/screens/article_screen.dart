@@ -321,6 +321,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
                   if (_article != null) {
                     showAiAssistantSheet(
                       context,
+                      articleId: _article!.id,
+                      moduleId: _article!.moduleId,
+                      moduleTitle: _article!.category,
                       articleContent: _article!.content,
                       articleTitle: _article!.title,
                     );
@@ -688,6 +691,9 @@ class _ArticleScreenState extends State<ArticleScreen> {
                     onPressed: () {
                       showAiAssistantSheet(
                         context,
+                        articleId: _article?.id ?? widget.articleId,
+                        moduleId: _article?.moduleId ?? '',
+                        moduleTitle: _article?.category ?? '',
                         articleContent: section.body,
                         articleTitle: '$fullTitle · ${section.title}',
                       );

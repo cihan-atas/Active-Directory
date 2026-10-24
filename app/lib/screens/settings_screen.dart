@@ -497,131 +497,286 @@ class _SavedChatsViewerModal extends StatefulWidget {
 
 class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
   final AiService _ai = AiService();
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
   SavedAiChat? _viewingChat;
 
   @override
+  void initState() {
+    super.initState();
+    _ai.addListener(_onAiChanged);
+  }
+
+  @override
+  void dispose() {
+    _ai.removeListener(_onAiChanged);
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  void _onAiChanged() {
+    if (mounted) {
+      if (_viewingChat != null) {
+        final updated = _ai.savedChats.where((c) => c.id == _viewingChat!.id).firstOrNull;
+        _viewingChat = updated;
+      }
+      setState(() {});
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final chats = _ai.savedChats;
+    final allChats = _ai.savedChats;
+
+    final filteredChats = allChats.where((chat) {
+      if (_searchQuery.trim().isEmpty) return true;
+      final q = _searchQuery.trim().toLowerCase();
+      final inTitle = chat.articleTitle.toLowerCase().contains(q);
+      final inMod = chat.moduleTitle.toLowerCase().contains(q);
+      final inPrompt = chat.prompt.toLowerCase().contains(q);
+      final inMsgs = chat.messages.any((m) => m.text.toLowerCase().contains(q));
+      return inTitle || inMod || inPrompt || inMsgs;
+    }).toList();
+
+    // Modüllere göre kategorize et
+    final Map<String, List<SavedAiChat>> groupedChats = {};
+    for (final chat in filteredChats) {
+      final modKey = chat.moduleTitle.isNotEmpty ? chat.moduleTitle : 'Diğer / Genel Dokümanlar';
+      groupedChats.putIfAbsent(modKey, () => []).add(chat);
+    }
 
     return SafeArea(
       child: Container(
         constraints: BoxConstraints(
-          maxHeight: MediaQuery.of(context).size.height * 0.85,
+          maxHeight: MediaQuery.of(context).size.height * 0.88,
         ),
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
         child: _viewingChat != null
             ? _buildChatDetail(_viewingChat!)
             : Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  // Üst Başlık & Tümünü Temizle
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
-                        children: const [
-                          Icon(Icons.bookmark, color: AppTheme.toolsAmber, size: 20),
-                          SizedBox(width: 8),
+                        children: [
+                          const Icon(Icons.bookmark, color: AppTheme.toolsAmber, size: 20),
+                          const SizedBox(width: 8),
                           Text(
-                            'Kayıtlı AI Sohbetleri',
-                            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                            'Kayıtlı AI Sohbetleri (${allChats.length})',
+                            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
                           ),
                         ],
                       ),
-                      if (chats.isNotEmpty)
+                      if (allChats.isNotEmpty)
                         TextButton.icon(
                           style: TextButton.styleFrom(foregroundColor: AppTheme.redTeam),
                           icon: const Icon(Icons.delete_sweep, size: 16),
                           label: const Text('Tümünü Temizle', style: TextStyle(fontSize: 12)),
                           onPressed: () async {
-                            await _ai.clearAllChats();
-                            setState(() {});
+                            final confirm = await showDialog<bool>(
+                              context: context,
+                              builder: (ctx) => AlertDialog(
+                                backgroundColor: AppTheme.bgCard,
+                                title: const Text('Tüm Kayıtları Temizle', style: TextStyle(color: Colors.white)),
+                                content: const Text(
+                                  'Tüm modül ve dokümanlara ait kaydedilmiş AI soru-cevap geçmişi silinecek. Emin misiniz?',
+                                  style: TextStyle(color: AppTheme.textSecondary),
+                                ),
+                                actions: [
+                                  TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('İptal')),
+                                  TextButton(
+                                    style: TextButton.styleFrom(foregroundColor: AppTheme.redTeam),
+                                    onPressed: () => Navigator.pop(ctx, true),
+                                    child: const Text('Tümünü Sil', style: TextStyle(fontWeight: FontWeight.bold)),
+                                  ),
+                                ],
+                              ),
+                            );
+                            if (confirm == true) {
+                              await _ai.clearAllChats();
+                              setState(() {});
+                            }
                           },
                         ),
                     ],
                   ),
-                  const Divider(height: 16),
-                  if (chats.isEmpty)
+                  const SizedBox(height: 10),
+
+                  // Arama Çubuğu
+                  if (allChats.isNotEmpty) ...[
+                    TextField(
+                      controller: _searchController,
+                      style: const TextStyle(fontSize: 13, color: Colors.white),
+                      decoration: InputDecoration(
+                        hintText: 'Modül, doküman veya soru ara...',
+                        hintStyle: const TextStyle(fontSize: 12, color: AppTheme.textMuted),
+                        prefixIcon: const Icon(Icons.search, size: 18, color: AppTheme.textMuted),
+                        suffixIcon: _searchQuery.isNotEmpty
+                            ? IconButton(
+                                icon: const Icon(Icons.clear, size: 16, color: AppTheme.textMuted),
+                                onPressed: () {
+                                  _searchController.clear();
+                                  setState(() => _searchQuery = '');
+                                },
+                              )
+                            : null,
+                        filled: true,
+                        fillColor: AppTheme.bgDark,
+                        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(8),
+                          borderSide: const BorderSide(color: AppTheme.border),
+                        ),
+                      ),
+                      onChanged: (val) => setState(() => _searchQuery = val),
+                    ),
+                    const SizedBox(height: 12),
+                  ],
+
+                  // İçerik: Boş veya Modüllere Göre Kategorili Liste
+                  if (allChats.isEmpty)
                     const Expanded(
                       child: Center(
                         child: Text(
-                          'Henüz kayıtlı bir AI sohbetiniz yok.\nBir makalede soru sorduktan sonra kaydet butonuna dokunabilirsiniz.',
+                          'Henüz kayıtlı bir AI sohbetiniz yok.\nBir dokümanda AI ile sohbet ettikten sonra yer imi simgesine basarak kaydedebilirsiniz.',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: AppTheme.textMuted, fontSize: 13, height: 1.4),
                         ),
                       ),
                     )
+                  else if (filteredChats.isEmpty)
+                    const Expanded(
+                      child: Center(
+                        child: Text(
+                          'Aramanızla eşleşen kayıtlı sohbet bulunamadı.',
+                          style: TextStyle(color: AppTheme.textMuted, fontSize: 13),
+                        ),
+                      ),
+                    )
                   else
                     Expanded(
-                      child: ListView.separated(
-                        itemCount: chats.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 8),
+                      child: ListView.builder(
+                        itemCount: groupedChats.keys.length,
                         itemBuilder: (context, index) {
-                          final chat = chats[index];
+                          final modTitle = groupedChats.keys.elementAt(index);
+                          final moduleChats = groupedChats[modTitle]!;
+
                           return Container(
+                            margin: const EdgeInsets.only(bottom: 12),
                             decoration: BoxDecoration(
-                              color: AppTheme.bgCode,
-                              borderRadius: BorderRadius.circular(8),
+                              color: AppTheme.bgCard,
+                              borderRadius: BorderRadius.circular(10),
                               border: Border.all(color: AppTheme.border),
                             ),
-                            child: ListTile(
-                              title: Text(
-                                chat.prompt,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              subtitle: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    chat.articleTitle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
+                            child: Theme(
+                              data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                              child: ExpansionTile(
+                                initiallyExpanded: true,
+                                tilePadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+                                leading: Container(
+                                  padding: const EdgeInsets.all(6),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.blueTeam.withAlpha(25),
+                                    borderRadius: BorderRadius.circular(6),
                                   ),
-                                  const SizedBox(height: 4),
-                                  Row(
-                                    children: [
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                  child: const Icon(Icons.folder_outlined, color: AppTheme.blueTeam, size: 18),
+                                ),
+                                title: Text(
+                                  modTitle,
+                                  style: const TextStyle(
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                                subtitle: Text(
+                                  '${moduleChats.length} doküman sohbeti',
+                                  style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
+                                ),
+                                children: [
+                                  const Divider(height: 1, color: AppTheme.border),
+                                  ListView.separated(
+                                    shrinkWrap: true,
+                                    physics: const NeverScrollableScrollPhysics(),
+                                    padding: const EdgeInsets.all(8),
+                                    itemCount: moduleChats.length,
+                                    separatorBuilder: (_, __) => const SizedBox(height: 6),
+                                    itemBuilder: (context, cIdx) {
+                                      final chat = moduleChats[cIdx];
+                                      return Container(
                                         decoration: BoxDecoration(
-                                          color: AppTheme.blueTeam.withAlpha(30),
-                                          borderRadius: BorderRadius.circular(3),
+                                          color: AppTheme.bgCode,
+                                          borderRadius: BorderRadius.circular(8),
+                                          border: Border.all(color: AppTheme.borderHighlight.withAlpha(50)),
                                         ),
-                                        child: Text(
-                                          chat.model,
-                                          style: const TextStyle(
-                                            fontSize: 10,
-                                            fontFamily: 'monospace',
-                                            color: AppTheme.blueTeam,
-                                            fontWeight: FontWeight.bold,
+                                        child: ListTile(
+                                          dense: true,
+                                          title: Text(
+                                            chat.articleTitle,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontSize: 13,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.white,
+                                            ),
                                           ),
+                                          subtitle: Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const SizedBox(height: 3),
+                                              Text(
+                                                chat.prompt,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: const TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Row(
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                                    decoration: BoxDecoration(
+                                                      color: AppTheme.blueTeam.withAlpha(30),
+                                                      borderRadius: BorderRadius.circular(3),
+                                                    ),
+                                                    child: Text(
+                                                      '${chat.messages.length} mesaj',
+                                                      style: const TextStyle(
+                                                        fontSize: 9.5,
+                                                        color: AppTheme.blueTeam,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    '${chat.timestamp.day}.${chat.timestamp.month}.${chat.timestamp.year} ${chat.timestamp.hour.toString().padLeft(2, '0')}:${chat.timestamp.minute.toString().padLeft(2, '0')}',
+                                                    style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                          trailing: IconButton(
+                                            icon: const Icon(Icons.delete_outline, size: 18, color: AppTheme.textMuted),
+                                            onPressed: () async {
+                                              await _ai.deleteChat(chat.id);
+                                              setState(() {});
+                                            },
+                                          ),
+                                          onTap: () {
+                                            setState(() => _viewingChat = chat);
+                                          },
                                         ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        '${chat.timestamp.day}.${chat.timestamp.month}.${chat.timestamp.year} ${chat.timestamp.hour.toString().padLeft(2, '0')}:${chat.timestamp.minute.toString().padLeft(2, '0')}',
-                                        style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
-                                      ),
-                                    ],
+                                      );
+                                    },
                                   ),
                                 ],
                               ),
-                              trailing: IconButton(
-                                icon: const Icon(Icons.delete_outline, size: 18, color: AppTheme.textMuted),
-                                onPressed: () async {
-                                  await _ai.deleteChat(chat.id);
-                                  setState(() {});
-                                },
-                              ),
-                              onTap: () {
-                                setState(() => _viewingChat = chat);
-                              },
                             ),
                           );
                         },
@@ -637,6 +792,7 @@ class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Üst Eylemler: Geri + Başlık + Kopyala + Sil
         Row(
           children: [
             IconButton(
@@ -645,93 +801,294 @@ class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
             ),
             const SizedBox(width: 4),
             Expanded(
-              child: Text(
-                chat.articleTitle,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    chat.articleTitle,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
+                  ),
+                  if (chat.moduleTitle.isNotEmpty)
+                    Text(
+                      chat.moduleTitle,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(fontSize: 11, color: AppTheme.blueTeam),
+                    ),
+                ],
               ),
             ),
             IconButton(
               icon: const Icon(Icons.copy, size: 18, color: AppTheme.textMuted),
-              tooltip: 'Tüm Yanıtı Kopyala',
+              tooltip: 'Tüm Konuşmayı Kopyala',
               onPressed: () {
-                Clipboard.setData(ClipboardData(text: 'SORU:\n${chat.prompt}\n\nYANIT:\n${chat.response}'));
+                final buffer = StringBuffer();
+                for (final msg in chat.messages) {
+                  buffer.writeln(msg.isUser ? '== KULLANICI SORUSU ==' : '== AI CEVABI ==');
+                  buffer.writeln(msg.text);
+                  buffer.writeln();
+                }
+                Clipboard.setData(ClipboardData(text: buffer.toString().trim()));
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Soru ve yanıt kopyalandı!')),
+                  const SnackBar(content: Text('Tüm sohbet panoya kopyalandı!')),
                 );
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.delete_outline, size: 18, color: AppTheme.redTeam),
+              tooltip: 'Bu Dokümanın Kaydını Sil',
+              onPressed: () async {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    backgroundColor: AppTheme.bgCard,
+                    title: const Text('Sohbeti Sil', style: TextStyle(color: Colors.white)),
+                    content: const Text(
+                      'Bu dokümana ait tüm kayıtlı konuşmalar silinecek. Onaylıyor musunuz?',
+                      style: TextStyle(color: AppTheme.textSecondary),
+                    ),
+                    actions: [
+                      TextButton(onPressed: () => Navigator.pop(ctx, false), child: const Text('İptal')),
+                      TextButton(
+                        style: TextButton.styleFrom(foregroundColor: AppTheme.redTeam),
+                        onPressed: () => Navigator.pop(ctx, true),
+                        child: const Text('Sil', style: TextStyle(fontWeight: FontWeight.bold)),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirm == true) {
+                  await _ai.deleteChat(chat.id);
+                  setState(() => _viewingChat = null);
+                }
               },
             ),
           ],
         ),
-        const Divider(height: 12),
+        const Divider(height: 12, color: AppTheme.border),
+
+        // Diyalog Listesi (Multi-turn soru & cevaplar)
         Expanded(
-          child: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    color: AppTheme.bgCardHover,
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: AppTheme.borderHighlight),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        'SORULAN SORU',
-                        style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: AppTheme.toolsAmber),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        chat.prompt,
-                        style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.bold, color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
-                MarkdownBody(
-                  data: chat.response,
-                  selectable: true,
-                  builders: {
-                    'code': CodeElementBuilder(context),
+          child: chat.messages.isEmpty
+              ? const Center(
+                  child: Text('Kayıtlı mesaj bulunamadı', style: TextStyle(color: AppTheme.textMuted)),
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  itemCount: chat.messages.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    final msg = chat.messages[index];
+                    return _buildMessageItem(chat, msg);
                   },
-                  onTapLink: (text, href, title) {
-                    LinkNavigationHelper.handleLinkTap(
-                      context: context,
-                      href: href,
-                      text: text,
-                    );
-                  },
-                  styleSheet: MarkdownStyleSheet(
-                    a: const TextStyle(
-                      color: AppTheme.blueTeam,
-                      decoration: TextDecoration.underline,
-                      decorationColor: Color(0x9958A6FF),
-                      fontWeight: FontWeight.w600,
-                    ),
-                    p: const TextStyle(fontSize: 13.5, color: AppTheme.textPrimary, height: 1.5),
-                    h1: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white, height: 1.4),
-                    h2: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: AppTheme.blueTeam, height: 1.4),
-                    h3: const TextStyle(fontSize: 14.5, fontWeight: FontWeight.w600, color: AppTheme.toolsAmber, height: 1.3),
-                    code: const TextStyle(fontFamily: 'monospace', fontSize: 12.5, backgroundColor: Color(0xFF1E222B)),
-                    codeblockDecoration: BoxDecoration(
-                      color: const Color(0xFF161922),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: AppTheme.border),
-                    ),
-                    listBullet: const TextStyle(color: AppTheme.blueTeam, fontSize: 13),
-                  ),
                 ),
-              ],
-            ),
-          ),
         ),
       ],
     );
+  }
+
+  Widget _buildMessageItem(SavedAiChat chat, SavedAiChatMessage msg) {
+    if (msg.isUser) {
+      // ==========================================
+      // KULLANICI SORUSU (Vurgulu Kutu)
+      // ==========================================
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: const Color(0xFF192B45),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppTheme.blueTeam.withAlpha(90)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: const [
+                    Icon(Icons.person, size: 14, color: AppTheme.blueTeam),
+                    SizedBox(width: 6),
+                    Text(
+                      'SORULAN SORU',
+                      style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: AppTheme.toolsAmber),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Text(
+                      '${msg.timestamp.hour.toString().padLeft(2, '0')}:${msg.timestamp.minute.toString().padLeft(2, '0')}',
+                      style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
+                    ),
+                    const SizedBox(width: 8),
+                    // Tekil mesaj silme (İstek 7)
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, size: 15, color: AppTheme.textMuted),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      tooltip: 'Bu Soruyu Sil',
+                      onPressed: () async {
+                        _ai.removeSessionMessage(chat.articleId, msg.id);
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const SizedBox(height: 6),
+            SelectableText(
+              msg.text,
+              style: const TextStyle(fontSize: 13.5, fontWeight: FontWeight.w500, color: Colors.white, height: 1.4),
+            ),
+          ],
+        ),
+      );
+    } else {
+      // ==========================================
+      // AI YANITI (Düzeltilmiş Markdown Kartı)
+      // ==========================================
+      return Container(
+        padding: const EdgeInsets.all(14),
+        decoration: BoxDecoration(
+          color: const Color(0xFF141720),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: AppTheme.border),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    const Icon(Icons.auto_awesome, size: 14, color: AppTheme.blueTeam),
+                    const SizedBox(width: 6),
+                    const Text(
+                      'AI YANITI',
+                      style: TextStyle(fontSize: 10.5, fontWeight: FontWeight.bold, color: AppTheme.blueTeam),
+                    ),
+                    const SizedBox(width: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: AppTheme.sysAdmin.withAlpha(25),
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        chat.model,
+                        style: const TextStyle(
+                          fontSize: 9.5,
+                          fontFamily: 'monospace',
+                          color: AppTheme.sysAdmin,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.copy, size: 15, color: AppTheme.textMuted),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      tooltip: 'Yanıtı Kopyala',
+                      onPressed: () {
+                        Clipboard.setData(ClipboardData(text: msg.text));
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Yanıt panoya kopyalandı!')),
+                        );
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    // Tekil yanıt silme (İstek 7)
+                    IconButton(
+                      icon: const Icon(Icons.delete_outline, size: 15, color: AppTheme.textMuted),
+                      padding: EdgeInsets.zero,
+                      constraints: const BoxConstraints(),
+                      tooltip: 'Bu Yanıtı Sil',
+                      onPressed: () async {
+                        _ai.removeSessionMessage(chat.articleId, msg.id);
+                        setState(() {});
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            const Divider(height: 14, color: AppTheme.border),
+            MarkdownBody(
+              data: msg.text,
+              selectable: true,
+              builders: {
+                'code': CodeElementBuilder(context),
+              },
+              onTapLink: (text, href, title) {
+                LinkNavigationHelper.handleLinkTap(
+                  context: context,
+                  href: href,
+                  text: text,
+                );
+              },
+              styleSheet: MarkdownStyleSheet(
+                a: const TextStyle(
+                  color: AppTheme.blueTeam,
+                  decoration: TextDecoration.underline,
+                  decorationColor: Color(0x9958A6FF),
+                  fontWeight: FontWeight.w600,
+                ),
+                p: const TextStyle(
+                  fontSize: 13.5,
+                  color: AppTheme.textPrimary,
+                  height: 1.5,
+                ),
+                h1: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                  height: 1.4,
+                ),
+                h2: const TextStyle(
+                  fontSize: 15.5,
+                  fontWeight: FontWeight.bold,
+                  color: AppTheme.blueTeam,
+                  height: 1.4,
+                ),
+                h3: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.toolsAmber,
+                  height: 1.3,
+                ),
+                code: const TextStyle(
+                  fontFamily: 'monospace',
+                  fontSize: 12.5,
+                  color: AppTheme.toolsAmber,
+                  backgroundColor: Color(0xFF1E222B),
+                ),
+                codeblockDecoration: BoxDecoration(
+                  color: const Color(0xFF161922),
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppTheme.border),
+                ),
+                listBullet: const TextStyle(color: AppTheme.blueTeam, fontSize: 13),
+                blockquote: const TextStyle(color: AppTheme.textSecondary, fontStyle: FontStyle.italic),
+                blockquoteDecoration: BoxDecoration(
+                  color: AppTheme.bgCard,
+                  borderRadius: BorderRadius.circular(4),
+                  border: const Border(left: BorderSide(color: AppTheme.blueTeam, width: 3)),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
   }
 }

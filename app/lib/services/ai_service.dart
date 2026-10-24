@@ -96,44 +96,118 @@ class SavedAiKey {
   }
 }
 
-class SavedAiChat {
+class SavedAiChatMessage {
   final String id;
-  final String articleTitle;
-  final String prompt;
-  final String response;
-  final String model;
-  final String provider;
+  final bool isUser;
+  final String text;
   final DateTime timestamp;
 
-  SavedAiChat({
+  SavedAiChatMessage({
     required this.id,
-    required this.articleTitle,
-    required this.prompt,
-    required this.response,
-    required this.model,
-    required this.provider,
+    required this.isUser,
+    required this.text,
     required this.timestamp,
   });
 
   Map<String, dynamic> toJson() => {
     'id': id,
+    'isUser': isUser,
+    'text': text,
+    'timestamp': timestamp.toIso8601String(),
+  };
+
+  factory SavedAiChatMessage.fromJson(Map<String, dynamic> json) => SavedAiChatMessage(
+    id: json['id'] as String? ?? 'msg_${DateTime.now().microsecondsSinceEpoch}',
+    isUser: json['isUser'] as bool? ?? false,
+    text: json['text'] as String? ?? '',
+    timestamp: DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now(),
+  );
+}
+
+class SavedAiChat {
+  final String id;
+  final String articleId;
+  final String articleTitle;
+  final String moduleId;
+  final String moduleTitle;
+  final String prompt;
+  final String response;
+  final String model;
+  final String provider;
+  final DateTime timestamp;
+  final List<SavedAiChatMessage> messages;
+
+  SavedAiChat({
+    required this.id,
+    this.articleId = '',
+    required this.articleTitle,
+    this.moduleId = '',
+    this.moduleTitle = 'Genel Dokümanlar',
+    required this.prompt,
+    required this.response,
+    required this.model,
+    required this.provider,
+    required this.timestamp,
+    this.messages = const [],
+  });
+
+  Map<String, dynamic> toJson() => {
+    'id': id,
+    'articleId': articleId,
     'articleTitle': articleTitle,
+    'moduleId': moduleId,
+    'moduleTitle': moduleTitle,
     'prompt': prompt,
     'response': response,
     'model': model,
     'provider': provider,
     'timestamp': timestamp.toIso8601String(),
+    'messages': messages.map((m) => m.toJson()).toList(),
   };
 
-  factory SavedAiChat.fromJson(Map<String, dynamic> json) => SavedAiChat(
-    id: json['id'] as String? ?? 'chat_${DateTime.now().millisecondsSinceEpoch}',
-    articleTitle: json['articleTitle'] as String? ?? 'Genel Soru',
-    prompt: json['prompt'] as String? ?? '',
-    response: json['response'] as String? ?? '',
-    model: json['model'] as String? ?? '',
-    provider: json['provider'] as String? ?? '',
-    timestamp: DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now(),
-  );
+  factory SavedAiChat.fromJson(Map<String, dynamic> json) {
+    final rawMsgs = json['messages'] as List<dynamic>?;
+    final parsedMsgs = rawMsgs != null
+        ? rawMsgs.map((m) => SavedAiChatMessage.fromJson(m as Map<String, dynamic>)).toList()
+        : <SavedAiChatMessage>[];
+
+    final promptText = json['prompt'] as String? ?? '';
+    final responseText = json['response'] as String? ?? '';
+
+    if (parsedMsgs.isEmpty && (promptText.isNotEmpty || responseText.isNotEmpty)) {
+      final t = DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now();
+      if (promptText.isNotEmpty) {
+        parsedMsgs.add(SavedAiChatMessage(
+          id: 'legacy_user_${json['id']}',
+          isUser: true,
+          text: promptText,
+          timestamp: t,
+        ));
+      }
+      if (responseText.isNotEmpty) {
+        parsedMsgs.add(SavedAiChatMessage(
+          id: 'legacy_ai_${json['id']}',
+          isUser: false,
+          text: responseText,
+          timestamp: t.add(const Duration(seconds: 1)),
+        ));
+      }
+    }
+
+    return SavedAiChat(
+      id: json['id'] as String? ?? 'chat_${DateTime.now().millisecondsSinceEpoch}',
+      articleId: json['articleId'] as String? ?? '',
+      articleTitle: json['articleTitle'] as String? ?? 'Genel Doküman',
+      moduleId: json['moduleId'] as String? ?? '',
+      moduleTitle: json['moduleTitle'] as String? ?? (json['articleTitle'] as String? ?? 'Genel Modül'),
+      prompt: promptText,
+      response: responseText,
+      model: json['model'] as String? ?? '',
+      provider: json['provider'] as String? ?? '',
+      timestamp: DateTime.tryParse(json['timestamp'] as String? ?? '') ?? DateTime.now(),
+      messages: parsedMsgs,
+    );
+  }
 }
 
 class AiService extends ChangeNotifier {
@@ -194,36 +268,170 @@ class AiService extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Doküman bazlı canlı aktif sohbet oturumları (Scoped Session Cache)
+  final Map<String, List<SavedAiChatMessage>> _activeSessions = {};
+
+  List<SavedAiChatMessage> getSession(String articleId) {
+    if (!_activeSessions.containsKey(articleId)) {
+      final saved = _savedChats.where((c) => c.articleId == articleId).firstOrNull;
+      if (saved != null && saved.messages.isNotEmpty) {
+        _activeSessions[articleId] = List.from(saved.messages);
+      } else {
+        _activeSessions[articleId] = [];
+      }
+    }
+    return _activeSessions[articleId]!;
+  }
+
+  void addSessionMessage(String articleId, SavedAiChatMessage msg) {
+    if (!_activeSessions.containsKey(articleId)) {
+      _activeSessions[articleId] = [];
+    }
+    _activeSessions[articleId]!.add(msg);
+    final savedIdx = _savedChats.indexWhere((c) => c.articleId == articleId);
+    if (savedIdx >= 0) {
+      final existing = _savedChats[savedIdx];
+      final updatedMsgs = List<SavedAiChatMessage>.from(_activeSessions[articleId]!);
+      _savedChats[savedIdx] = SavedAiChat(
+        id: existing.id,
+        articleId: existing.articleId,
+        articleTitle: existing.articleTitle,
+        moduleId: existing.moduleId,
+        moduleTitle: existing.moduleTitle,
+        prompt: updatedMsgs.firstWhere((m) => m.isUser, orElse: () => updatedMsgs.first).text,
+        response: updatedMsgs.lastWhere((m) => !m.isUser, orElse: () => updatedMsgs.last).text,
+        model: _lastUsedModel ?? existing.model,
+        provider: existing.provider,
+        timestamp: DateTime.now(),
+        messages: updatedMsgs,
+      );
+      _persistSavedChats();
+    }
+    notifyListeners();
+  }
+
+  void removeSessionMessage(String articleId, String msgId) {
+    if (_activeSessions.containsKey(articleId)) {
+      _activeSessions[articleId]!.removeWhere((m) => m.id == msgId);
+      final savedIdx = _savedChats.indexWhere((c) => c.articleId == articleId);
+      if (savedIdx >= 0) {
+        final existing = _savedChats[savedIdx];
+        final updatedMsgs = List<SavedAiChatMessage>.from(_activeSessions[articleId]!);
+        if (updatedMsgs.isEmpty) {
+          _savedChats.removeAt(savedIdx);
+        } else {
+          _savedChats[savedIdx] = SavedAiChat(
+            id: existing.id,
+            articleId: existing.articleId,
+            articleTitle: existing.articleTitle,
+            moduleId: existing.moduleId,
+            moduleTitle: existing.moduleTitle,
+            prompt: updatedMsgs.firstWhere((m) => m.isUser, orElse: () => updatedMsgs.first).text,
+            response: updatedMsgs.lastWhere((m) => !m.isUser, orElse: () => updatedMsgs.last).text,
+            model: existing.model,
+            provider: existing.provider,
+            timestamp: existing.timestamp,
+            messages: updatedMsgs,
+          );
+        }
+        _persistSavedChats();
+      }
+      notifyListeners();
+    }
+  }
+
+  void clearSession(String articleId) {
+    _activeSessions[articleId] = [];
+    notifyListeners();
+  }
+
+  bool isArticleChatSaved(String articleId) {
+    if (articleId.isEmpty) return false;
+    return _savedChats.any((c) => c.articleId == articleId);
+  }
+
+  Future<void> _persistSavedChats() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(
+      'saved_ai_chats_json',
+      json.encode(_savedChats.map((c) => c.toJson()).toList()),
+    );
+  }
+
+  /// Toggle Save: Eğer bu doküman zaten kayıtlıysa kaydı siler (false döner), değilse tüm oturumu kaydeder (true döner)
+  Future<bool> toggleSaveChat({
+    required String articleId,
+    required String articleTitle,
+    String moduleId = '',
+    String moduleTitle = '',
+    required List<SavedAiChatMessage> messages,
+  }) async {
+    final existingIndex = _savedChats.indexWhere((c) => c.articleId == articleId);
+    if (existingIndex >= 0) {
+      _savedChats.removeAt(existingIndex);
+      await _persistSavedChats();
+      notifyListeners();
+      return false;
+    } else {
+      if (messages.isEmpty) return false;
+      final promptText = messages.firstWhere((m) => m.isUser, orElse: () => messages.first).text;
+      final responseText = messages.lastWhere((m) => !m.isUser, orElse: () => messages.last).text;
+
+      final chat = SavedAiChat(
+        id: 'chat_${articleId}_${DateTime.now().millisecondsSinceEpoch}',
+        articleId: articleId,
+        articleTitle: articleTitle,
+        moduleId: moduleId,
+        moduleTitle: moduleTitle.isNotEmpty ? moduleTitle : articleTitle,
+        prompt: promptText,
+        response: responseText,
+        model: _lastUsedModel ?? activeKey?.activeModel ?? 'AI Modeli',
+        provider: activeKey?.provider.label ?? 'AI',
+        timestamp: DateTime.now(),
+        messages: List.from(messages),
+      );
+      _savedChats.insert(0, chat);
+      await _persistSavedChats();
+      notifyListeners();
+      return true;
+    }
+  }
+
   Future<void> saveChat({
     required String articleTitle,
     required String prompt,
     required String response,
+    String articleId = '',
+    String moduleId = '',
+    String moduleTitle = '',
+    List<SavedAiChatMessage>? messages,
   }) async {
+    final chatMessages = messages ?? [
+      SavedAiChatMessage(id: 'msg_u', isUser: true, text: prompt, timestamp: DateTime.now()),
+      SavedAiChatMessage(id: 'msg_a', isUser: false, text: response, timestamp: DateTime.now()),
+    ];
+
     final chat = SavedAiChat(
       id: 'chat_${DateTime.now().millisecondsSinceEpoch}',
+      articleId: articleId,
       articleTitle: articleTitle,
+      moduleId: moduleId,
+      moduleTitle: moduleTitle.isNotEmpty ? moduleTitle : articleTitle,
       prompt: prompt,
       response: response,
       model: _lastUsedModel ?? activeKey?.activeModel ?? 'AI Modeli',
       provider: activeKey?.provider.label ?? 'AI',
       timestamp: DateTime.now(),
+      messages: chatMessages,
     );
     _savedChats.insert(0, chat);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      'saved_ai_chats_json',
-      json.encode(_savedChats.map((c) => c.toJson()).toList()),
-    );
+    await _persistSavedChats();
     notifyListeners();
   }
 
   Future<void> deleteChat(String id) async {
     _savedChats.removeWhere((c) => c.id == id);
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(
-      'saved_ai_chats_json',
-      json.encode(_savedChats.map((c) => c.toJson()).toList()),
-    );
+    await _persistSavedChats();
     notifyListeners();
   }
 
