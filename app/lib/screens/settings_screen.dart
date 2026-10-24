@@ -538,11 +538,13 @@ class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
       return inTitle || inMod || inPrompt || inMsgs;
     }).toList();
 
-    // Modüllere göre kategorize et
-    final Map<String, List<SavedAiChat>> groupedChats = {};
+    // Modüller Ana Kategori -> Dokümanlar Alt Kategori Hiyerarşisi
+    final Map<String, Map<String, List<SavedAiChat>>> hierarchicalChats = {};
     for (final chat in filteredChats) {
       final modKey = chat.moduleTitle.isNotEmpty ? chat.moduleTitle : 'Diğer / Genel Dokümanlar';
-      groupedChats.putIfAbsent(modKey, () => []).add(chat);
+      final docKey = chat.articleTitle.isNotEmpty ? chat.articleTitle : 'İsimsiz Doküman';
+      hierarchicalChats.putIfAbsent(modKey, () => {});
+      hierarchicalChats[modKey]!.putIfAbsent(docKey, () => []).add(chat);
     }
 
     return SafeArea(
@@ -659,10 +661,11 @@ class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
                   else
                     Expanded(
                       child: ListView.builder(
-                        itemCount: groupedChats.keys.length,
+                        itemCount: hierarchicalChats.keys.length,
                         itemBuilder: (context, index) {
-                          final modTitle = groupedChats.keys.elementAt(index);
-                          final moduleChats = groupedChats[modTitle]!;
+                          final modTitle = hierarchicalChats.keys.elementAt(index);
+                          final docMap = hierarchicalChats[modTitle]!;
+                          final totalModChats = docMap.values.fold<int>(0, (sum, list) => sum + list.length);
 
                           return Container(
                             margin: const EdgeInsets.only(bottom: 12),
@@ -682,7 +685,7 @@ class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
                                     color: AppTheme.blueTeam.withAlpha(25),
                                     borderRadius: BorderRadius.circular(6),
                                   ),
-                                  child: const Icon(Icons.folder_outlined, color: AppTheme.blueTeam, size: 18),
+                                  child: const Icon(Icons.folder, color: AppTheme.blueTeam, size: 18),
                                 ),
                                 title: Text(
                                   modTitle,
@@ -693,87 +696,125 @@ class _SavedChatsViewerModalState extends State<_SavedChatsViewerModal> {
                                   ),
                                 ),
                                 subtitle: Text(
-                                  '${moduleChats.length} doküman sohbeti',
+                                  '${docMap.keys.length} doküman · $totalModChats kayıtlı sohbet',
                                   style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
                                 ),
                                 children: [
                                   const Divider(height: 1, color: AppTheme.border),
-                                  ListView.separated(
-                                    shrinkWrap: true,
-                                    physics: const NeverScrollableScrollPhysics(),
-                                    padding: const EdgeInsets.all(8),
-                                    itemCount: moduleChats.length,
-                                    separatorBuilder: (_, __) => const SizedBox(height: 6),
-                                    itemBuilder: (context, cIdx) {
-                                      final chat = moduleChats[cIdx];
-                                      return Container(
-                                        decoration: BoxDecoration(
-                                          color: AppTheme.bgCode,
-                                          borderRadius: BorderRadius.circular(8),
-                                          border: Border.all(color: AppTheme.borderHighlight.withAlpha(50)),
-                                        ),
-                                        child: ListTile(
-                                          dense: true,
-                                          title: Text(
-                                            chat.articleTitle,
-                                            maxLines: 1,
-                                            overflow: TextOverflow.ellipsis,
-                                            style: const TextStyle(
-                                              fontSize: 13,
-                                              fontWeight: FontWeight.bold,
-                                              color: Colors.white,
-                                            ),
+                                  Padding(
+                                    padding: const EdgeInsets.fromLTRB(10, 6, 10, 10),
+                                    child: ListView.separated(
+                                      shrinkWrap: true,
+                                      physics: const NeverScrollableScrollPhysics(),
+                                      itemCount: docMap.keys.length,
+                                      separatorBuilder: (_, __) => const SizedBox(height: 8),
+                                      itemBuilder: (context, dIdx) {
+                                        final docTitle = docMap.keys.elementAt(dIdx);
+                                        final docChats = docMap[docTitle]!;
+
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: const Color(0xFF131722),
+                                            borderRadius: BorderRadius.circular(8),
+                                            border: Border.all(color: AppTheme.borderHighlight.withAlpha(60)),
                                           ),
-                                          subtitle: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              const SizedBox(height: 3),
-                                              Text(
-                                                chat.prompt,
+                                          child: Theme(
+                                            data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+                                            child: ExpansionTile(
+                                              initiallyExpanded: docMap.keys.length == 1,
+                                              tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 2),
+                                              leading: const Icon(Icons.description_outlined, color: AppTheme.toolsAmber, size: 18),
+                                              title: Text(
+                                                docTitle,
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: const TextStyle(fontSize: 11.5, color: AppTheme.textSecondary),
+                                                style: const TextStyle(
+                                                  fontSize: 13,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.white,
+                                                ),
                                               ),
-                                              const SizedBox(height: 4),
-                                              Row(
-                                                children: [
-                                                  Container(
-                                                    padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
-                                                    decoration: BoxDecoration(
-                                                      color: AppTheme.blueTeam.withAlpha(30),
-                                                      borderRadius: BorderRadius.circular(3),
-                                                    ),
-                                                    child: Text(
-                                                      '${chat.messages.length} mesaj',
-                                                      style: const TextStyle(
-                                                        fontSize: 9.5,
-                                                        color: AppTheme.blueTeam,
-                                                        fontWeight: FontWeight.bold,
+                                              subtitle: Text(
+                                                '${docChats.length} kayıtlı sohbet oturumu',
+                                                style: const TextStyle(fontSize: 10.5, color: AppTheme.textMuted),
+                                              ),
+                                              children: [
+                                                const Divider(height: 1, color: AppTheme.border),
+                                                ListView.separated(
+                                                  shrinkWrap: true,
+                                                  physics: const NeverScrollableScrollPhysics(),
+                                                  padding: const EdgeInsets.all(8),
+                                                  itemCount: docChats.length,
+                                                  separatorBuilder: (_, __) => const SizedBox(height: 6),
+                                                  itemBuilder: (context, cIdx) {
+                                                    final chat = docChats[cIdx];
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: AppTheme.bgCode,
+                                                        borderRadius: BorderRadius.circular(6),
+                                                        border: Border.all(color: AppTheme.border.withAlpha(50)),
                                                       ),
-                                                    ),
-                                                  ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    '${chat.timestamp.day}.${chat.timestamp.month}.${chat.timestamp.year} ${chat.timestamp.hour.toString().padLeft(2, '0')}:${chat.timestamp.minute.toString().padLeft(2, '0')}',
-                                                    style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
+                                                      child: ListTile(
+                                                        dense: true,
+                                                        contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                                                        title: Text(
+                                                          chat.prompt,
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow.ellipsis,
+                                                          style: const TextStyle(
+                                                            fontSize: 12.5,
+                                                            fontWeight: FontWeight.w600,
+                                                            color: Colors.white,
+                                                          ),
+                                                        ),
+                                                        subtitle: Padding(
+                                                          padding: const EdgeInsets.only(top: 4),
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
+                                                                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                                                decoration: BoxDecoration(
+                                                                  color: AppTheme.blueTeam.withAlpha(30),
+                                                                  borderRadius: BorderRadius.circular(3),
+                                                                ),
+                                                                child: Text(
+                                                                  '${chat.messages.length} mesaj',
+                                                                  style: const TextStyle(
+                                                                    fontSize: 9.5,
+                                                                    color: AppTheme.blueTeam,
+                                                                    fontWeight: FontWeight.bold,
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              const SizedBox(width: 8),
+                                                              Text(
+                                                                '${chat.timestamp.day}.${chat.timestamp.month}.${chat.timestamp.year} ${chat.timestamp.hour.toString().padLeft(2, '0')}:${chat.timestamp.minute.toString().padLeft(2, '0')}',
+                                                                style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                        trailing: IconButton(
+                                                          icon: const Icon(Icons.delete_outline, size: 17, color: AppTheme.textMuted),
+                                                          tooltip: 'Sohbeti Sil',
+                                                          onPressed: () async {
+                                                            await _ai.deleteChat(chat.id);
+                                                            setState(() {});
+                                                          },
+                                                        ),
+                                                        onTap: () {
+                                                          setState(() => _viewingChat = chat);
+                                                        },
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                          trailing: IconButton(
-                                            icon: const Icon(Icons.delete_outline, size: 18, color: AppTheme.textMuted),
-                                            onPressed: () async {
-                                              await _ai.deleteChat(chat.id);
-                                              setState(() {});
-                                            },
-                                          ),
-                                          onTap: () {
-                                            setState(() => _viewingChat = chat);
-                                          },
-                                        ),
-                                      );
-                                    },
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ],
                               ),

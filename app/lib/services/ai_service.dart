@@ -350,12 +350,10 @@ class AiService extends ChangeNotifier {
     return _savedChats.where((c) => c.articleId == articleId).toList();
   }
 
+  /// Sadece ve sadece o dokümana ait kayıtlı sohbetleri döner (Tam Doküman İzolasyonu)
   List<SavedAiChat> getSavedChatsForScope({required String articleId, String moduleId = ''}) {
-    return _savedChats.where((c) {
-      if (c.articleId == articleId) return true;
-      if (moduleId.isNotEmpty && c.moduleId == moduleId) return true;
-      return false;
-    }).toList();
+    if (articleId.isEmpty) return [];
+    return _savedChats.where((c) => c.articleId == articleId).toList();
   }
 
   bool isArticleChatSaved(String articleId) {

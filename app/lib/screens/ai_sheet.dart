@@ -420,8 +420,8 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                 ],
               ),
 
-              // Model Seçici Rozeti
-              if (_ai.activeKey != null) ...[
+              // Model Seçici Rozeti (Sadece tam ekran değilken göster)
+              if (!_isFullScreen && _ai.activeKey != null) ...[
                 const SizedBox(height: 8),
                 InkWell(
                   borderRadius: BorderRadius.circular(8),
@@ -473,7 +473,7 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                   ),
                 ),
               ],
-              const SizedBox(height: 10),
+              SizedBox(height: _isFullScreen ? 4 : 10),
 
               // ==========================================
               // ANA GÖVDE: Konfigürasyon veya Sohbet
@@ -481,26 +481,28 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
               if (!_ai.isConfigured) ...[
                 _buildUnconfiguredView(),
               ] else ...[
-                // Hızlı Taktik Soru Çipleri
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      _buildQuickAction('💡 Basitçe Açıkla', 'Bu dokümandaki konuyu ve çalışma prensibini yeni başlayan biri için basitçe açıkla.'),
-                      const SizedBox(width: 8),
-                      _buildQuickAction('⚡ Komut & Saldırı', 'Bu araç/teknikteki kritik CLI komutlarını ve pratik sızma testi senaryolarını detaylandır.'),
-                      const SizedBox(width: 8),
-                      _buildQuickAction('🛡️ Tespit & EDR', 'Bu saldırıya karşı Windows Event ID\'leri, Sysmon kuralları ve kesin savunma adımlarını listele.'),
-                      const SizedBox(width: 8),
-                      _buildQuickAction('🎯 AD Saldırı Zinciri', 'Bu tekniğin Active Directory sızma testindeki saldırı zincirindeki (Kill-Chain) yeri nedir? Hangi adımdan önce ve sonra kullanılır?'),
-                      const SizedBox(width: 8),
-                      _buildQuickAction('🔧 Hata & Sorun Giderme', 'Bu komut veya araç çalışırken en sık karşılaşılan hatalar (Access Denied, Timeout, Dialect Mismatch) ve kesin çözümleri nelerdir?'),
-                      const SizedBox(width: 8),
-                      _buildQuickAction('🔒 Sertleştirme', 'Bu zafiyeti tamamen kapatmak ve Domain ortamını sertleştirmek için gereken GPO ve yapılandırma adımları nelerdir?'),
-                    ],
+                // Hızlı Taktik Soru Çipleri (Sadece tam ekran değilken göster; tam ekranda devasa okuma alanı kalsın)
+                if (!_isFullScreen) ...[
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _buildQuickAction('💡 Basitçe Açıkla', 'Bu dokümandaki konuyu ve çalışma prensibini yeni başlayan biri için basitçe açıkla.'),
+                        const SizedBox(width: 8),
+                        _buildQuickAction('⚡ Komut & Saldırı', 'Bu araç/teknikteki kritik CLI komutlarını ve pratik sızma testi senaryolarını detaylandır.'),
+                        const SizedBox(width: 8),
+                        _buildQuickAction('🛡️ Tespit & EDR', 'Bu saldırıya karşı Windows Event ID\'leri, Sysmon kuralları ve kesin savunma adımlarını listele.'),
+                        const SizedBox(width: 8),
+                        _buildQuickAction('🎯 AD Saldırı Zinciri', 'Bu tekniğin Active Directory sızma testindeki saldırı zincirindeki (Kill-Chain) yeri nedir? Hangi adımdan önce ve sonra kullanılır?'),
+                        const SizedBox(width: 8),
+                        _buildQuickAction('🔧 Hata & Sorun Giderme', 'Bu komut veya araç çalışırken en sık karşılaşılan hatalar (Access Denied, Timeout, Dialect Mismatch) ve kesin çözümleri nelerdir?'),
+                        const SizedBox(width: 8),
+                        _buildQuickAction('🔒 Sertleştirme', 'Bu zafiyeti tamamen kapatmak ve Domain ortamını sertleştirmek için gereken GPO ve yapılandırma adımları nelerdir?'),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 10),
+                  const SizedBox(height: 10),
+                ],
 
                 // ==========================================
                 // MULTI-TURN SOHBET LİSTESİ
