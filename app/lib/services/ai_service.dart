@@ -345,6 +345,19 @@ class AiService extends ChangeNotifier {
     notifyListeners();
   }
 
+  List<SavedAiChat> getSavedChatsForArticle(String articleId) {
+    if (articleId.isEmpty) return [];
+    return _savedChats.where((c) => c.articleId == articleId).toList();
+  }
+
+  List<SavedAiChat> getSavedChatsForScope({required String articleId, String moduleId = ''}) {
+    return _savedChats.where((c) {
+      if (c.articleId == articleId) return true;
+      if (moduleId.isNotEmpty && c.moduleId == moduleId) return true;
+      return false;
+    }).toList();
+  }
+
   bool isArticleChatSaved(String articleId) {
     if (articleId.isEmpty) return false;
     return _savedChats.any((c) => c.articleId == articleId);

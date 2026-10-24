@@ -20,10 +20,8 @@ void showAiAssistantSheet(
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
-    backgroundColor: AppTheme.bgCard,
-    shape: const RoundedRectangleBorder(
-      borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-    ),
+    useSafeArea: true,
+    backgroundColor: Colors.transparent,
     builder: (ctx) => _AiAssistantSheet(
       articleId: resolvedId,
       moduleId: moduleId,
@@ -58,7 +56,12 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
   final TextEditingController _keyController = TextEditingController();
   final TextEditingController _promptController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
+
+  // Aktif oturum mesajları (Sayfa kapatıldığında kaybolur, eski sistem gibi temiz başlar)
+  final List<SavedAiChatMessage> _messages = [];
   bool _isLoading = false;
+  bool _isSaved = false;
+  bool _isFullScreen = false;
   String? _currentPendingPrompt;
 
   @override
@@ -84,7 +87,7 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (_scrollController.hasClients) {
         _scrollController.animateTo(
-          _scrollController.position.maxScrollExtent + 80,
+          _scrollController.position.maxScrollExtent + 100,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
@@ -121,9 +124,8 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
       timestamp: DateTime.now(),
     );
 
-    _ai.addSessionMessage(widget.articleId, userMsg);
-
     setState(() {
+      _messages.add(userMsg);
       _isLoading = true;
       _currentPendingPrompt = prompt.trim();
     });
@@ -141,46 +143,103 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
         text: res,
         timestamp: DateTime.now(),
       );
-      _ai.addSessionMessage(widget.articleId, aiMsg);
 
       setState(() {
+        _messages.add(aiMsg);
         _isLoading = false;
         _currentPendingPrompt = null;
       });
       _scrollToBottom();
+
+      // Eğer kullanıcı bu oturumu önceden kaydettiyse, yeni mesajları otomatik güncelle
+      if (_isSaved) {
+        await _ai.toggleSaveChat(
+          articleId: widget.articleId,
+          articleTitle: widget.articleTitle,
+          moduleId: widget.moduleId,
+          moduleTitle: widget.moduleTitle,
+          messages: _messages,
+        );
+        // toggleSaveChat kayıtlıysa siler, bu yüzden tek seferlik güncelleme için tekrar kaydedelim:
+        if (!_ai.isArticleChatSaved(widget.articleId)) {
+          await _ai.toggleSaveChat(
+            articleId: widget.articleId,
+            articleTitle: widget.articleTitle,
+            moduleId: widget.moduleId,
+            moduleTitle: widget.moduleTitle,
+            messages: _messages,
+          );
+        }
+      }
     }
   }
 
   Future<void> _toggleSaveCurrentChat() async {
-    final msgs = _ai.getSession(widget.articleId);
-    if (msgs.isEmpty) {
+    if (_messages.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Kaydedilecek bir soru-cevap bulunmuyor.')),
       );
       return;
     }
 
-    final isSaved = await _ai.toggleSaveChat(
+    final saved = await _ai.toggleSaveChat(
       articleId: widget.articleId,
       articleTitle: widget.articleTitle,
       moduleId: widget.moduleId,
       moduleTitle: widget.moduleTitle,
-      messages: msgs,
+      messages: _messages,
     );
 
     if (mounted) {
-      setState(() {});
+      setState(() {
+        _isSaved = saved;
+      });
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            isSaved
-                ? 'Sohbet kaydedildi! "Ayarlar > Soru-Cevap Geçmişi" bölümünden erişebilirsiniz.'
+            saved
+                ? 'Sohbet kaydedildi! Üstteki "Geçmiş" butonundan veya Ayarlar menüsünden erişebilirsiniz.'
                 : 'Sohbet kaydı kaldırıldı.',
           ),
           duration: const Duration(seconds: 2),
         ),
       );
     }
+  }
+
+  void _showScopedHistorySheet() {
+    final scopedChats = _ai.getSavedChatsForScope(
+      articleId: widget.articleId,
+      moduleId: widget.moduleId,
+    );
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppTheme.bgCard,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (ctx) => _ScopedHistoryModal(
+        articleTitle: widget.articleTitle,
+        moduleTitle: widget.moduleTitle,
+        savedChats: scopedChats,
+        onSelectChat: (chat) {
+          Navigator.pop(ctx);
+          setState(() {
+            _messages.clear();
+            _messages.addAll(chat.messages);
+            _isSaved = true;
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('"${chat.articleTitle}" kayıtlı sohbeti yüklendi.'),
+              duration: const Duration(seconds: 2),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   Future<void> _deleteMessage(SavedAiChatMessage msg) async {
@@ -210,63 +269,61 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
     );
 
     if (confirm == true) {
-      _ai.removeSessionMessage(widget.articleId, msg.id);
-      if (mounted) setState(() {});
+      setState(() {
+        _messages.removeWhere((m) => m.id == msg.id);
+      });
+      if (_isSaved) {
+        _ai.removeSessionMessage(widget.articleId, msg.id);
+      }
     }
   }
 
-  Future<void> _clearSession() async {
-    final msgs = _ai.getSession(widget.articleId);
-    if (msgs.isEmpty) return;
-
-    final confirm = await showDialog<bool>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: AppTheme.bgCard,
-        title: const Text('Oturumu Temizle', style: TextStyle(color: Colors.white, fontSize: 16)),
-        content: const Text(
-          'Bu dokümandaki aktif sohbet geçmişini temizlemek istiyor musunuz?',
-          style: TextStyle(color: AppTheme.textSecondary, fontSize: 13),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('İptal', style: TextStyle(color: AppTheme.textMuted)),
-          ),
-          TextButton(
-            style: TextButton.styleFrom(foregroundColor: AppTheme.redTeam),
-            onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Temizle', style: TextStyle(fontWeight: FontWeight.bold)),
-          ),
-        ],
-      ),
+  void _clearCurrentSession() {
+    if (_messages.isEmpty) return;
+    setState(() {
+      _messages.clear();
+      _isSaved = false;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('Aktif sohbet temizlendi, yeni oturum başladı.'), duration: Duration(seconds: 1)),
     );
-
-    if (confirm == true) {
-      _ai.clearSession(widget.articleId);
-      if (mounted) setState(() {});
-    }
   }
 
   @override
   Widget build(BuildContext context) {
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-    final messages = _ai.getSession(widget.articleId);
-    final isSaved = _ai.isArticleChatSaved(widget.articleId);
+    final scopedChats = _ai.getSavedChatsForScope(
+      articleId: widget.articleId,
+      moduleId: widget.moduleId,
+    );
 
-    return Padding(
-      padding: EdgeInsets.only(bottom: keyboardHeight),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final sheetHeight = _isFullScreen ? screenHeight : screenHeight * 0.88;
+
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 250),
+      curve: Curves.easeInOut,
+      height: sheetHeight,
+      margin: EdgeInsets.only(bottom: keyboardHeight),
+      decoration: BoxDecoration(
+        color: AppTheme.bgCard,
+        borderRadius: _isFullScreen
+            ? BorderRadius.zero
+            : const BorderRadius.vertical(top: Radius.circular(20)),
+        boxShadow: const [
+          BoxShadow(color: Colors.black54, blurRadius: 15, spreadRadius: 2),
+        ],
+      ),
       child: SafeArea(
-        child: Container(
-          constraints: BoxConstraints(
-            maxHeight: MediaQuery.of(context).size.height * 0.90,
-          ),
-          padding: const EdgeInsets.fromLTRB(16, 14, 16, 12),
+        top: _isFullScreen,
+        bottom: true,
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 12, 16, 12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               // ==========================================
-              // ÜST EYLEM ÇUBUĞU (Başlık + Model + İkonlar)
+              // ÜST EYLEM ÇUBUĞU
               // ==========================================
               Row(
                 children: [
@@ -303,26 +360,52 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                     ),
                   ),
 
-                  // Toggle Kaydet / Kaldır Butonu
+                  // 1. TAM EKRAN / TAM EKRANDAN ÇIK BUTONU
                   IconButton(
                     icon: Icon(
-                      isSaved ? Icons.bookmark : Icons.bookmark_border,
+                      _isFullScreen ? Icons.fullscreen_exit : Icons.fullscreen,
                       size: 22,
-                      color: isSaved ? AppTheme.toolsAmber : AppTheme.textMuted,
+                      color: _isFullScreen ? AppTheme.toolsAmber : Colors.white,
                     ),
-                    tooltip: isSaved ? 'Kayıtlı (Kaldırmak için dokunun)' : 'Sohbeti Kaydet',
+                    tooltip: _isFullScreen ? 'Tam Ekrandan Çık' : 'Tam Ekran Yap',
+                    onPressed: () {
+                      setState(() {
+                        _isFullScreen = !_isFullScreen;
+                      });
+                    },
+                  ),
+
+                  // 2. GEÇMİŞ (SADECE BU MODÜLE / DOKÜMANA ÖZEL)
+                  IconButton(
+                    icon: Badge(
+                      isLabelVisible: scopedChats.isNotEmpty,
+                      label: Text('${scopedChats.length}'),
+                      child: const Icon(Icons.history, size: 21, color: Colors.white),
+                    ),
+                    tooltip: 'Bu Dokümanın Kayıtlı Geçmişi',
+                    onPressed: _showScopedHistorySheet,
+                  ),
+
+                  // 3. TOGGLE KAYDET / KALDIR BUTONU
+                  IconButton(
+                    icon: Icon(
+                      _isSaved ? Icons.bookmark : Icons.bookmark_border,
+                      size: 21,
+                      color: _isSaved ? AppTheme.toolsAmber : AppTheme.textMuted,
+                    ),
+                    tooltip: _isSaved ? 'Kaydedildi (Kaldırmak için dokunun)' : 'Sohbeti Kaydet',
                     onPressed: _toggleSaveCurrentChat,
                   ),
 
-                  // Oturumu Temizle
-                  if (messages.isNotEmpty)
+                  // 4. TEMİZLE (Yeni Sohbet Başlat)
+                  if (_messages.isNotEmpty)
                     IconButton(
                       icon: const Icon(Icons.refresh, size: 20, color: AppTheme.textMuted),
-                      tooltip: 'Bu Dokümanın Sohbetini Sıfırla',
-                      onPressed: _clearSession,
+                      tooltip: 'Sohbeti Temizle (Yeni Başlat)',
+                      onPressed: _clearCurrentSession,
                     ),
 
-                  // AI Anahtar Yönetimi
+                  // 5. AI ANAHTAR YÖNETİMİ
                   IconButton(
                     icon: const Icon(Icons.vpn_key_outlined, size: 19, color: AppTheme.toolsAmber),
                     tooltip: 'AI Anahtar Yöneticisi',
@@ -429,15 +512,15 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                       borderRadius: BorderRadius.circular(10),
                       border: Border.all(color: AppTheme.border),
                     ),
-                    child: messages.isEmpty && !_isLoading
+                    child: _messages.isEmpty && !_isLoading
                         ? _buildEmptyState()
                         : ListView.builder(
                             controller: _scrollController,
                             padding: const EdgeInsets.all(12),
-                            itemCount: messages.length + (_isLoading ? 1 : 0),
+                            itemCount: _messages.length + (_isLoading ? 1 : 0),
                             itemBuilder: (context, index) {
-                              if (index < messages.length) {
-                                final msg = messages[index];
+                              if (index < _messages.length) {
+                                final msg = _messages[index];
                                 return _buildMessageItem(msg);
                               } else {
                                 return _buildLoadingIndicator();
@@ -506,13 +589,13 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
             Icon(Icons.chat_bubble_outline, size: 36, color: AppTheme.textMuted),
             SizedBox(height: 12),
             Text(
-              'Bu dokümana özel AI sohbet oturumu hazır.',
+              'Yeni AI Sohbet Oturumu Hazır',
               style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold, color: Colors.white),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 6),
             Text(
-              'Yukarıdaki hazır taktiksel butonlara dokunun veya aşağıdan serbest bir soru yazın.\nKonuşmanız bu dokümana özel olarak korunacaktır.',
+              'Yukarıdaki hazır taktiksel butonlara dokunun veya aşağıdan serbest bir soru yazın.\nKaydetmek isterseniz üstteki yer imi simgesine basabilirsiniz.',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 12, color: AppTheme.textMuted, height: 1.4),
             ),
@@ -524,9 +607,6 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
 
   Widget _buildMessageItem(SavedAiChatMessage msg) {
     if (msg.isUser) {
-      // ==========================================
-      // KULLANICI SORUSU (Sağa Hizalı Baloncuk)
-      // ==========================================
       return Padding(
         padding: const EdgeInsets.only(bottom: 12),
         child: Row(
@@ -586,9 +666,6 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
         ),
       );
     } else {
-      // ==========================================
-      // AI YANITI (Sola Hizalı Markdown Kartı)
-      // ==========================================
       return Padding(
         padding: const EdgeInsets.only(bottom: 16),
         child: Row(
@@ -619,7 +696,6 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Üst Eylemler: Model rozeti + Kopyala + Sil
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -656,7 +732,6 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                         ),
                         Row(
                           children: [
-                            // Kopyala Butonu
                             IconButton(
                               icon: const Icon(Icons.copy, size: 15, color: AppTheme.textMuted),
                               padding: EdgeInsets.zero,
@@ -673,7 +748,6 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                               },
                             ),
                             const SizedBox(width: 10),
-                            // Sil Butonu (İstek 7)
                             IconButton(
                               icon: const Icon(Icons.delete_outline, size: 16, color: AppTheme.textMuted),
                               padding: EdgeInsets.zero,
@@ -686,8 +760,6 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
                       ],
                     ),
                     const Divider(height: 12, color: AppTheme.border),
-
-                    // Markdown İçeriği
                     MarkdownBody(
                       data: msg.text,
                       selectable: true,
@@ -873,6 +945,134 @@ class _AiAssistantSheetState extends State<_AiAssistantSheet> {
       backgroundColor: AppTheme.bgCardHover,
       side: const BorderSide(color: AppTheme.borderHighlight),
       onPressed: () => _ask(prompt),
+    );
+  }
+}
+
+/// SADECE VE SADECE BU DOKÜMANA / BU MODÜLE AİT KAYITLI GEÇMİŞİ GÖSTEREN MODAL
+class _ScopedHistoryModal extends StatelessWidget {
+  final String articleTitle;
+  final String moduleTitle;
+  final List<SavedAiChat> savedChats;
+  final ValueChanged<SavedAiChat> onSelectChat;
+
+  const _ScopedHistoryModal({
+    required this.articleTitle,
+    required this.moduleTitle,
+    required this.savedChats,
+    required this.onSelectChat,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Container(
+        constraints: BoxConstraints(
+          maxHeight: MediaQuery.of(context).size.height * 0.70,
+        ),
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.history, color: AppTheme.toolsAmber, size: 20),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Bu Dokümanın Kayıtlı Sohbetleri',
+                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: Colors.white),
+                      ),
+                      Text(
+                        articleTitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 11, color: AppTheme.textSecondary),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Divider(height: 16),
+
+            if (savedChats.isEmpty)
+              const Expanded(
+                child: Center(
+                  child: Text(
+                    'Bu doküman için henüz kayıtlı bir sohbet geçmişi bulunmuyor.\nBir soru sorduktan sonra üstteki yer imi simgesine basarak kaydedebilirsiniz.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: AppTheme.textMuted, fontSize: 13, height: 1.4),
+                  ),
+                ),
+              )
+            else
+              Expanded(
+                child: ListView.separated(
+                  itemCount: savedChats.length,
+                  separatorBuilder: (_, __) => const SizedBox(height: 8),
+                  itemBuilder: (context, index) {
+                    final chat = savedChats[index];
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: AppTheme.bgCode,
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: AppTheme.border),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          chat.prompt,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            const SizedBox(height: 4),
+                            Row(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                                  decoration: BoxDecoration(
+                                    color: AppTheme.blueTeam.withAlpha(30),
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                  child: Text(
+                                    '${chat.messages.length} mesaj',
+                                    style: const TextStyle(
+                                      fontSize: 10,
+                                      color: AppTheme.blueTeam,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  '${chat.timestamp.day}.${chat.timestamp.month}.${chat.timestamp.year} ${chat.timestamp.hour.toString().padLeft(2, '0')}:${chat.timestamp.minute.toString().padLeft(2, '0')}',
+                                  style: const TextStyle(fontSize: 10, color: AppTheme.textMuted),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: AppTheme.textMuted),
+                        onTap: () => onSelectChat(chat),
+                      ),
+                    );
+                  },
+                ),
+              ),
+          ],
+        ),
+      ),
     );
   }
 }
