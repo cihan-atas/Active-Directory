@@ -66,6 +66,7 @@ Bu aşamada iki temel zafiyet ekseni kullanılır:
 | **03.2** | [LSASS Bellek Mimarisi, PPL Baypas ve Özel SSP Enjeksiyonu](./03.2_LSASS_Bellek_Dokumu.md) | SSP paketleri (MSV1_0, Kerberos, CloudAP), RunAsPPL baypasları (BYOVD sürücüleri, PPLdump), özel SSP enjeksiyonu (`mimilib`), EDR filtrelerini atlatarak `nanodump` ve `comsvcs.dll` ile bellek dökümü. |
 | **03.3** | [DPAPI, Credential Vault, LAPS ve Tarayıcı Sırlarının Hasadı](./03.3_DPAPI_ve_Credential_Vault.md) | DPAPI mimarisi, Kullanıcı/Sistem Master Key zincirleri, Domain Backup Key (`LsaUnprotectMemory` / PVK), LAPS v1 ve modern Windows LAPS (v2) çözümü, Chrome App-Bound Encryption çerez hasadı. |
 | **03.4** | [Çevrimdışı Hash Kırma, Strateji ve Hash Shucking (NT Adayı)](./03.4_Offline_Hash_Kirma.md) | Hashcat mod seçimleri, Hash Shucking (NT-Adayı modları 35300, 35400, 27100), maske ve kural tabanlı kırma stratejileri, Pass-the-Hash vs. Hash Cracking operasyonel kararı. |
+| **03.5** | [Linux Active Directory Bilet, Keytab ve Kimlik Hasadı](./03.5_Linux_Active_Directory_Bilet_ve_Keytab_Hasadi.md) | Linux domain-joined sistemlerde `/etc/krb5.keytab` anahtar hasadı, `/tmp/krb5cc_*` ve Kernel Keyring CCACHE biletlerinin çalınması, `ticketConverter` ve Impacket ile Pass-the-Ticket. |
 
 ---
 

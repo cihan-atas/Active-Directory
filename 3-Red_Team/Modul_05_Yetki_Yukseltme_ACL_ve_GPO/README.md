@@ -70,6 +70,7 @@ Microsoft ekosisteminde her nesnenin (kullanıcı, bilgisayar, grup, GPO, OU) bi
 | **05.2** | [WriteOwner, AddMember ve GPLink](./05.2_WriteOwner_AddMember_GPLink.md) | Sahiplik alma zincirleri (`OwnerSID` ile örtük `WRITE_DAC`), grup hiyerarşisi (AGDLP) istismarı, OU nesnelerine zorlanmış GPO bağlama (`gPLink/gPOptions`) ve AdminSDHolder/SDProp mekanizması. |
 | **05.3** | [GPO Abuse ve SharpGPOAbuse](./05.3_GPO_Abuse_SharpGPOAbuse.md) | Group Policy mimarisi (GPC LDAP vs. GPT SYSVOL), İstemci Uzantıları (CSE), SYSTEM bağlamında Immediate Task enjeksiyonu, GPP Local Admin, User Rights Assignment ve hedeflenmiş güvenlik filtreleme. |
 | **05.4** | [Shadow Credentials](./05.4_Shadow_Credentials.md) | `msDS-KeyCredentialLink` özniteliği, Windows Hello for Business (Key Trust) altyapısı, parola sıfırlamadan gizli kimlik devralma, UnPAC-the-Hash ile NT hash çözme ve Whisker/Certipy otomasyonu. |
+| **05.5** | [OpenSSH LPK ve Hassas LDAP Nitelik Manipülasyonu](./05.5_OpenSSH_LPK_ve_LDAP_Sema_Manipulasyonu.md) | OpenSSH LPK şeması (`ldapPublicKey`, `sshPublicKey` enjeksiyonu ile parolasız Linux root erişimi), `supplementalCredentials` hasadı, `primaryGroupID` ve `userWorkstations` istismarı. |
 
 ---
 

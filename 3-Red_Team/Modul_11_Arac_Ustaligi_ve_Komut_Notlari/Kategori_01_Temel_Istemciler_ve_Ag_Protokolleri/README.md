@@ -1,7 +1,7 @@
 # 1. TEMEL İSTEMCİLER VE AĞ PROTOKOL ARAÇLARI (NATIVE CLIENTS & UTILITIES)
 
 > **Modül:** [Modül 11 — Araç Cephaneliği](../README.md) · **Kol:** 🔴 Red Team  
-> **Toplam Araç:** 11 Araç
+> **Toplam Araç:** 12 Araç
 
 ---
 
@@ -20,6 +20,7 @@
 | 9 | **impacket-samrdump** | [impacket-samrdump.md](./impacket-samrdump.md) | SAMR protokolünü sorgulayarak hedef sistemdeki yerel ve etki alanı kullanıcılarını, gruplarını ve parola kilitleme politikalarını döker. |
 | 10 | **enum4linux-ng** | [enum4linux-ng.md](./enum4linux-ng.md) | SMB, RPC, LDAP ve NetBIOS protokollerini birleştirerek Windows ve Samba sistemlerinden kullanıcı, grup, paylaşım ve işletim sistemi bilgilerini toplayan hepsi bir arada keşif aracıdır. |
 | 11 | **nmap (NSE Script)** | [nmap_NSE_Script.md](./nmap_NSE_Script.md) | Nmap script motoru üzerinden SMB imzalama zorunluluğunu (SMB Signing), işletim sistemi sürümlerini ve MS17-010 gibi kritik zafiyetleri denetleyen ağ tarama aracıdır. |
+| 12 | **NTLMParse** | [NTLMParse.md](./NTLMParse.md) | Base64 NTLMSSP paketlerini (Type 1, 2, 3) bayt düzeyinde çözerek hedef DC adını, etki alanı adını, sunucu zamanını ve OS yapı numarasını çıkaran analiz aracıdır. |
 
 
 ---

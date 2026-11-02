@@ -1,7 +1,7 @@
 # 10. KURUMSAL ALTYAPI, PAYLAŞIM VE VERİ AVI (ENTERPRISE DATA HUNTING)
 
 > **Modül:** [Modül 11 — Araç Cephaneliği](../README.md) · **Kol:** 🔴 Red Team  
-> **Toplam Araç:** 6 Araç
+> **Toplam Araç:** 7 Araç
 
 ---
 
@@ -15,6 +15,7 @@
 | 4 | **impacket-mssqlclient** | [impacket-mssqlclient.md](./impacket-mssqlclient.md) | Linux üzerinden TDS protokolüyle MSSQL veritabanlarına bağlanan, Windows/SQL kimlik doğrulaması yapan ve etkileşimli SQL kabuğu sunan araçtır. |
 | 5 | **SharpSCCM** | [SharpSCCM.md](./SharpSCCM.md) | Microsoft Endpoint Configuration Manager (SCCM/MECM) altyapısını WMI üzerinden sorgulayarak sertifika çekme, komut yürütme ve etki alanı genelinde yetki yükseltme sağlayan C# aracıdır. |
 | 6 | **MalSCCM** | [MalSCCM.md](./MalSCCM.md) | SCCM dağıtım noktalarını ve yönetim servislerini kötüye kullanarak yönetilen tüm uç noktalara zararlı yazılım ve ters kabuk dağıtan saldırı aracıdır. |
+| 7 | **Lnkbomb** | [Lnkbomb.md](./Lnkbomb.md) | Açık SMB ağ paylaşımlarına zararlı `.url`/`.lnk` dosyaları enjekte ederek klasörü açan kullanıcıların NTLMv1/v2 hash'lerini toplayan ve otomatik temizlik yapan araçtır. |
 
 
 ---

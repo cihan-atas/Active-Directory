@@ -1,7 +1,7 @@
 # 4. ZEHİRLEME, ORTADAKİ ADAM VE ZORLAMALI KİMLİK DOĞRULAMA (POISONING & COERCION)
 
 > **Modül:** [Modül 11 — Araç Cephaneliği](../README.md) · **Kol:** 🔴 Red Team  
-> **Toplam Araç:** 13 Araç
+> **Toplam Araç:** 14 Araç
 
 ---
 
@@ -22,6 +22,7 @@
 | 11 | **Pre2k** | [Pre2k.md](./Pre2k.md) | Active Directory'deki eski işletim sistemi (Windows 2000 öncesi) bilgisayar hesaplarının varsayılan zayıf makine parolalarını sömüren araçtır. |
 | 12 | **Crop** | [Crop.md](./Crop.md) | WebDAV servisi üzerinden Windows kullanıcı ve servis hesaplarını dış hedefe kimlik doğrulamaya zorlayan bir coerce aracıdır. |
 | 13 | **Farmer** | [Farmer.md](./Farmer.md) | Sahte WebDAV sunucusu ayağa kaldırarak ve kurban makinelerde SCF/LNK dosyaları tetikleyerek NetNTLM hash'lerini toplayan C# tabanlı bir araçtır. |
+| 14 | **LNKUp** | [LNKUp.md](./LNKUp.md) | Windows Gezgini'nin simge yükleme davranışını sömürerek klasör açıldığı anda kurbanın NTLM hash'ini veya ortam değişkenlerini otomatik çalan LNK üretecidir. |
 
 
 ---

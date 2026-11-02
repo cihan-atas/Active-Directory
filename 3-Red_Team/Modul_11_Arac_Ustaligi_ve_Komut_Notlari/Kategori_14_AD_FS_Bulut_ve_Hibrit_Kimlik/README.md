@@ -1,7 +1,7 @@
 # 14. AD FS, BULUT VE HİBRİT KİMLİK (FEDERATION & HYBRID PIVOT)
 
 > **Modül:** [Modül 11 — Araç Cephaneliği](../README.md) · **Kol:** 🔴 Red Team  
-> **Toplam Araç:** 3 Araç
+> **Toplam Araç:** 4 Araç
 
 ---
 
@@ -11,7 +11,8 @@
 |:---:|:---|:---|:---|
 | 1 | **AADInternals** | [AADInternals.md](./AADInternals.md) | Azure AD (Microsoft Entra ID), M365 ve Azure AD Connect altyapılarını yönetmek, MSOL_ senkronizasyon parolalarını dökmek ve parola hash senkronizasyonunu (PHS) manipüle etmek için kullanılan kapsamlı PowerShell modülüdür. |
 | 2 | **ADFSpoof (Golden SAML)** | [ADFSpoof.md](./ADFSpoof.md) | Ele geçirilen AD FS Token-Signing özel anahtarını kullanarak, şirket içi sunuculara uğramadan herhangi bir kullanıcı adına sahte SAML 2.0 belirteçleri üreten ve bulutta parola/MFA olmaksızın oturum açan Python aracıdır. |
-| 3 | **ROADtools / roadrecon** | [ROADtools_roadrecon.md](./ROADtools_roadrecon.md) | Azure AD / Entra ID bulut ortamlarındaki kullanıcıları, grupları, rolleri ve Koşullu Erişim politikalarını tarayan, yerel veritabanında depolayan ve görsel web arayüzünde analiz eden keşif çerçevesidir. |
+| 3 | **ADFSRelay** | [ADFSRelay.md](./ADFSRelay.md) | Yakalanan NTLM kimlik doğrulama isteklerini AD FS sunucusuna relay ederek meşru SAML 2.0 belirteçleri alan ve bulut servislerine (M365, Azure) şifresiz/MFA'sız erişim sağlayan araçtır. |
+| 4 | **ROADtools / roadrecon** | [ROADtools_roadrecon.md](./ROADtools_roadrecon.md) | Azure AD / Entra ID bulut ortamlarındaki kullanıcıları, grupları, rolleri ve Koşullu Erişim politikalarını tarayan, yerel veritabanında depolayan ve görsel web arayüzünde analiz eden keşif çerçevesidir. |
 
 
 ## 🎯 Operasyonel Rol ve AD-Bulut Köprüsü

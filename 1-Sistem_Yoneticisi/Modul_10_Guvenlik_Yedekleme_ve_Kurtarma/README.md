@@ -19,6 +19,7 @@ AD'nin kalbini (NTDS.dit) korumayı ve bakımını, hangi felakette hangi kurtar
 | [10.2](./10.2_Yedekleme_ve_Kurtarma.md) | **Yedekleme ve Kurtarma** | System State, kurtarma karar ağacı, Recycle Bin/non-auth/authoritative, Forest Recovery, krbtgt 2x reset, ADMT |
 | [10.3](./10.3_Hardening_Temelleri.md) | **Hardening Temelleri** | Protokol (signing/NTLM/AES), hesap (Protected Users/LAPS/gMSA), mimari (Tier Model) |
 | [10.4](./10.4_Denetim_ve_Uyumluluk.md) | **Denetim ve Uyumluluk** | DACL vs SACL, denetim boru hattı, kritik Event ID'ler, ISO 27001/SOC 2/GDPR |
+| [10.5](./10.5_Guvenlik_Test_Laboratuvari_GOAD_ve_Simulasyon_Kurulumu.md) | **Güvenlik Test Laboratuvarı (GOAD & Simülasyon)** | GOAD multi-forest mimarisi, Vagrant/Ansible ile otomatik dağıtım, Vulnerable-AD-Plus ile anında zafiyet enjeksiyonu ve izolasyon kuralları |
 
 ## Önerilen okuma sırası
 

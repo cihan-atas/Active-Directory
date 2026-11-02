@@ -440,48 +440,141 @@ def strip_prompt(cmd: str) -> str:
     cleaned = re.sub(r'^(?:[A-Za-z]:\\[^>]*>|PS\s+[A-Za-z]:\\[^>]*>|root@[^:#]+:[^#]+#\s*|\$\s+|rpcclient\s*\$>\s*|beacon>\s*)', '', cmd).strip()
     return cleaned
 
-def is_executable_command_clean(code: str, lang: str) -> bool:
-    """Kod bloğunun gerçek, çalıştırılabilir bir komut veya sorgu olup olmadığını doğrular."""
-    code = code.strip()
-    if not code or len(code) < 5:
+def is_executable_command_clean(code: str, lang: str = "", title: str = "") -> bool:
+    """Kod bloğunun gerçek, çalıştırılabilir bir operasyonel komut veya sorgu olup olmadığını doğrular."""
+    raw = code.strip()
+    if not raw or len(raw) < 4:
         return False
-    # ASCII diyagramlar, oklar, akış şemaları ve tabloları atla
-    if any(s in code for s in [
-        '┌──', '├──', '└──', '│', '───', '===', '└─', '+---', '|---', '<Subscription', '<?xml',
-        '──▶', '──►', '-->', '◄──', '▲', '▼', '◀', '▶', '┌', '└', '┤', '┼', '═'
+        
+    lines = [l.strip() for l in raw.split('\n') if l.strip()]
+    non_comment_lines = [l for l in lines if not l.startswith(('#', '//', '::', '<!--'))]
+    if not non_comment_lines:
+        return False
+        
+    first_non_comment = non_comment_lines[0]
+    
+    # 1. Sigma / YARA / KQL / XML tespit ve kural şablonları
+    if any(line.startswith(('title:', 'description:', 'author:', 'logsource:', 'detection:', 'condition:', 'rule Indicator_', 'rule ', '<Subscription', '<?xml')) for line in lines):
+        return False
+    if any(s in raw for s in ['<Sysmon', '<EventFiltering', '<RuleGroup', '<QueryList', '<form ', '<input ']):
+        return False
+        
+    # 2. Markdown tabloları, ASCII akış şemaları ve diyagramlar
+    if any(line.startswith('|') and '|' in line[1:] for line in lines):
+        return False
+    if any(symbol in raw for symbol in [
+        '┌──', '├──', '└──', '│', '───', '===', '└─', '+---', '|---', '──▶', '──►', '-->', '◄──',
+        '▲', '▼', '◀', '▶', '┌', '┐', '└', '┘', '├', '┤', '┬', '┴', '┼', '═'
+    ]):
+        return False
+    if any(s in raw for s in ['OPSEC GÜRÜLTÜ', '0 ------', '0 ----[', '------[']):
+        return False
+        
+    # 3. GUI / Arayüz yönergeleri (adım adım tıklama yolları)
+    if any(term in raw for term in [
+        'Computer Configuration →', 'Computer Configuration ->', 'User Configuration →', 'User Configuration ->',
+        'GPO:', 'Event Viewer →', 'Active Directory Users and Computers →', 'ldp.exe →', 'adsiedit.msc →',
+        'Group Policy Management →', 'dsa.msc →', 'certsrv.msc →', 'compmgmt.msc →'
     ]):
         return False
         
-    # OPSEC gürültü skalası diyagramlarını atla
-    if any(s in code for s in ['OPSEC GÜRÜLTÜ', '0 ------', '0 ----[', '------[']):
-        return False
-        
-    # YARA, Sigma ve XML/HTML yapılandırma şablonlarını atla
-    if code.startswith(('title:', 'description:', 'author:', 'rule Indicator_', 'rule ', '<!--', '<')):
-        return False
-        
-    if any(s in code for s in ['<Sysmon', '<EventFiltering', '<RuleGroup', '<QueryList', '<form ', '<input ']):
-        return False
-        
-    lines = [l.strip() for l in code.split('\n') if l.strip() and not l.strip().startswith(('#', '::', '//', '<!--'))]
-    if not lines:
-        return False
-    first = lines[0]
-    
-    # Komut çıktısı (output logs) ve GUI kılavuzlarını filtrele
+    # 4. İnteraktif terminal / konsol çıktısı veya log dökümü
     output_prefixes = [
         'Loaded ', 'Administrator:', 'Domain Name:', 'Metot ', 'UAC ', 'dn:', 'defaultNamingContext:',
         'Computer Config', 'User Config', 'Adım ', 'NOT:', 'Rule ', 'Flags: 0x',
         '[+] ', '[*] ', '[-] ', '[!] ', '[DC] ', '[SMB] ', '[HTTP] ', '[LDAP] ', '[Agent',
         '[ntlmrelayx', '[Rubeus', '[Responder', '[OPSEC', 'NTLMv2-SSP Client'
     ]
-    if any(first.startswith(p) for p in output_prefixes):
+    if any(first_non_comment.startswith(p) for p in output_prefixes):
+        return False
+    if any(l.startswith(('ntdsutil:', 'beacon>', 'rpcclient $>', 'mimikatz #', 'kerberos::', 'C:\\>')) for l in lines[:3]):
+        if any('Active instance set to' in l or 'mimikatz(powershell)' in l or 'Privilege ' in l for l in lines):
+            return False
+            
+    # 5. User-Agent, Event ID ve salt ağ/EDR imza alanları
+    if any(line.startswith(('User-Agent:', 'Event ID:', 'EventID:', 'Olay Kimliği:', 'Provider_Name:')) for line in lines):
+        return False
+    if ('Ağ ve EDR İmzaları' in title or 'Bırakılan İzler' in title) and not any(k in raw.lower() for k in ['powershell', 'get-winevent', 'wevtutil', 'mimikatz', 'rubeus', 'certipy', 'nxc']):
+        return False
+
+    # 6. Kayıt Defteri (Registry) anahtar yolu tek başına
+    if (first_non_comment.startswith(('HKLM\\', 'HKCU\\', 'HKEY_LOCAL_MACHINE\\', 'HKEY_CURRENT_USER\\')) and 
+        not any(first_non_comment.lower().startswith(p) for p in ['reg ', 'reg.exe', 'powershell', 'get-item', 'set-item'])):
+        return False
+
+    # 7. Salt URL veya dosya yolu
+    if (first_non_comment.startswith(('http://', 'https://', 'C:\\Windows\\System32\\')) and ' ' not in first_non_comment):
+        return False
+
+    # 8. LDAP bitmask veya RFC 4515 sözdizim şablonları
+    if first_non_comment.startswith('(') and any(k in first_non_comment for k in ['<öznitelik>', 'eşleme_kuralı', ':=', '→']):
+        if not any(cmd_w in raw.lower() for cmd_w in ['ldapsearch', 'dsquery', 'get-ad', 'adfind']):
+            return False
+
+    # 9. Düz metin / metodoloji / soru / kontrol listesi cümleleri
+    prose_starters = [
+        r'^(?:Normal akış|USN Rollback|Link doğru mu\?|Bu |Aşağıdaki|Şayet|Eğer|Not:|Dikkat:|Örnek:|Kullanıcı |Saldırgan |Hedef |Yöntem |Metot |Aşama |Senaryo |Gerekli |Öncelikle |Ardından |Sonrasında |Sonuç: |Çıktı: |Analiz: |Tespit: |Çözüm: |Neden: |Durum: |Özet: |Tanım: |Açıklama: |Faydalı |Tavsiye |Bilgi |Öneri:)\b',
+        r'^(?:Şablon:|Yön:|Adım\s*\d+:|Faz\s*\d+:|Phase\s*\d+:|Step\s*\d+:)\b',
+        r'^(?:Soru:|Cevap:|Teori:|Mimarisi:|Çalışma Prensibi:)\b',
+        r'^(?:1\)\s+|2\)\s+|3\)\s+|1\.\s+[A-ZÇĞİÖŞÜ]|2\.\s+[A-ZÇĞİÖŞÜ])',
+        r'^(?:T10|T11|T12|T15)\d{2}',
+    ]
+    for pat in prose_starters:
+        if re.search(pat, first_non_comment, re.IGNORECASE):
+            if not any(k in raw.lower() for k in ['powershell', 'cmd.exe', 'nxc ', 'mimikatz', 'rubeus', 'certipy', 'impacket-', 'curl ', 'wget ', 'nmap ']):
+                return False
+
+    # 10. Python scriptleri ve DSC konfigürasyon blokları
+    if raw.startswith(('from ldap3 import', 'import ssl', 'import os', 'import sys', '[DSCLocalConfigurationManager()]', 'Configuration ')):
         return False
         
-    # Faz / Adım / Senaryo bloklarını ve Python tuple/list çıktılarını filtrele
-    if re.match(r'^\s*\[(?:Faz|Adım|Senaryo|Aşama|Step|Phase|Blue)\s*[\d\.]+', first, re.IGNORECASE):
+    # 11. Cypher sorgusu (BloodHound için geçerli komut)
+    if any(first_non_comment.startswith(k) for k in ['MATCH ', 'MATCH(', 'CREATE ', 'RETURN ']):
+        return True
+        
+    # 12. PowerShell Cmdlet / Script
+    if re.search(r'^(?:(?:Get|Set|New|Remove|Enable|Disable|Add|Clear|Test|Search|Invoke|Select|Where|Start|Stop|Restart|Export|Import|Resolve|Measure|Compare|Install|Uninstall)-[A-Za-z0-9]+|\$[a-zA-Z0-9_]+\s*=|\[[A-Za-z0-9_\.]+\])', first_non_comment):
+        return True
+        
+    # 13. Bilinen CLI Araçları
+    cli_tokens = [
+        'impacket-', 'nxc', 'crackmapexec', 'cme', 'rubeus', 'mimikatz', 'certipy', 'certify', 'bloodhound',
+        'sharphound', 'responder', 'mitm6', 'ntlmrelayx', 'hashcat', 'john', 'hydra', 'kerbrute', 'ldapsearch',
+        'rpcclient', 'evil-winrm', 'chisel', 'ligolo', 'powershell', 'cmd', 'curl', 'wget', 'nmap', 'sqlmap',
+        'nltest', 'dsquery', 'dsget', 'repadmin', 'dcdiag', 'ntdsutil', 'certutil', 'klist', 'kinit', 'whoami',
+        'net', 'net1', 'sc', 'reg', 'schtasks', 'wmic', 'tasklist', 'ipconfig', 'wevtutil', 'auditpol', 'secedit',
+        'vssadmin', 'wbadmin', 'sudo', 'export', 'chmod', 'mkdir', 'findstr', 'grep', 'python3', 'python',
+        'Get-WinEvent', 'SecurityEvent', 'DeviceProcessEvents', 'WinEvent', 'adfind', 'admod', 'seatbelt',
+        'safetykatz', 'sharpup', 'sharpview', 'sharpdpapi', 'sharpwmi', 'sharpchrome', 'snaffler', 'coercer',
+        'petitpotam', 'dfscoerce', 'shadowcoerce', 'printerbug', 'spoolsample', 'demodal', 'bloodyad',
+        'pywerview', 'ldapdomaindump', 'adalanche', 'pingcastle', 'gowitness', 'gowinrm', 'pre2k', 'masky',
+        'netsh', 'route', 'arp', 'systeminfo', 'gpupdate', 'gpresult', 'ping', 'tracert', 'nslookup',
+        'execute-assembly', 'inline-execute', 'bof-netexec', 'lsassy', 'donpapi', 'pypykatz', 'gpp-decrypt'
+    ]
+    first_word = first_non_comment.split()[0].lower().strip('`"\'(').split('/')[-1].replace('.exe', '').replace('.py', '').replace('.ps1', '')
+    if any(first_word == ct or first_non_comment.lower().startswith(ct) for ct in cli_tokens):
+        return True
+        
+    # 14. CLI bayrakları barındıran komutlar
+    has_flags = bool(re.search(r'(?:^|\s)(?:-[a-zA-Z0-9_\-]+|--[a-zA-Z0-9_\-]+|/[a-zA-Z0-9_\-]+:?)\s+', raw))
+    if has_flags and len(raw.split()) <= 40 and not any(turkish_word in raw.lower() for turkish_word in ['nedir', 'çünkü', 'olmalıdır', 'şeklinde', 'yapılır', 'gerekmektedir']):
+        return True
+
+    # 15. Faz / Adım / Senaryo bloklarını ve Python tuple/list çıktılarını filtrele
+    if re.match(r'^\s*\[(?:Faz|Adım|Senaryo|Aşama|Step|Phase|Blue)\s*[\d\.]+', first_non_comment, re.IGNORECASE):
         return False
-    if first.startswith(("[('", '[{"', "[{ '")):
+    if first_non_comment.startswith(("[('", '[{"', "[{ '")):
+        return False
+        
+    # 16. Doğal dil / Türkçe cümle kontrolü
+    if len(raw.split()) > 15 and not any(k in raw for k in ['|', '$', '-', '/']):
+        return False
+    turkish_sentence_words = ['veya', 'için', 'ile', 'üzerinden', 'tarafından', 'sonra', 'önce', 'göre', 'kadar', 'olarak', 'olan', 'edilen']
+    found_tw = sum(1 for w in turkish_sentence_words if f" {w} " in f" {raw.lower()} ")
+    if found_tw >= 2 and not has_flags:
+        return False
+
+    if not has_flags and not any(symbol in raw for symbol in ['$', '|', '>', '<', '\\', '/']):
         return False
         
     return True

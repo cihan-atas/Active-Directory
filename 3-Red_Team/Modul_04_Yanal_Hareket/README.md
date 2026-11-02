@@ -66,6 +66,7 @@ Kimlik doğrulama süreçlerinde açık metin parola bilmek şart değildir:
 | **04.2** | [Pass-the-Ticket](./04.2_Pass_the_Ticket.md) | Kerberos TGT/TGS bilet anatomisi, `.kirbi` ve `.ccache` format dönüşümleri, `kerberos::ptt`, Kerberos Double-Hop sorunu ve çözümleri (tgtdeleg, CredSSP, RBCD). |
 | **04.3** | [PsExec, WMI ve WinRM](./04.3_PsExec_WMI_WinRM.md) | SMB, WMI ve WinRM protokol karşılaştırması, DCOM tabanlı yanal hareket (`MMC20.Application`, `ShellWindows`), RDP oturum ele geçirme (`tscon.exe`) ve telemetri izleri. |
 | **04.4** | [NetExec ile Otomasyon](./04.4_NetExec_Otomasyon.md) | Çoklu protokol orkestrasyonu (SMB, WMI, WinRM, RDP, MSSQL), "Pwn3d!" mantığı, modüler yürütme yöntemleri (`wmiexec, smbexec, atexec, mmcexec`) ve `spider_plus`/`lsassy` modülleri. |
+| **04.5** | [MSSQL Database Link ve Çapraz Orman SQL Pivoting](./04.5_MSSQL_Database_Link_ve_Cross_Trust_Pivoting.md) | MSSQL veritabanı bağlantıları (`sp_addlinkedserver`), çok kademeli (multi-hop) `OPENQUERY` zincirleri, `rpc out` suiistimali ve trust sınırlarını aşarak `xp_cmdshell` ile RCE. |
 
 ---
 

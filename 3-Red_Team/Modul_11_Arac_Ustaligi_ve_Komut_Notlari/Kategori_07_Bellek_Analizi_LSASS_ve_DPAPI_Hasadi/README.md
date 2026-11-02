@@ -1,7 +1,7 @@
 # 7. BELLEK ANALİZİ, LSASS DÖKÜMÜ VE KASA HASADI (CREDENTIAL HARVESTING & DPAPI)
 
 > **Modül:** [Modül 11 — Araç Cephaneliği](../README.md) · **Kol:** 🔴 Red Team  
-> **Toplam Araç:** 17 Araç
+> **Toplam Araç:** 18 Araç
 
 ---
 
@@ -26,6 +26,7 @@
 | 15 | **LaZagne** | [lazagne.md](./lazagne.md) | Windows ve Linux sistemlerde web tarayıcıları, e-posta istemcileri, veritabanları ve WiFi profillerinde saklanan açık metin parolaları toplayan açık kaynaklı araçtır. |
 | 16 | **PPLKiller** | [PPLKiller.md](./PPLKiller.md) | Zafiyetli ve meşru bir çekirdek sürücüsünü (BYOVD) sisteme yükleyerek LSASS üzerindeki RunAsPPL korumasını çekirdek seviyesinde devre dışı bırakan araçtır. |
 | 17 | **PPLMedic & PPLDump** | [PPLMedic_PPLDump.md](./PPLMedic_PPLDump.md) | Windows'un Protected Process Light (PPL) korumasını kullanıcı alanındaki mantıksal nesne hiyerarşisi hatalarını istismar ederek aşan ve korunan LSASS bellek dökümünü alan araçlardır. |
+| 18 | **DragonCastle** | [DragonCastle.md](./DragonCastle.md) | AutodialDLL ve BITS servisi manipülasyonu ile LSASS'a sahte SSP yükleyerek NTLM karmalarını ve AES oturum anahtarlarını uzaktan kazıyan araçtır. |
 
 
 ---

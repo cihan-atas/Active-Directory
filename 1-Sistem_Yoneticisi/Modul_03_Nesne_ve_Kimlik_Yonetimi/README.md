@@ -19,6 +19,7 @@ Kimin hangi isimle var olduğunu, hesapların hangi özniteliklerinin güvenlik 
 | [03.2](./03.2_Hesap_Yonetimi.md) | **Hesap Yönetimi** | UPN vs sAMAccountName, userAccountControl bayrakları (güvenlik!), SPN/adminCount, Attribute Editor, stale hesaplar |
 | [03.3](./03.3_Grup_Ustaligi_AGDLP.md) | **Grup Ustalığı ve AGDLP** | Tür/kapsam kuralları, AGDLP/AGUDLP, primaryGroupID tuzağı, korumalı gruplar & SDProp |
 | [03.4](./03.4_gMSA_ve_FGPP.md) | **gMSA ve FGPP** | MSA/gMSA/dMSA, KDS Root Key, servis hesabı sertleştirme, PSO ile granüler parola politikası |
+| [03.5](./03.5_Linux_Sistemlerin_AD_Entegrasyonu_SSSD_ve_Realm.md) | **Linux AD Entegrasyonu (SSSD & Realm)** | realmd, SSSD, Kerberos keytab, DNS/NTP senkronizasyonu, sudoers AD grup yetkilendirmesi |
 
 ## Önerilen okuma sırası
 

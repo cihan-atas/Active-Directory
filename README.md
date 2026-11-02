@@ -1,19 +1,19 @@
 # 🛡️ Active Directory Ustalık Programı & Vault
 
-[![GitHub Release](https://img.shields.io/badge/Release-v1.1.0-blue.svg)](https://github.com/cihan-atas/Active-Directory/releases/tag/v1.1.0)
-[![Download APK](https://img.shields.io/badge/Download-Android%20APK%20(v1.1.0)-success?logo=android&logoColor=white)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.1.0/ActiveDirectory_Vault_v1.1.0.apk)
+[![GitHub Release](https://img.shields.io/badge/Release-v1.2.0-blue.svg)](https://github.com/cihan-atas/Active-Directory/releases/tag/v1.2.0)
+[![Download APK](https://img.shields.io/badge/Download-Android%20APK%20(v1.2.0)-success?logo=android&logoColor=white)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.2.0/ActiveDirectory_Vault_v1.2.0.apk)
 [![Architecture](https://img.shields.io/badge/Architecture-100%25%20Offline%20First-orange.svg)](#)
-[![Topics](https://img.shields.io/badge/Külliyat-316%20Doküman-purple.svg)](#)
-[![Operational Commands](https://img.shields.io/badge/Operasyonel%20Komut-3.333+-red.svg)](#)
+[![Topics](https://img.shields.io/badge/Külliyat-329%20Doküman-purple.svg)](#)
+[![Operational Commands](https://img.shields.io/badge/Operasyonel%20Komut-3.160+-red.svg)](#)
 [![MITRE ATT&CK](https://img.shields.io/badge/Framework-MITRE%20ATT%26CK-informational.svg)](https://attack.mitre.org/)
-[![Status](https://img.shields.io/badge/Durum-Tamamlandı%20(v1.1)-brightgreen.svg)](#)
+[![Status](https://img.shields.io/badge/Durum-Tamamlandı%20(v1.2)-brightgreen.svg)](#)
 
 Active Directory (AD) kurumsal altyapılarını sıfırdan en ileri seviyeye kadar anlamak, yönetmek, sertleştirmek ve saldırı/savunma simetrisiyle derinlemesine kavramak amacıyla inşa edilmiş **ansiklopedik eğitim külliyatı ve operasyonel cephanelik platformudur**.
 
 Aynı sistem mimarisi, birbirine çift yönlü çapraz referanslar veren **üç farklı operasyonel perspektif** üzerinden ele alınır:
 - 🏗️ **Sistem Mimarı / Yöneticisi:** Kurulum, tasarım, replikasyon, kimlik ve orman yönetimi.
 - 🛡️ **Blue Team (Savunma):** Tehdit avcılığı, SIEM/Sigma kuralları, Event ID telemetrisi ve sıkılaştırma.
-- 🔴 **Red Team (Saldırı & Cephanelik):** Sızma teknikleri, yetki yükseltme, yanal hareket ve 146 araçlık operasyonel cephanelik.
+- 🔴 **Red Team (Saldırı & Cephanelik):** Sızma teknikleri, yetki yükseltme, yanal hareket ve 153 araçlık operasyonel cephanelik.
 
 ---
 
@@ -44,10 +44,10 @@ Projede yer alan tüm külliyat, sahadaki siber güvenlik operatörleri, pentest
 
 #### 1. Android (APK)
 Uygulamayı harici hiçbir mağazaya veya internete ihtiyaç duymadan doğrudan telefonunuza ya da tabletinize yükleyebilirsiniz:
-* 📲 **Doğrudan İndir:** [ActiveDirectory_Vault_v1.1.0.apk (56 MB)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.1.0/ActiveDirectory_Vault_v1.1.0.apk)
+* 📲 **Doğrudan İndir:** [ActiveDirectory_Vault_v1.2.0.apk (56 MB)](https://github.com/cihan-atas/Active-Directory/releases/download/v1.2.0/ActiveDirectory_Vault_v1.2.0.apk)
 * **Manuel ADB Kurulumu:**
   ```bash
-  adb install -r ActiveDirectory_Vault_v1.1.0.apk
+  adb install -r ActiveDirectory_Vault_v1.2.0.apk
   ```
 
 #### 2. Web Sürümü (Tarayıcı)
@@ -72,11 +72,11 @@ Projenin derleme pipeline'ı tarafından taranan güncel operasyonel veriler:
 | **Operasyonel Kol (Pillars)** | **3 Kol** | Sistem Yöneticisi, Blue Team, Red Team |
 | **Modül Sayısı** | **31 Modül** | 10 Sistem + 10 Blue + 11 Red Team Modülü |
 | **Alt Araç Kategorisi** | **18 Kategori** | Modül 11 kapsamındaki derin araç sınıflandırması |
-| **Toplam Doküman & Kılavuz** | **316 Doküman** | Ansiklopedik derinlikte hazırlanmış markdown konuları |
-| **Toplam Satır Sayısı** | **85.432 Satır** | Pratik anlatım, kod blokları ve senaryolar |
-| **Toplam Kelime Hacmi** | **594.234 Kelime**| Kapsamlı teknik referans arşivi |
-| **Operasyonel Komut Kataloğu** | **3.333+ Komut** | Parametre çözümleyicili, kopyalamaya hazır komutlar |
-| **Desteklenen Araç Sayısı** | **146 Araç** | Impacket, Mimikatz, BloodHound, NetExec, Rubeus vb. |
+| **Toplam Doküman & Kılavuz** | **329 Doküman** | Ansiklopedik derinlikte hazırlanmış markdown konuları |
+| **Toplam Satır Sayısı** | **88.000+ Satır** | Pratik anlatım, kod blokları ve senaryolar |
+| **Toplam Kelime Hacmi** | **615.000+ Kelime**| Kapsamlı teknik referans arşivi |
+| **Operasyonel Komut Kataloğu** | **3.160+ Komut** | Parametre çözümleyicili, kopyalamaya hazır filtrelenmiş komutlar |
+| **Desteklenen Araç Sayısı** | **153 Araç** | Impacket, Mimikatz, BloodHound, NetExec, Rubeus vb. |
 
 ---
 
@@ -140,7 +140,7 @@ $$\text{Red Team Modül } N \iff \text{Blue Team Modül } N$$
 8. **[Koersiyon ve NTLM Relay](3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/)** — PetitPotam, PrinterBug, ShadowCoerce, ntlmrelayx (AD CS & LDAP relay).
 9. **[Domain Hakimiyeti ve Kalıcılık](3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/)** — DCSync, Golden/Silver/Diamond Ticket, Skeleton Key, AdminSDHolder.
 10. **[Trust, Forest ve Hibrit Saldırılar](3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/)** — SID History abuse, Cross-forest Kerberos hop, Azure AD Connect sync hesabı çıkarma.
-11. **[Araç Ustalığı ve Komut Notları](3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/)** — **18 Kategori ve 146 Araçlık Tam Saha Cephaneliği**:
+11. **[Araç Ustalığı ve Komut Notları](3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/)** — **18 Kategori ve 153 Araçlık Tam Saha Cephaneliği**:
     - *Kategori 01:* Temel İstemciler ve Ağ Protokolleri (`smbclient`, `enum4linux-ng`, `netexec`, `rpcclient`...)
     - *Kategori 02:* LDAP Keşif ve Sorgu Araçları (`ldapsearch`, `windapsearch`, `ldapdomaindump`...)
     - *Kategori 03:* Kerberos Saldırı Araçları (`Rubeus`, `getTGT`, `getST`, `kerbrute`...)

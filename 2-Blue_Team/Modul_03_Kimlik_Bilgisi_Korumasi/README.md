@@ -20,6 +20,7 @@ Kimlik bilgisi LSASS belleğinde, diskte (DPAPI) ve önbellekte (DCC2) yaşar; h
 | [03.2](./03.2_LAPS_ile_Yerel_Admin_Parola_Yonetimi.md) | **LAPS** | Benzersiz/dönen yerel admin parolası, PtH yayılma yarıçapını 1'e indirme, LAPS harvesting tespiti |
 | [03.3](./03.3_Protected_Users_ve_Authentication_Policies.md) | **Protected Users & Auth Silos** | NTLM/RC4/delegation kapatma, Silo ile "nereden" kilidi, 4820/4821 |
 | [03.4](./03.4_DPAPI_ve_Onbelleklenmis_Kimlik.md) | **DPAPI & Cached Credentials** | DPAPI masterkey/backup key, DCC2/MSCACHEv2, cache=0, disk sırları |
+| [03.5](./03.5_Linux_Domain_Sistem_Guvenligi_ve_Keytab_Sertlestirme.md) | **Linux Domain Güvenliği & Keytab** | `/etc/krb5.keytab` 0600 sertleştirme, KCM çekirdek önbellekleme, auditd telemetrisi ve SSSD güvenliği |
 
 ## Önerilen okuma sırası
 
