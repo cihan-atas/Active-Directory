@@ -26,11 +26,11 @@ Projede yer alan tüm külliyat, sahadaki siber güvenlik operatörleri, pentest
 │                        ACTIVE DIRECTORY VAULT                          │
 │   [ Hub ]     [ Red Team ]     [ Blue Team ]     [ SysAdmin ]          │
 ├────────────────────────────────────────────────────────────────────────┤
-│  ⚡ KOMUT MOTORU      : 3.333+ Hazır Parametreli CLI Komutu & Debounce │
+│  ⚡ KOMUT MOTORU      : 3.160+ Hazır Parametreli CLI Komutu & Debounce │
 │  🎟 BİLET ÇÖZÜMLEME   : .kirbi & .ccache Base64 Kerberos Inspector     │
 │  🗺 MITRE MATRİSİ     : İnteraktif Isı Haritası & Taktik Navigatörü    │
 │  📊 YETENEK RADARI    : Sınav Karnesi & Konu Bazlı Radar Grafiği       │
-│  🤖 AI SORU MOTORU    : Yapay Zeka ile Dinamik Sınav Sorusu Üretimi    │
+│  🤖 AI OKUMA & SOHBET : Tam Ekran Okuma, Çevrimdışı Soru & İzole Tarih │
 │  🎯 PENTEST CHECKLIST : CRTP / OSCP / CEH Uyumlu 8 Faz, 45+ Madde      │
 │  🏆 GANİMET (LOOT)    : Hash, Bilet, IP ve Parola Defteri              │
 │  🧠 LAB & SINAV       : 122 Soru Bankası & 10 Karar Ağacı Senaryosu    │
@@ -80,6 +80,17 @@ Projenin derleme pipeline'ı tarafından taranan güncel operasyonel veriler:
 
 ---
 
+## 🚀 Son Sürüm: v1.2.0 Öne Çıkan Yenilikler
+
+* 🐧 **Linux Active Directory & SSSD Desteği (3 Kol Simetrisi):** Red Team bilet/keytab hasadı (`03.5`), Blue Team keytab & PAM sıkılaştırma (`03.5`), Sistem Yöneticisi SSSD/realmd entegrasyonu (`03.5`).
+* 🗄️ **MSSQL Database Link & Cross-Trust Pivoting:** SQL Server `OPENQUERY` zincirleme, `xp_cmdshell` impersonation ve cross-trust atlama teknikleri (`Red 04.5`), SIEM telemetrisi ve link sıkılaştırma (`Blue 04.3`).
+* 🔑 **OpenSSH LPK & LDAP Şema İstismarı:** `sshPublicKey` LDAP özniteliği manipülasyonu ile domain kalıcılığı ve yetki yükseltme (`Red 05.5`).
+* 🧪 **GOAD & Simülasyon Laboratuvarı:** Game of Active Directory (GOAD), BadBlood ve AD test lablarının otomatik kurulum kılavuzu (`SysAdmin 10.5`).
+* 🧰 **153 Araçlık Cephanelik (+7 Yeni Araç):** `lsarelayx`, `LdapRelayScan`, `ADFSRelay`, `LNKUp`, `Lnkbomb`, `DragonCastle`, `NTLMParse` 6 bölümlük standart operasyonel rehberle eklendi.
+* 📱 **Vault Uygulaması Geliştirmeleri:** AI Asistanında dikkat dağıtıcı öğeleri gizleyen tam ekran okuma modu, modül/doküman bazlı izole geçmiş mimarisi ve 3.164 operasyonel komuta sahip arındırılmış komut motoru.
+
+---
+
 ## 🎯 1:1 Simetrik Savunma ve Saldırı Felsefesi
 
 Active Directory altyapısında hiçbir güvenlik olgusu tek taraflı değildir. Projedeki her Red Team saldırı tekniği, Blue Team tarafında **1:1 simetrik tespit ve önleme modülüyle** eşleştirilmiştir:
@@ -100,14 +111,14 @@ $$\text{Red Team Modül } N \iff \text{Blue Team Modül } N$$
 [`1-Sistem_Yoneticisi/`](1-Sistem_Yoneticisi/)
 1. **[Mimari ve Temeller](1-Sistem_Yoneticisi/Modul_01_Mimari_ve_Temeller/)** — Forest/Tree/Domain mantıksal hiyerarşisi, Schema, GC, Fonksiyonel Seviyeler.
 2. **[Fiziksel Altyapı ve Replikasyon](1-Sistem_Yoneticisi/Modul_02_Fiziksel_Altyapi_ve_Replikasyon/)** — DC topolojisi, Sites & Subnets, KCC, FSMO Rolleri, RODC.
-3. **[Nesne ve Kimlik Yönetimi](1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/)** — OU mimarisi, Delegasyon, AGDLP gruplama, gMSA, FGPP parola politikaları.
+3. **[Nesne ve Kimlik Yönetimi](1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/)** — OU mimarisi, Delegasyon, AGDLP gruplama, gMSA, FGPP parola politikaları, Linux SSSD/realmd entegrasyonu.
 4. **[Grup İlkeleri (GPO)](1-Sistem_Yoneticisi/Modul_04_Grup_Ilkeleri_GPO/)** — LSDOU işleme sırası, WMI filtreleme, GPP, Central Store.
 5. **[DNS ve Ad Çözümleme](1-Sistem_Yoneticisi/Modul_05_DNS_ve_Ad_Cozumleme/)** — AD-Integrated Bölgeler, SRV kayıtları, Scavenging, DNSSEC.
 6. **[Depolama ve Dosya Servisleri](1-Sistem_Yoneticisi/Modul_06_Depolama_ve_Dosya_Servisleri/)** — DFS-Namespaces, DFS-Replication, FSRM kotaları.
 7. **[PKI ve Sertifika Servisleri (AD CS)](1-Sistem_Yoneticisi/Modul_07_PKI_ve_Sertifika_Servisleri/)** — İki katmanlı PKI, Enterprise CA, Şablonlar, CRL/OCSP, Autoenrollment.
 8. **[Hibrit Kimlik ve Federasyon](1-Sistem_Yoneticisi/Modul_08_Hibrit_Kimlik_ve_Federasyon/)** — Microsoft Entra Connect (PHS/PTA), AD FS, Seamless SSO.
 9. **[Otomasyon ve Arayüzler](1-Sistem_Yoneticisi/Modul_09_Otomasyon_ve_Arayuzler/)** — Active Directory PowerShell Module, DSC, ADSI/LDAP, Windows Admin Center.
-10. **[Güvenlik, Yedekleme ve Kurtarma](1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/)** — NTDS.dit bakımı, System State Backup, Tombstone, AD Recycle Bin, Kurtarma.
+10. **[Güvenlik, Yedekleme ve Kurtarma](1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/)** — NTDS.dit bakımı, System State Backup, Tombstone, AD Recycle Bin, GOAD simülasyon laboratuvar kurulumu.
 
 ---
 
@@ -115,8 +126,8 @@ $$\text{Red Team Modül } N \iff \text{Blue Team Modül } N$$
 [`2-Blue_Team/`](2-Blue_Team/)
 1. **[Görünürlük ve Log Yönetimi](2-Blue_Team/Modul_01_Gorunurluk_ve_Log_Yonetimi/)** ↔ Red 01 — Audit Policy, WEF (Windows Event Forwarding), Sysmon konfigürasyonu.
 2. **[SIEM ve Tespit Mühendisliği](2-Blue_Team/Modul_02_SIEM_ve_Tespit_Muhendisligi/)** ↔ Red 02/03 — Sigma kural yazımı, MITRE ATT&CK telemetrisi, Event ID kataloğu.
-3. **[Kimlik Bilgisi Koruması](2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/)** ↔ Red 03 — Credential Guard, Remote Credential Guard, LAPS, Protected Users.
-4. **[Yanal Hareket Tespiti](2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/)** ↔ Red 04 — PtH, Overpass-the-Hash, PsExec, WMI/WinRM avcılığı, Honeytoken hesapları.
+3. **[Kimlik Bilgisi Koruması](2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/)** ↔ Red 03 — Credential Guard, Remote Credential Guard, LAPS, Protected Users, Linux keytab sertleştirme ve LSA SSP / SilentProcessExit tespiti.
+4. **[Yanal Hareket Tespiti](2-Blue_Team/Modul_04_Yanal_Hareket_Tespiti/)** ↔ Red 04 — PtH, Overpass-the-Hash, PsExec, WMI/WinRM avcılığı, MSSQL xp_cmdshell ve LNK zehirleme telemetrisi.
 5. **[Yetki ve ACL Sıkılaştırma](2-Blue_Team/Modul_05_Yetki_ve_ACL_Sikilastirma/)** ↔ Red 05 — Tiering / Enterprise Access Model, Privileged Access Workstations (PAW), DACL temizliği.
 6. **[Kerberos ve Delegation Sertleştirme](2-Blue_Team/Modul_06_Kerberos_ve_Delegation_Sertlestirme/)** ↔ Red 06 — Delegation denetimi, AES zorlaması, PAC Validation, Kerberos zırhı (FAST).
 7. **[AD CS / PKI Güvenliği](2-Blue_Team/Modul_07_AD_CS_PKI_Guvenligi/)** ↔ Red 07 — Sertifika şablon denetimi, ESC1-ESC8 sıkılaştırması, Certify telemetrisi.
@@ -132,33 +143,33 @@ $$\text{Red Team Modül } N \iff \text{Blue Team Modül } N$$
 
 1. **[Keşif ve Numaralandırma](3-Red_Team/Modul_01_Kesif_ve_Numaralandirma/)** — Anonim/Kimlikli LDAP, BloodHound/SharpHound graf keşfi, SPN tarama.
 2. **[İlk Erişim ve Yerleşme](3-Red_Team/Modul_02_Ilk_Erisim_ve_Yerlesme/)** — LLMNR/NBT-NS Poisoning (Responder), Password Spraying, Smart Card keşfi.
-3. **[Kimlik Bilgisi Erişimi](3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/)** — Kerberoasting, AS-REP Roasting, LSASS Memory Dump, DPAPI çıkarma.
-4. **[Yanal Hareket](3-Red_Team/Modul_04_Yanal_Hareket/)** — Pass-the-Hash (PtH), Overpass-the-Hash, Pass-the-Ticket (PtT), PsExec, WMI, WinRM.
-5. **[Yetki Yükseltme (ACL & GPO Abuse)](3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/)** — GenericAll, WriteDacl, Shadow Credentials (WHfB), GPO istismarı.
+3. **[Kimlik Bilgisi Erişimi](3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/)** — Kerberoasting, AS-REP Roasting, LSASS Memory Dump (WerFault / Shtinkering), DPAPI, Linux AD bilet ve keytab hasadı.
+4. **[Yanal Hareket](3-Red_Team/Modul_04_Yanal_Hareket/)** — Pass-the-Hash (PtH), Overpass-the-Hash, Pass-the-Ticket (PtT), PsExec, WMI, WinRM, MSSQL Database Link & cross-trust pivoting.
+5. **[Yetki Yükseltme (ACL & GPO Abuse)](3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/)** — GenericAll, WriteDacl, Shadow Credentials (WHfB), OpenSSH LPK LDAP şema manipülasyonu, GPO istismarı.
 6. **[Kerberos Delegation Saldırıları](3-Red_Team/Modul_06_Kerberos_Delegation_Saldirilari/)** — Unconstrained, Constrained (S4U2Self/S4U2Proxy), RBCD, Bronze Bit.
 7. **[AD CS / PKI Saldırıları](3-Red_Team/Modul_07_AD_CS_PKI_Saldirilari/)** — ESC1'den ESC8'e sertifika şablon istismarları, Certifried, ForgeCert.
 8. **[Koersiyon ve NTLM Relay](3-Red_Team/Modul_08_Koersiyon_ve_NTLM_Relay/)** — PetitPotam, PrinterBug, ShadowCoerce, ntlmrelayx (AD CS & LDAP relay).
-9. **[Domain Hakimiyeti ve Kalıcılık](3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/)** — DCSync, Golden/Silver/Diamond Ticket, Skeleton Key, AdminSDHolder.
+9. **[Domain Hakimiyeti ve Kalıcılık](3-Red_Team/Modul_09_Domain_Hakimiyeti_ve_Kalicilik/)** — DCSync, Golden/Silver/Diamond Ticket, Skeleton Key, AdminSDHolder, düşük yetkili DC kalıcılığı.
 10. **[Trust, Forest ve Hibrit Saldırılar](3-Red_Team/Modul_10_Trust_Forest_ve_Hibrit_Saldirilar/)** — SID History abuse, Cross-forest Kerberos hop, Azure AD Connect sync hesabı çıkarma.
 11. **[Araç Ustalığı ve Komut Notları](3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/)** — **18 Kategori ve 153 Araçlık Tam Saha Cephaneliği**:
-    - *Kategori 01:* Temel İstemciler ve Ağ Protokolleri (`smbclient`, `enum4linux-ng`, `netexec`, `rpcclient`...)
-    - *Kategori 02:* LDAP Keşif ve Sorgu Araçları (`ldapsearch`, `windapsearch`, `ldapdomaindump`...)
-    - *Kategori 03:* Kerberos Saldırı Araçları (`Rubeus`, `getTGT`, `getST`, `kerbrute`...)
-    - *Kategori 04:* Graf Tabanlı Saldırı Yolu Analizi (`BloodHound`, `SharpHound`, `pyFiles`...)
-    - *Kategori 05:* Kimlik Bilgisi Çıkarma (`Mimikatz`, `secretsdump`, `pypykatz`, `Procdump`...)
-    - *Kategori 06:* Parola Püskürtme ve Kaba Kuvvet (`sprayhound`, `DomainPasswordSpray`...)
-    - *Kategori 07:* NTLM Relay ve Ağ Zehirleme (`Responder`, `ntlmrelayx`, `mitm6`...)
-    - *Kategori 08:* Kimlik Doğrulama Zorlama (Coercion) (`PetitPotam`, `Coercer`, `PrinterBug`...)
-    - *Kategori 09:* AD CS / PKI İstismar Araçları (`Certify`, `Certipy`, `ForgeCert`...)
-    - *Kategori 10:* Yanal Hareket ve Uzaktan Komut (`wmiexec`, `psexec`, `evil-winrm`, `smbexec`...)
-    - *Kategori 11:* Ayrıcalık Yükseltme ve ACL İstismarı (`PowerView`, `dacledit`, `Whisker`...)
-    - *Kategori 12:* Kalıcılık ve Gizli Kanallar (`mimikatz skeleton`, `DCSync`, `dnscat2`...)
-    - *Kategori 13:* Güven İlişkileri ve Cross-Forest (`SIDHistory`, `raiseChild`...)
-    - *Kategori 14:* Hibrit ve Azure / Entra ID (`ROADtools`, `AADInternals`...)
-    - *Kategori 15:* Sertleştirme ve Güvenlik Denetimi (`PingCastle`, `Purple Knight`, `ORADR`...)
-    - *Kategori 16:* Savunma ve Mavi Takım Telemetrisi (`Sysmon`, `Chainsaw`, `Hayabusa`...)
-    - *Kategori 17:* Tünelleme ve Proxy Araçları (`Chisel`, `Ligolo-ng`, `SocksOverRDP`...)
-    - *Kategori 18:* C2 Framework AD Eklentileri (`Cobalt Strike`, `Sliver`, `Havoc`...)
+    - *Kategori 01:* Temel İstemciler ve Ağ Protokolleri (`smbclient`, `enum4linux-ng`, `netexec`, `rpcclient`, `ntlmparse`...)
+    - *Kategori 02:* Windows Yerel Komut Satırı ve LOLBins (`cmd`, `powershell`, `certutil`, `reg`, `nltest`, `dsquery`...)
+    - *Kategori 03:* Dizin Keşfi, Graf Analizi ve Haritalama (`BloodHound`, `SharpHound`, `ldapdomaindump`, `windapsearch`...)
+    - *Kategori 04:* Zehirleme, MitM ve Zorlamalı Kimlik (`Responder`, `mitm6`, `inveigh`, `LNKUp`, `PetitPotam`, `Coercer`...)
+    - *Kategori 05:* NTLM ve Kerberos Relay Motorları (`ntlmrelayx`, `lsarelayx`, `LdapRelayScan`, `KrbRelayUp`...)
+    - *Kategori 06:* Kerberos Protokol Cephaneliği (`Rubeus`, `getTGT`, `getST`, `kerbrute`, `PKINITtools`...)
+    - *Kategori 07:* Bellek Analizi, LSASS ve DPAPI Hasadı (`Mimikatz`, `pypykatz`, `Procdump`, `DragonCastle`, `DonPAPI`...)
+    - *Kategori 08:* Active Directory Sertifika Servisleri (AD CS) (`Certify`, `Certipy`, `ForgeCert`, `PassTheCert`...)
+    - *Kategori 09:* ACL, GPO ve Nesne Manipülasyonu (`PowerView`, `dacledit`, `pyGPOAbuse`, `Whisker`...)
+    - *Kategori 10:* Kurumsal Altyapı Paylaşım ve Veri Avı (`Snaffler`, `Lnkbomb`, `CrackMapExec`, `SprayHound`...)
+    - *Kategori 11:* Yanal Hareket ve Uzak Kod Yürütme (`wmiexec`, `psexec`, `evil-winrm`, `smbexec`, `atexec`...)
+    - *Kategori 12:* NTDS, GPO Şifreleri ve LAPS Hasadı (`secretsdump`, `gpp-decrypt`, `LAPSToolkit`, `SharpLAPS`...)
+    - *Kategori 13:* Tarihi ve Kritik Zafiyet Araçları (`MS14-068`, `Zerologon`, `NoPac`, `PrintNightmare`...)
+    - *Kategori 14:* AD FS, Bulut ve Hibrit Kimlik (`ROADtools`, `AADInternals`, `ADFSRelay`, `o365spray`...)
+    - *Kategori 15:* Yerel Yetki Yükseltme ve Potato Ailesi (`JuicyPotato`, `SweetPotato`, `GodPotato`, `PrintSpoofer`...)
+    - *Kategori 16:* Tünelleme, Pivot ve SOCKS Proxy (`Chisel`, `Ligolo-ng`, `SocksOverRDP`, `rpivot`...)
+    - *Kategori 17:* Modern EDR-Safe Beacon Object Files (BOF) (`Inline-Execute-Assembly`, `bof-netexec`, `nanodump`...)
+    - *Kategori 18:* Çevrimdışı Parola Kırma (`Hashcat`, `John the Ripper`, `kerberoast.py`...)
 
 ---
 
@@ -170,7 +181,7 @@ Proje, dokümantasyon güncellemelerini otomatik olarak parse edip derleyen beti
 # 1. Tüm Markdown Külliyatını Tara ve İndeksle
 python3 scripts/build_content.py app/assets/data
 
-# 2. Operasyonel Komutları ve Parametreleri Çıkar (3.333+ Komut)
+# 2. Operasyonel Komutları ve Parametreleri Çıkar (3.160+ Komut)
 python3 scripts/extract_commands.py
 
 # 3. Yüksek Çözünürlüklü İkon ve Logoları Üret
