@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../services/tts_service.dart';
 import '../theme/app_theme.dart';
 
@@ -188,6 +189,62 @@ class _TtsMediaSheet extends StatelessWidget {
   final TtsService tts;
   const _TtsMediaSheet({required this.tts});
 
+  void _showApiKeyDialog(BuildContext context, TtsService tts) {
+    final controller = TextEditingController();
+    showDialog<void>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: AppTheme.bgCard,
+        title: const Text('ElevenLabs API Key', style: TextStyle(fontSize: 16)),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            TextField(
+              controller: controller,
+              obscureText: true,
+              decoration: const InputDecoration(
+                hintText: 'xi-... veya sk_...',
+                labelText: 'ElevenLabs API Key (Ücretsiz)',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            OutlinedButton.icon(
+              icon: const Icon(Icons.open_in_new, size: 16),
+              label: const Text('Ücretsiz Key Al (elevenlabs.io)'),
+              onPressed: () => launchUrl(
+                Uri.parse('https://elevenlabs.io/app/settings/api-keys'),
+                mode: LaunchMode.externalApplication,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          if (tts.hasOpenAiKey)
+            TextButton(
+              onPressed: () async {
+                await tts.setOpenAiKey(null);
+                if (ctx.mounted) Navigator.pop(ctx);
+              },
+              child: const Text('Temizle', style: TextStyle(color: Colors.redAccent)),
+            ),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('İptal'),
+          ),
+          FilledButton(
+            onPressed: () async {
+              await tts.setOpenAiKey(controller.text);
+              if (ctx.mounted) Navigator.pop(ctx);
+            },
+            child: const Text('Kaydet'),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
@@ -224,6 +281,68 @@ class _TtsMediaSheet extends StatelessWidget {
                       ),
                     ),
                   ),
+                const SizedBox(height: 12),
+
+                // Ses Motoru Seçici (Yerel TTS vs Edge Nöral TTS)
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    for (final eng in TtsEngine.values)
+                      ChoiceChip(
+                        label: Text(eng.label, style: const TextStyle(fontSize: 11.5)),
+                        selected: tts.engine == eng,
+                        selectedColor: AppTheme.blueTeam.withAlpha(60),
+                        onSelected: (_) => tts.setEngine(eng),
+                      ),
+                  ],
+                ),
+                if (tts.engine == TtsEngine.edgeNeural) ...[
+                  const SizedBox(height: 8),
+                  Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    alignment: WrapAlignment.center,
+                    children: [
+                      for (final v in EdgeVoice.values)
+                        ChoiceChip(
+                          label: Text(v.label, style: const TextStyle(fontSize: 11.5)),
+                          selected: tts.edgeVoice == v,
+                          selectedColor: AppTheme.blueTeam.withAlpha(60),
+                          onSelected: (_) => tts.setEdgeVoice(v),
+                        ),
+                      ActionChip(
+                        avatar: Icon(
+                          tts.hasOpenAiKey ? Icons.vpn_key : Icons.key_off,
+                          size: 14,
+                          color: tts.hasOpenAiKey ? Colors.greenAccent : Colors.orangeAccent,
+                        ),
+                        label: Text(
+                          tts.hasOpenAiKey ? 'API Key Değiştir' : 'API Key Ekle',
+                          style: const TextStyle(fontSize: 11.5),
+                        ),
+                        onPressed: () => _showApiKeyDialog(context, tts),
+                      ),
+                    ],
+                  ),
+                  if (tts.lastEdgeError != null) ...[
+                    const SizedBox(height: 8),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
+                        color: Colors.orange.withAlpha(30),
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(color: Colors.orange.withAlpha(120)),
+                      ),
+                      child: Text(
+                        tts.lastEdgeError!,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(fontSize: 11, color: Colors.orangeAccent),
+                      ),
+                    ),
+                  ],
+                ],
                 const SizedBox(height: 12),
 
                 // Parça İlerleme Çubuğu ve Slider (Çoklu parça varsa)

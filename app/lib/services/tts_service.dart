@@ -1,8 +1,32 @@
+import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
+import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_tts/flutter_tts.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum TtsState { stopped, playing, paused }
+
+enum TtsEngine {
+  local('Yerel TTS (Çevrimdışı)', 'Cihaz motoru, tamamen ücretsiz ve sınırsız'),
+  edgeNeural('ElevenLabs TTS (Ücretsiz Kota)', 'Aylık 10.000 karakter ücretsiz, kart istemez');
+
+  final String label;
+  final String description;
+  const TtsEngine(this.label, this.description);
+}
+
+enum EdgeVoice {
+  ahmet('Adam (Erkek)', 'pNInz6obpgDQGcFmaJgB'),
+  emel('Sarah (Kadın)', 'EXAVITQu4vr4xnSDxMaL');
+
+  final String label;
+  final String shortName;
+  const EdgeVoice(this.label, this.shortName);
+}
 
 enum TtsProfile {
   instructor(
@@ -64,12 +88,21 @@ class TtsService extends ChangeNotifier {
   static const String _kRate = 'ad_tts_rate';
   static const String _kPitch = 'ad_tts_pitch';
   static const String _kProfile = 'ad_tts_profile';
+  static const String _kEngine = 'ad_tts_engine';
+  static const String _kEdgeVoice = 'ad_tts_edge_voice';
+  static const String _kOpenAiKey = 'ad_tts_openai_key';
 
   final FlutterTts _tts = FlutterTts();
+  final AudioPlayer _audioPlayer = AudioPlayer();
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   SharedPreferences? _prefs;
+  String? _openAiKey;
 
   TtsState _state = TtsState.stopped;
   TtsProfile _profile = TtsProfile.instructor;
+  TtsEngine _engine = TtsEngine.local;
+  EdgeVoice _edgeVoice = EdgeVoice.ahmet;
+  String? _lastEdgeError;
   String? _currentId;
   String? _currentTitle;
   String? _currentSubtitle;
@@ -85,6 +118,10 @@ class TtsService extends ChangeNotifier {
 
   TtsState get state => _state;
   TtsProfile get profile => _profile;
+  TtsEngine get engine => _engine;
+  EdgeVoice get edgeVoice => _edgeVoice;
+  String? get lastEdgeError => _lastEdgeError;
+  bool get hasOpenAiKey => _openAiKey != null && _openAiKey!.trim().isNotEmpty;
   bool get isPlaying => _state == TtsState.playing;
   bool get isPaused => _state == TtsState.paused;
   bool get isStopped => _state == TtsState.stopped;
@@ -107,6 +144,22 @@ class TtsService extends ChangeNotifier {
       (p) => p.name == profName,
       orElse: () => TtsProfile.instructor,
     );
+
+    final engName = _prefs?.getString(_kEngine) ?? 'local';
+    _engine = TtsEngine.values.firstWhere(
+      (e) => e.name == engName,
+      orElse: () => TtsEngine.local,
+    );
+
+    final voiceName = _prefs?.getString(_kEdgeVoice) ?? 'ahmet';
+    _edgeVoice = EdgeVoice.values.firstWhere(
+      (v) => v.name == voiceName,
+      orElse: () => EdgeVoice.ahmet,
+    );
+
+    try {
+      _openAiKey = await _secureStorage.read(key: _kOpenAiKey);
+    } catch (_) {}
 
     _speechRate = _prefs?.getDouble(_kRate) ?? _profile.defaultRate;
     _pitch = _prefs?.getDouble(_kPitch) ?? _profile.defaultPitch;
@@ -176,6 +229,27 @@ class TtsService extends ChangeNotifier {
         }
       });
     } catch (_) {}
+
+    _audioPlayer.onPlayerComplete.listen((_) async {
+      if (_isHotRestarting || _userStopped) return;
+      if (_state == TtsState.playing) {
+        if (_chunkIndex + 1 < _chunks.length) {
+          _chunkIndex++;
+          _currentChunkOffset = 0;
+          _chunkBaseOffset = 0;
+          notifyListeners();
+          await _speakCurrentChunk();
+          return;
+        }
+        _state = TtsState.stopped;
+        _currentId = null;
+        _currentTitle = null;
+        _currentSubtitle = null;
+        _chunks.clear();
+        _chunkIndex = 0;
+        notifyListeners();
+      }
+    });
 
     _isInitialized = true;
   }
@@ -281,7 +355,7 @@ class TtsService extends ChangeNotifier {
     text = text.replaceAll(RegExp(r'^\s*[-*_]{3,}\s*$', multiLine: true), '');
 
     // Ses motorunun harf harf okumaması için sembol ve emojileri temizle
-    text = text.replaceAll(RegExp(r'[→←↗↳✓❌⚠️·⚡📋🛡️🔴🏗️🎯🏆🎧🧠🔍]'), ' ');
+    text = text.replaceAll(RegExp(r'[→←↗↳✓❌⚠️·⚡📋🛡️🔴🏗️🎯🏆🎧🧠🔍┌┐└┘├┤┬┴┼─│═║╔╗╚╝╠╣╦╩╬]'), ' ');
 
     // Tablo satırlarını virgülle ayrılmış akıcı cümleye dönüştür
     final lines = text.split('\n');
@@ -305,7 +379,206 @@ class TtsService extends ChangeNotifier {
     text = text.replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
     text = text.replaceAll(RegExp(r'\n{3,}'), '\n\n');
     text = text.replaceAll(RegExp(r'[ \t]{2,}'), ' ');
-    return text.trim();
+    return applyPhoneticDictionary(text.trim());
+  }
+
+  /// Active Directory ve siber güvenlik terimlerini Türkçe TTS motorunun doğru telaffuz etmesi için dönüştürür
+  static String applyPhoneticDictionary(String text) {
+    const Map<String, String> phoneticMap = {
+      'KRBTGT': 'kerbe te ge te',
+      'DCSync': 'di si sink',
+      'DCShadow': 'di si şedov',
+      'LSASS': 'el sas',
+      'NTLM': 'en ti el em',
+      'sAMAccountName': 'sem ekant neym',
+      'userPrincipalName': 'yuzır prinsıpıl neym',
+      'BloodHound': 'blad haund',
+      'SharpHound': 'şarp haund',
+      'Mimikatz': 'mimikats',
+      'Rubeus': 'rubiyus',
+      'Impacket': 'impekıt',
+      'Certipy': 'sörtipay',
+      'Certify': 'sörtifay',
+      'Kerberoasting': 'kerberosting',
+      'AS-REP': 'ey es rep',
+      'AS-REQ': 'ey es rek',
+      'TGS-REQ': 'ti ci es rek',
+      'TGS-REP': 'ti ci es rep',
+      'SYSVOL': 'sisvol',
+      'NTDS': 'en ti di es',
+      'RBCD': 'ar bi si di',
+      'AD CS': 'ey di si es',
+      'AD FS': 'ey di ef es',
+      'LAPS': 'leps',
+      'SIEM': 'siyem',
+      'SOAR': 'soar',
+      'SOC': 'sok',
+      'EDR': 'i di ar',
+      'XDR': 'iks di ar',
+      'MITRE ATT&CK': 'maytır etek',
+      'SPN': 'es pi en',
+      'TGT': 'ti ci ti',
+      'TGS': 'ti ci es',
+      'GPO': 'ci pi o',
+      'FSMO': 'ef es em o',
+      'RODC': 'ar o di si',
+      'DPAPI': 'di pi ey pi ay',
+      'PetitPotam': 'pöti potam',
+      'PrinterBug': 'printır bag',
+      'Pass-the-Hash': 'pes dı heş',
+      'Pass-the-Ticket': 'pes dı tikıt',
+      'Overpass-the-Hash': 'ovırpes dı heş',
+      'Golden Ticket': 'goldın tikıt',
+      'Silver Ticket': 'silvır tikıt',
+      'Shadow Credentials': 'şedov kıredenşıls',
+      'Active Directory': 'ektiv dayrektori',
+      'Domain Controller': 'domeyn kontrolır',
+      'PowerShell': 'pavırşel',
+      'PowerView': 'pavırviyv',
+      // Protokoller & Ağ
+      'LDAP': 'el dap',
+      'LDAPS': 'el daps',
+      'SMB': 'es em bi',
+      'RPC': 'ar pi si',
+      'WMI': 'dabıl yu em ay',
+      'WinRM': 'vin ar em',
+      'DCOM': 'di kom',
+      'DRSUAPI': 'di ar es yu ey pi ay',
+      'SAMR': 'sem ar',
+      'LSARPC': 'el es ey ar pi si',
+      'PKINIT': 'pi key init',
+      'S4U2Self': 'es for yu tu self',
+      'S4U2Proxy': 'es for yu tu proksi',
+      'LLMNR': 'el el em en ar',
+      'NBT-NS': 'en bi ti en es',
+      'mDNS': 'em di en es',
+      'WPAD': 'dabıl yu ped',
+      'WebDAV': 'veb dav',
+      'DNSSEC': 'di en es sek',
+      'FQDN': 'ef ku di en',
+      'NetBIOS': 'net bayos',
+      'Kerberos': 'kerberos',
+      'KDC': 'key di si',
+      'PAC': 'pek',
+      'KrbRelayUp': 'kerb riley ap',
+      'DFSCoerce': 'di ef es koörs',
+      // Nesne, Yetki & Mimari
+      'ACL': 'ey si el',
+      'DACL': 'di ey si el',
+      'SACL': 'es ey si el',
+      'ACE': 'ey si i',
+      'SID': 'es ay di',
+      'RID': 'ar ay di',
+      'GUID': 'gi yu ay di',
+      'UPN': 'yu pi en',
+      'OU': 'o yu',
+      'gMSA': 'ci em es ey',
+      'AdminSDHolder': 'edmin es di holdır',
+      'AGDLP': 'ey ci di el pi',
+      'FGPP': 'ef ci pi pi',
+      'USN': 'yu es en',
+      'KCC': 'key si si',
+      'ISTG': 'ay es ti ci',
+      'PDC': 'pi di si',
+      'GPMC': 'ci pi em si',
+      'RSOP': 'ar es o pi',
+      'DFS-R': 'di ef es ar',
+      'DFS-N': 'di ef es en',
+      'FSRM': 'ef es ar em',
+      'CA': 'si ey',
+      'CRL': 'si ar el',
+      'OCSP': 'o si es pi',
+      'EKU': 'i key yu',
+      'SAN': 'es ey en',
+      'ESC1': 'i es si bir',
+      'ESC2': 'i es si iki',
+      'ESC3': 'i es si üç',
+      'ESC4': 'i es si dört',
+      'ESC5': 'i es si beş',
+      'ESC6': 'i es si altı',
+      'ESC7': 'i es si yedi',
+      'ESC8': 'i es si sekiz',
+      // Araçlar & Savunma
+      'NetExec': 'net ekzek',
+      'CrackMapExec': 'krek mep ekzek',
+      'Evil-WinRM': 'ivıl vin ar em',
+      'PsExec': 'pi es ekzek',
+      'Responder': 'rispondır',
+      'mitm6': 'mitm altı',
+      'ntlmrelayx': 'en ti el em riley iks',
+      'secretsdump': 'sikrıts damp',
+      'Seatbelt': 'sitbelt',
+      'SharpDPAPI': 'şarp di pi ey pi ay',
+      'PingCastle': 'ping kesıl',
+      'Purple Knight': 'pörpıl nayt',
+      'Sysmon': 'sismon',
+      'WEF': 'dabıl yu i ef',
+      'KQL': 'key ku el',
+      'Sigma': 'sigma',
+      'Hashcat': 'heşket',
+      'Cobalt Strike': 'kobalt strayk',
+      'Sliver': 'slayvır',
+      'Ligolo': 'ligolo',
+      'Chisel': 'çizıl',
+      'OPSEC': 'opsek',
+      'IOC': 'ay o si',
+      'DFIR': 'di ef ay ar',
+      'CVE': 'si vi i',
+      'SSO': 'es es o',
+      'MFA': 'em ef ey',
+      'Entra ID': 'entra ay di',
+      'Diamond Ticket': 'daymınd tikıt',
+      'Sapphire Ticket': 'sefayr tikıt',
+      // Tarama sonucu yüksek frekanslı genel teknik terimler
+      'Windows': 'vindovs',
+      'Domain': 'domeyn',
+      'Event': 'ivent',
+      'Microsoft': 'maykrosoft',
+      'SYSTEM': 'sistım',
+      'Administrator': 'edministreytır',
+      'Linux': 'linuks',
+      'Security': 'seküriti',
+      'TCP': 'ti si pi',
+      'DNS': 'di en es',
+      'Server': 'sörvır',
+      'Ticket': 'tikıt',
+      'ccache': 'si keş',
+      'HTTP': 'eyç ti ti pi',
+      'Controller': 'kontrolır',
+      'Users': 'yuzırs',
+      'Admins': 'edmins',
+      'Access': 'ekses',
+      'relay': 'riley',
+      'Service': 'sörvis',
+      'Admin': 'edmin',
+      'API': 'ey pi ay',
+      'Python': 'paytın',
+      'Golden': 'goldın',
+      'Hash': 'heş',
+      'exe': 'ekze',
+      'cmd': 'si em di',
+      'bash': 'beş',
+      'README': 'ridmi',
+      'Blue': 'blu',
+      'Red': 'red',
+    };
+
+    var result = text;
+    phoneticMap.forEach((term, pronunciation) {
+      result = result.replaceAll(
+        RegExp('\\b${RegExp.escape(term)}\\b', caseSensitive: false),
+        pronunciation,
+      );
+    });
+
+    // Sözlükte olmayan camelCase / PascalCase / alt çizgili teknik terimleri kelimelerine ayır
+    // Örn: servicePrincipalName -> service Principal Name, msDS_AllowedToDelegateTo -> ms DS Allowed To Delegate To
+    result = result.replaceAll('_', ' ');
+    result = result.replaceAllMapped(
+      RegExp(r'([a-z0-9])([A-Z])'),
+      (m) => '${m.group(1)} ${m.group(2)}',
+    );
+    return result;
   }
 
   Future<void> _speakCurrentChunk() async {
@@ -319,10 +592,106 @@ class TtsService extends ChangeNotifier {
       final chunk = _chunks[_chunkIndex];
       _chunkBaseOffset = 0;
       _currentChunkOffset = 0;
+
+      if (_engine == TtsEngine.edgeNeural) {
+        _lastEdgeError = null;
+        final audioBytes = await _fetchEdgeTtsAudio(chunk);
+        if (audioBytes != null && audioBytes.isNotEmpty) {
+          _state = TtsState.playing;
+          notifyListeners();
+          await _audioPlayer.play(BytesSource(audioBytes));
+          return;
+        }
+        _lastEdgeError ??= 'Edge TTS ses verisi alınamadı (yerel TTS kullanılıyor).';
+        notifyListeners();
+      }
+
       await _tts.speak(chunk);
     } catch (_) {
-      _state = TtsState.stopped;
-      notifyListeners();
+      // Edge TTS veya ağ hatası durumunda otomatik yerel TTS'e düş
+      try {
+        await _tts.speak(_chunks[_chunkIndex]);
+      } catch (_) {
+        _state = TtsState.stopped;
+        notifyListeners();
+      }
+    }
+  }
+
+  Future<void> setEngine(TtsEngine newEngine) async {
+    if (_engine == newEngine) return;
+    _engine = newEngine;
+    await _prefs?.setString(_kEngine, newEngine.name);
+    notifyListeners();
+    if (_state == TtsState.playing && _chunks.isNotEmpty) {
+      _isHotRestarting = true;
+      await _tts.stop();
+      await _audioPlayer.stop();
+      _isHotRestarting = false;
+      await _speakCurrentChunk();
+    }
+  }
+
+  Future<void> setEdgeVoice(EdgeVoice voice) async {
+    if (_edgeVoice == voice) return;
+    _edgeVoice = voice;
+    await _prefs?.setString(_kEdgeVoice, voice.name);
+    notifyListeners();
+    if (_state == TtsState.playing && _engine == TtsEngine.edgeNeural && _chunks.isNotEmpty) {
+      _isHotRestarting = true;
+      await _audioPlayer.stop();
+      _isHotRestarting = false;
+      await _speakCurrentChunk();
+    }
+  }
+
+  Future<void> setOpenAiKey(String? key) async {
+    final trimmed = key?.trim();
+    if (trimmed == null || trimmed.isEmpty) {
+      _openAiKey = null;
+      await _secureStorage.delete(key: _kOpenAiKey);
+    } else {
+      _openAiKey = trimmed;
+      await _secureStorage.write(key: _kOpenAiKey, value: trimmed);
+    }
+    _lastEdgeError = null;
+    notifyListeners();
+  }
+
+  /// ElevenLabs (eleven_multilingual_v2) üzerinden ücretsiz kotalı Türkçe MP3 ses akışı alır
+  Future<Uint8List?> _fetchEdgeTtsAudio(String text) async {
+    if (!hasOpenAiKey) {
+      _lastEdgeError = 'ElevenLabs API Key tanımlı değil. Aşağıdan anahtar ekleyin.';
+      return null;
+    }
+    try {
+      final resp = await http
+          .post(
+            Uri.parse('https://api.elevenlabs.io/v1/text-to-speech/${_edgeVoice.shortName}'),
+            headers: {
+              'xi-api-key': _openAiKey!,
+              'Content-Type': 'application/json',
+              'Accept': 'audio/mpeg',
+            },
+            body: jsonEncode({
+              'text': text,
+              'model_id': 'eleven_multilingual_v2',
+              'voice_settings': {
+                'stability': 0.5,
+                'similarity_boost': 0.75,
+              },
+            }),
+          )
+          .timeout(const Duration(seconds: 20));
+
+      if (resp.statusCode == 200 && resp.bodyBytes.isNotEmpty) {
+        return resp.bodyBytes;
+      }
+      _lastEdgeError = 'ElevenLabs HTTP ${resp.statusCode} hatası';
+      return null;
+    } catch (e) {
+      _lastEdgeError = 'ElevenLabs hatası: $e';
+      return null;
     }
   }
 
@@ -330,6 +699,12 @@ class TtsService extends ChangeNotifier {
   /// anında ve kesintisiz olarak yeni hızla okumaya devam eden sıcak yeniden başlatıcı (Hot Restart)
   Future<void> _restartPlaybackWithNewSettings() async {
     if (!isPlaying || _chunks.isEmpty || _chunkIndex >= _chunks.length) return;
+    if (_engine == TtsEngine.edgeNeural) {
+      try {
+        await _audioPlayer.setPlaybackRate(speedMultiplier.clamp(0.5, 2.5));
+      } catch (_) {}
+      return;
+    }
     try {
       final fullChunk = _chunks[_chunkIndex];
       int offset = _currentChunkOffset;
@@ -476,7 +851,11 @@ class TtsService extends ChangeNotifier {
   Future<void> pause() async {
     if (!isPlaying) return;
     try {
-      await _tts.pause();
+      if (_engine == TtsEngine.edgeNeural) {
+        await _audioPlayer.pause();
+      } else {
+        await _tts.pause();
+      }
       _state = TtsState.paused;
       notifyListeners();
     } catch (_) {}
@@ -487,7 +866,11 @@ class TtsService extends ChangeNotifier {
     try {
       _state = TtsState.playing;
       notifyListeners();
-      await _speakCurrentChunk();
+      if (_engine == TtsEngine.edgeNeural) {
+        await _audioPlayer.resume();
+      } else {
+        await _speakCurrentChunk();
+      }
     } catch (_) {}
   }
 
@@ -499,6 +882,7 @@ class TtsService extends ChangeNotifier {
     _chunkBaseOffset = 0;
     try {
       await _tts.stop();
+      await _audioPlayer.stop();
     } catch (_) {}
     _state = TtsState.stopped;
     _currentId = null;
