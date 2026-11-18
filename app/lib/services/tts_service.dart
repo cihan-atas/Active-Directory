@@ -12,7 +12,7 @@ enum TtsState { stopped, playing, paused }
 
 enum TtsEngine {
   local('Yerel TTS (Çevrimdışı)', 'Cihaz motoru, tamamen ücretsiz ve sınırsız'),
-  edgeNeural('ElevenLabs TTS (Ücretsiz Kota)', 'Aylık 10.000 karakter ücretsiz, kart istemez');
+  edgeNeural('Azure Nöral TTS (500K/ay)', 'Microsoft resmi F0 ücretsiz katman (Ahmet & Emel)');
 
   final String label;
   final String description;
@@ -20,8 +20,8 @@ enum TtsEngine {
 }
 
 enum EdgeVoice {
-  ahmet('Adam (Erkek)', 'pNInz6obpgDQGcFmaJgB'),
-  emel('Sarah (Kadın)', 'EXAVITQu4vr4xnSDxMaL');
+  ahmet('Ahmet (Erkek)', 'tr-TR-AhmetNeural'),
+  emel('Emel (Kadın)', 'tr-TR-EmelNeural');
 
   final String label;
   final String shortName;
@@ -90,13 +90,15 @@ class TtsService extends ChangeNotifier {
   static const String _kProfile = 'ad_tts_profile';
   static const String _kEngine = 'ad_tts_engine';
   static const String _kEdgeVoice = 'ad_tts_edge_voice';
-  static const String _kOpenAiKey = 'ad_tts_openai_key';
+  static const String _kOpenAiKey = 'ad_tts_azure_key';
+  static const String _kAzureRegion = 'ad_tts_azure_region';
 
   final FlutterTts _tts = FlutterTts();
   final AudioPlayer _audioPlayer = AudioPlayer();
   final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
   SharedPreferences? _prefs;
   String? _openAiKey;
+  String _azureRegion = 'westeurope';
 
   TtsState _state = TtsState.stopped;
   TtsProfile _profile = TtsProfile.instructor;
@@ -122,6 +124,7 @@ class TtsService extends ChangeNotifier {
   EdgeVoice get edgeVoice => _edgeVoice;
   String? get lastEdgeError => _lastEdgeError;
   bool get hasOpenAiKey => _openAiKey != null && _openAiKey!.trim().isNotEmpty;
+  String get azureRegion => _azureRegion;
   bool get isPlaying => _state == TtsState.playing;
   bool get isPaused => _state == TtsState.paused;
   bool get isStopped => _state == TtsState.stopped;
@@ -156,6 +159,8 @@ class TtsService extends ChangeNotifier {
       (v) => v.name == voiceName,
       orElse: () => EdgeVoice.ahmet,
     );
+
+    _azureRegion = _prefs?.getString(_kAzureRegion) ?? 'westeurope';
 
     try {
       _openAiKey = await _secureStorage.read(key: _kOpenAiKey);
@@ -379,7 +384,7 @@ class TtsService extends ChangeNotifier {
     text = text.replaceAll('&nbsp;', ' ').replaceAll('&amp;', '&');
     text = text.replaceAll(RegExp(r'\n{3,}'), '\n\n');
     text = text.replaceAll(RegExp(r'[ \t]{2,}'), ' ');
-    return applyPhoneticDictionary(text.trim());
+    return text.trim();
   }
 
   /// Active Directory ve siber güvenlik terimlerini Türkçe TTS motorunun doğru telaffuz etmesi için dönüştürür
@@ -597,20 +602,22 @@ class TtsService extends ChangeNotifier {
         _lastEdgeError = null;
         final audioBytes = await _fetchEdgeTtsAudio(chunk);
         if (audioBytes != null && audioBytes.isNotEmpty) {
+          await _tts.stop();
           _state = TtsState.playing;
           notifyListeners();
           await _audioPlayer.play(BytesSource(audioBytes));
           return;
         }
-        _lastEdgeError ??= 'Edge TTS ses verisi alınamadı (yerel TTS kullanılıyor).';
+        _lastEdgeError ??= 'Azure TTS ses verisi alınamadı (yerel TTS kullanılıyor).';
         notifyListeners();
       }
 
-      await _tts.speak(chunk);
+      await _audioPlayer.stop();
+      await _tts.speak(applyPhoneticDictionary(chunk));
     } catch (_) {
       // Edge TTS veya ağ hatası durumunda otomatik yerel TTS'e düş
       try {
-        await _tts.speak(_chunks[_chunkIndex]);
+        await _tts.speak(applyPhoneticDictionary(_chunks[_chunkIndex]));
       } catch (_) {
         _state = TtsState.stopped;
         notifyListeners();
@@ -658,39 +665,52 @@ class TtsService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// ElevenLabs (eleven_multilingual_v2) üzerinden ücretsiz kotalı Türkçe MP3 ses akışı alır
+  Future<void> setAzureConfig(String? key, String region) async {
+    final cleanRegion = region.trim().isEmpty ? 'westeurope' : region.trim().toLowerCase();
+    _azureRegion = cleanRegion;
+    await _prefs?.setString(_kAzureRegion, cleanRegion);
+    await setOpenAiKey(key);
+  }
+
+  /// Microsoft Azure AI Speech (F0 Ücretsiz Katman — 500K kr/ay) üzerinden resmi MP3 ses akışı alır
   Future<Uint8List?> _fetchEdgeTtsAudio(String text) async {
     if (!hasOpenAiKey) {
-      _lastEdgeError = 'ElevenLabs API Key tanımlı değil. Aşağıdan anahtar ekleyin.';
+      _lastEdgeError = 'Azure Speech Key tanımlı değil. Aşağıdan anahtar ekleyin.';
       return null;
     }
     try {
+      final ratePercent = ((speedMultiplier - 1.0) * 100).round();
+      final rateStr = ratePercent >= 0 ? '+$ratePercent%' : '$ratePercent%';
+      final escapedText = text
+          .replaceAll('&', '&amp;')
+          .replaceAll('<', '&lt;')
+          .replaceAll('>', '&gt;');
+
+      final ssml = "<speak version='1.0' xml:lang='tr-TR'>"
+          "<voice xml:lang='tr-TR' name='${_edgeVoice.shortName}'>"
+          "<prosody rate='$rateStr'>$escapedText</prosody>"
+          '</voice></speak>';
+
       final resp = await http
           .post(
-            Uri.parse('https://api.elevenlabs.io/v1/text-to-speech/${_edgeVoice.shortName}'),
+            Uri.parse('https://$_azureRegion.tts.speech.microsoft.com/cognitiveservices/v1'),
             headers: {
-              'xi-api-key': _openAiKey!,
-              'Content-Type': 'application/json',
-              'Accept': 'audio/mpeg',
+              'Ocp-Apim-Subscription-Key': _openAiKey!,
+              'Content-Type': 'application/ssml+xml',
+              'X-Microsoft-OutputFormat': 'audio-24khz-48kbitrate-mono-mp3',
+              'User-Agent': 'ActiveDirectoryVault',
             },
-            body: jsonEncode({
-              'text': text,
-              'model_id': 'eleven_multilingual_v2',
-              'voice_settings': {
-                'stability': 0.5,
-                'similarity_boost': 0.75,
-              },
-            }),
+            body: utf8.encode(ssml),
           )
           .timeout(const Duration(seconds: 20));
 
       if (resp.statusCode == 200 && resp.bodyBytes.isNotEmpty) {
         return resp.bodyBytes;
       }
-      _lastEdgeError = 'ElevenLabs HTTP ${resp.statusCode} hatası';
+      _lastEdgeError = 'Azure Speech HTTP ${resp.statusCode} hatası (Bölge: $_azureRegion)';
       return null;
     } catch (e) {
-      _lastEdgeError = 'ElevenLabs hatası: $e';
+      _lastEdgeError = 'Azure Speech hatası: $e';
       return null;
     }
   }
@@ -891,9 +911,9 @@ class TtsService extends ChangeNotifier {
     notifyListeners();
   }
 
-  /// Hızlı tek tıkla döngüsel hız değiştirme (0.75x -> 1.0x -> 1.25x -> 1.5x -> 1.75x -> 2.0x -> 0.75x)
+  /// Hızlı tek tıkla döngüsel hız değiştirme (0.75x -> 1.0x -> 1.25x -> 1.5x -> 1.75x -> 2.0x -> 2.5x -> 0.75x)
   Future<void> cycleSpeed() async {
-    const speeds = [0.375, 0.50, 0.625, 0.75, 0.875, 1.00];
+    const speeds = [0.375, 0.50, 0.625, 0.75, 0.875, 1.00, 1.25];
     int nextIdx = 0;
     for (int i = 0; i < speeds.length; i++) {
       if ((_speechRate - speeds[i]).abs() < 0.04) {
@@ -912,7 +932,7 @@ class TtsService extends ChangeNotifier {
   /// Okuma hızını ayarla (Flutter TTS motorunda 0.25 - 1.0 arası)
   /// Oynatma sırasındaysa kesintiye uğramadan anında yeni hıza geçer
   Future<void> setSpeechRate(double rate) async {
-    _speechRate = rate.clamp(0.20, 1.00);
+    _speechRate = rate.clamp(0.125, 1.25);
     await _prefs?.setDouble(_kRate, _speechRate);
     try {
       await _tts.setSpeechRate(_speechRate);

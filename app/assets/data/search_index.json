@@ -165,6 +165,17 @@
     "search_text": "03.4 — çevrimdışı hash kırma, strateji ve hash shucking (nt adayı) kerberoasting, responder ve as-rep roasting saldırıları sonucunda elde edilen veriler doğrudan bir hedef sistemde oturum açmak için kullanılamaz (pass-the-hash yapılamaz). çünkü bu veriler **challenge  03.4_offline_hash_kirma.md"
   },
   {
+    "id": "a8b820fcd6",
+    "title": "03.5 — Linux Active Directory Bilet, Keytab ve Kimlik Hasadı",
+    "description": "Modern kurumsal ortamlarda veritabanları (Oracle, PostgreSQL, MySQL), web sunucuları (Apache, Nginx, Tomcat) ve konteyner orkestrasyon altyapıları ağırlıklı olarak Linux tabanlıdır. Bu sunucular, merk",
+    "category": "Modül 03: Kimlik Bilgisi Erisimi",
+    "path": "3-Red_Team/Modul_03_Kimlik_Bilgisi_Erisimi/03.5_Linux_Active_Directory_Bilet_ve_Keytab_Hasadi.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_03_Kimlik_Bilgisi_Erisimi",
+    "is_readme": false,
+    "search_text": "03.5 — linux active directory bilet, keytab ve kimlik hasadı modern kurumsal ortamlarda veritabanları (oracle, postgresql, mysql), web sunucuları (apache, nginx, tomcat) ve konteyner orkestrasyon altyapıları ağırlıklı olarak linux tabanlıdır. bu sunucular, merk  03.5_linux_active_directory_bilet_ve_keytab_hasadi.md"
+  },
+  {
     "id": "da023419af",
     "title": "📋 Modül 04: Yanal Hareket - Genel Bakış",
     "description": "Yanal Hareket (Lateral Movement), bir saldırganın etki alanında ele geçirdiği bir başlangıç noktasından (Foothold) ağdaki diğer kritik sistemlere (sunucular, SQL veritabanları, yedekleme sistemleri ve",
@@ -220,6 +231,17 @@
     "search_text": "04.4 — netexec (nxc) ile yanal hareket, otomasyon ve ağ geneli hasat yanal hareket sürecinde onlarca veya yüzlerce farklı iş istasyonu ve sunucuyu tek tek `wmiexec` veya `psexec` ile denemek operasyonel açıdan sürdürülemezdir. **netexec (nxc)** — eski crackmapexec (cme  04.4_netexec_otomasyon.md"
   },
   {
+    "id": "6182ea7bfd",
+    "title": "04.5 — MSSQL Database Link ve Çapraz Orman (Cross-Trust) SQL Pivoting",
+    "description": "Kurumsal işletmelerde veritabanları nadiren izole çalışır; raporlama, iş zekası (BI), muhasebe ve ERP entegrasyonları için **MSSQL Veritabanı Bağlantıları (Database Links)** kullanılır. `sp_addlinkeds",
+    "category": "Modül 04: Yanal Hareket",
+    "path": "3-Red_Team/Modul_04_Yanal_Hareket/04.5_MSSQL_Database_Link_ve_Cross_Trust_Pivoting.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_04_Yanal_Hareket",
+    "is_readme": false,
+    "search_text": "04.5 — mssql database link ve çapraz orman (cross-trust) sql pivoting kurumsal işletmelerde veritabanları nadiren izole çalışır; raporlama, iş zekası (bi), muhasebe ve erp entegrasyonları için **mssql veritabanı bağlantıları (database links)** kullanılır. `sp_addlinkeds  04.5_mssql_database_link_ve_cross_trust_pivoting.md"
+  },
+  {
     "id": "2daea77186",
     "title": "📋 Modül 05: Yetki Yukseltme ACL ve GPO - Genel Bakış",
     "description": "Active Directory güvenliğinde ayrıcalık yükseltme (Privilege Escalation) çoğunlukla bir işletim sistemi çekirdek açığı (kernel exploit) ile gerçekleşmez. AD ortamlarında yetki yükseltme, **yıllar için",
@@ -273,6 +295,17 @@
     "module_id": "red_team_Modul_05_Yetki_Yukseltme_ACL_ve_GPO",
     "is_readme": false,
     "search_text": "05.4 — shadow credentials (msds-keycredentiallink) active directory ortamlarında bir kullanıcı veya bilgisayar hesabı üzerinde `genericall` veya `genericwrite` hakkı elde edildiğinde başvurulan klasik yöntem **parolayı zorla sıfırlamaktır (forcechange  05.4_shadow_credentials.md"
+  },
+  {
+    "id": "1b53f6f794",
+    "title": "05.5 — OpenSSH LPK ve Hassas LDAP Nitelik Manipülasyonu",
+    "description": "Active Directory ortamları yalnızca Windows makineler için değil, kurumsal Linux sunucular (Red Hat, Ubuntu, Debian, SUSE) için de merkezi kimlik sağlayıcıdır. Linux sistemlerde kullanıcıların SSH otu",
+    "category": "Modül 05: Yetki Yukseltme ACL ve GPO",
+    "path": "3-Red_Team/Modul_05_Yetki_Yukseltme_ACL_ve_GPO/05.5_OpenSSH_LPK_ve_LDAP_Sema_Manipulasyonu.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_05_Yetki_Yukseltme_ACL_ve_GPO",
+    "is_readme": false,
+    "search_text": "05.5 — openssh lpk ve hassas ldap nitelik manipülasyonu active directory ortamları yalnızca windows makineler için değil, kurumsal linux sunucular (red hat, ubuntu, debian, suse) için de merkezi kimlik sağlayıcıdır. linux sistemlerde kullanıcıların ssh otu  05.5_openssh_lpk_ve_ldap_sema_manipulasyonu.md"
   },
   {
     "id": "93a9af6a4f",
@@ -570,6 +603,17 @@
     "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
     "is_readme": true,
     "search_text": "1. temel i̇stemci̇ler ve ağ protokol araçlari (native clients & utilities) | no | araç | dokümantasyon dosyası | ne i̇çin kullanılır? (tanım ve amaç) |  readme.md"
+  },
+  {
+    "id": "522cc12cc4",
+    "title": "NTLMParse",
+    "description": "Base64 veya ham hex formatında kodlanmış NTLM mesajlarını (Type 1 Negotiate, Type 2 Challenge, Type 3 Authenticate) bayt düzeyinde ayrıştıran; hedef bilgisayar adı, NetBIOS/DNS etki alanı adı, işletim sistemi tam yapı numarası (OS Build) ve bayrakları (Negotiate Flags) anında deşifre eden protokoler analiz aracı.",
+    "category": "1. Temel İstemciler ve Ağ Protokol Araçları",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_01_Temel_Istemciler_ve_Ag_Protokolleri/NTLMParse.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "ntlmparse base64 veya ham hex formatında kodlanmış ntlm mesajlarını (type 1 negotiate, type 2 challenge, type 3 authenticate) bayt düzeyinde ayrıştıran; hedef bilgisayar adı, netbios/dns etki alanı adı, işletim sistemi tam yapı numarası (os build) ve bayrakları (negotiate flags) anında deşifre eden protokoler analiz aracı. 1. temel i̇stemciler ve ağ protokol araçları ntlmparse.md"
   },
   {
     "id": "c1392a6fa2",
@@ -1177,6 +1221,17 @@
     "search_text": "inveigh windows üzerinde yerel olarak çalışan, llmnr, nbt-ns, mdns ve dns protokollerini zehirleyerek sahte http/https/smb/wpad servisleri üzerinden netntlm hash'lerini yakalayan c# ve powershell tabanlı sömürü aracı. 4. zehi̇rleme, ortadaki̇ adam ve zorlamali ki̇mli̇k doğrulama (poisoning & coercion) inveigh.md"
   },
   {
+    "id": "1eb0a3e358",
+    "title": "LNKUp",
+    "description": "Windows Gezgini'nin (Explorer) simge yükleme davranışını istismar ederek, kurbanın dosyaya tıklamasına bile gerek kalmadan dizini görüntülediği anda arka planda saldırganın SMB sunucusuna NTLM kimlik doğrulama isteği gönderen veya ortam değişkenlerini dışarı sızdıran özel `.lnk` (Kısayol) yükleri üreten sömürü aracı.",
+    "category": "4. Zehirleme, MitM ve Zorlamalı Kimlik",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_04_Zehirleme_MitM_ve_Zorlamali_Kimlik/LNKUp.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "lnkup windows gezgini'nin (explorer) simge yükleme davranışını istismar ederek, kurbanın dosyaya tıklamasına bile gerek kalmadan dizini görüntülediği anda arka planda saldırganın smb sunucusuna ntlm kimlik doğrulama isteği gönderen veya ortam değişkenlerini dışarı sızdıran özel `.lnk` (kısayol) yükleri üreten sömürü aracı. 4. zehirleme, mitm ve zorlamalı kimlik lnkup.md"
+  },
+  {
     "id": "a7ffba135a",
     "title": "PetitPotam",
     "description": "MS-EFSR (Encrypting File System Remote) protokolünü istismar ederek Windows sistemlerini ve Domain Controller'ları saldırganın dinleyicisine NTLM kimlik doğrulaması göndermeye zorlayan efsanevi koersiyon aracı (CVE-2021-36942).",
@@ -1287,6 +1342,17 @@
     "search_text": "krbrelayup krbrelay, rbcd (kaynak tabanlı kısıtlı yetki devri), shadow credentials ve rubeus (s4u2proxy/ptt) tekniklerini tek bir çatı altında birleştiren, active directory ortamındaki standart bir etki alanı kullanıcısından saniyeler içinde yerel `nt authority\\system` haklarına ulaşmayı sağlayan hepsi bir arada (all-in-one) yerel yetki yükseltme (lpe) otomasyon aracı. 5. ntlm ve kerberos relay motorları krbrelayup.md"
   },
   {
+    "id": "86858349a3",
+    "title": "LdapRelayScan",
+    "description": "Etki Alanı Denetleyicilerinin (Domain Controllers) NTLM relay saldırılarına karşı güvenliğini doğrulamak amacıyla LDAP İmzalama (LDAP Signing) ve LDAPS Kanal Bağlama (Channel Binding Tokens - CBT / EPA) politikalarını kimlik doğrulamalı veya parolasız olarak denetleyen güvenlik tarama aracı.",
+    "category": "5. NTLM ve Kerberos Relay Motorları",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/LdapRelayScan.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "ldaprelayscan etki alanı denetleyicilerinin (domain controllers) ntlm relay saldırılarına karşı güvenliğini doğrulamak amacıyla ldap i̇mzalama (ldap signing) ve ldaps kanal bağlama (channel binding tokens - cbt / epa) politikalarını kimlik doğrulamalı veya parolasız olarak denetleyen güvenlik tarama aracı. 5. ntlm ve kerberos relay motorları ldaprelayscan.md"
+  },
+  {
     "id": "5621fc5b49",
     "title": "impacket-ntlmrelayx",
     "description": "Ağ üzerinden yakalanan veya zorlanan NTLM kimlik doğrulama oturumlarını SMB, HTTP, LDAP, LDAPS, MSSQL ve IMAP gibi servislere aktararak (relay) etki alanında ayrıcalık yükseltme, RBCD yapılandırma, AD CS üzerinden sertifika talep etme ve oturum kaçırma saldırılarını otomatize eden endüstri standardı relay motoru.",
@@ -1296,6 +1362,17 @@
     "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
     "is_readme": false,
     "search_text": "impacket-ntlmrelayx ağ üzerinden yakalanan veya zorlanan ntlm kimlik doğrulama oturumlarını smb, http, ldap, ldaps, mssql ve imap gibi servislere aktararak (relay) etki alanında ayrıcalık yükseltme, rbcd yapılandırma, ad cs üzerinden sertifika talep etme ve oturum kaçırma saldırılarını otomatize eden endüstri standardı relay motoru. 5. ntlm ve kerberos relay motorları impacket-ntlmrelayx.md"
+  },
+  {
+    "id": "1480b7e6e5",
+    "title": "lsarelayx",
+    "description": "Windows Yerel Güvenlik Yetkilisi (LSA) sürecine özel bir kimlik doğrulama paketi (LSA Authentication Provider) yükleyerek, sisteme gelen tüm SMB, HTTP, LDAP ve RPC kimlik doğrulama isteklerini sistem genelinde yakalayan, Kerberos isteklerini zorla NTLM'e düşüren ve bunları harici hedeflere relay eden gelişmiş sistem düzeyinde relay aracı.",
+    "category": "5. NTLM ve Kerberos Relay Motorları",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_05_NTLM_ve_Kerberos_Relay_Motorlari/lsarelayx.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "lsarelayx windows yerel güvenlik yetkilisi (lsa) sürecine özel bir kimlik doğrulama paketi (lsa authentication provider) yükleyerek, sisteme gelen tüm smb, http, ldap ve rpc kimlik doğrulama isteklerini sistem genelinde yakalayan, kerberos isteklerini zorla ntlm'e düşüren ve bunları harici hedeflere relay eden gelişmiş sistem düzeyinde relay aracı. 5. ntlm ve kerberos relay motorları lsarelayx.md"
   },
   {
     "id": "3aa233e1c8",
@@ -1439,6 +1516,17 @@
     "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
     "is_readme": false,
     "search_text": "donpapi hedef windows sistemlerinde hiçbir süreç veya kod çalıştırmadan (code-executionless); smb ve rpc protokolleri üzerinden uzaktan dpapi (data protection api) anahtarlarını, windows vault kayıtlarını, chrome/edge/firefox tarayıcı parolalarını ve çerezlerini otomatik olarak toplayıp etki alanı yedekleme anahtarıyla (domain backup key) yerel olarak deşifre eden açık kaynaklı kimlik hasat motoru. 7. bellek analizi, lsass dökümü ve kasa hasadı donpapi.md"
+  },
+  {
+    "id": "c6d67542e9",
+    "title": "DragonCastle",
+    "description": "Windows `AutodialDLL` kayıt defteri mekanizmasını ve BITS servisini istismar ederek uzak hedef makinelerde yanal hareket gerçekleştiren, özel bir DLL'i LSASS sürecine Güvenlik Destek Sağlayıcısı (SSP) olarak enjekte edip bellekten NTLM hash'lerini ve AES/3DES oturum anahtarlarını sıyıran Python tabanlı gelişmiş istismar aracı.",
+    "category": "7. Bellek Analizi, LSASS ve DPAPI Hasadı",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_07_Bellek_Analizi_LSASS_ve_DPAPI_Hasadi/DragonCastle.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "dragoncastle windows `autodialdll` kayıt defteri mekanizmasını ve bits servisini istismar ederek uzak hedef makinelerde yanal hareket gerçekleştiren, özel bir dll'i lsass sürecine güvenlik destek sağlayıcısı (ssp) olarak enjekte edip bellekten ntlm hash'lerini ve aes/3des oturum anahtarlarını sıyıran python tabanlı gelişmiş istismar aracı. 7. bellek analizi, lsass ve dpapi hasadı dragoncastle.md"
   },
   {
     "id": "b8432f0f2d",
@@ -1848,6 +1936,17 @@
     "search_text": "10. kurumsal altyapi, paylaşim ve veri̇ avi (enterprise data hunting) | no | araç | dokümantasyon dosyası | ne i̇çin kullanılır? (tanım ve amaç) |  readme.md"
   },
   {
+    "id": "1752fced31",
+    "title": "Lnkbomb",
+    "description": "Güvensiz veya yazma izni açık ağ paylaşımlarına (SMB Shares) otomatik olarak zararlı `.url` veya `.lnk` kısayol dosyaları yükleyen, dizini açan kullanıcıların NTLMv1/NTLMv2 karmalarını saldırgana yönlendiren ve test sonrasında yüklenen dosyaları otomatik temizleyen Python tabanlı operasyonel araç.",
+    "category": "10. Kurumsal Altyapı, Paylaşım ve Veri Avı",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_10_Kurumsal_Altyapi_Paylasim_ve_Veri_Avi/Lnkbomb.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "lnkbomb güvensiz veya yazma izni açık ağ paylaşımlarına (smb shares) otomatik olarak zararlı `.url` veya `.lnk` kısayol dosyaları yükleyen, dizini açan kullanıcıların ntlmv1/ntlmv2 karmalarını saldırgana yönlendiren ve test sonrasında yüklenen dosyaları otomatik temizleyen python tabanlı operasyonel araç. 10. kurumsal altyapı, paylaşım ve veri avı lnkbomb.md"
+  },
+  {
     "id": "c7477b2582",
     "title": "MalSCCM",
     "description": "Microsoft Endpoint Configuration Manager (SCCM / MECM) altyapısını kötüye kullanarak SMS Provider üzerinden hedefli cihaz koleksiyonları oluşturan, zararlı uygulama/paket dağıtan, anlık ilke yenilemesiyle hedef sistemlerde SYSTEM yetkisinde kod yürüten ve izleri temizleyen C# tabanlı yanal hareket ve yayılma aracı.",
@@ -2200,6 +2299,17 @@
     "search_text": "aadinternals azure ad (microsoft entra id), office 365, azure ad connect ve ad fs altyapılarını yönetmek, hibrit kimlik mekanizmalarını denetlemek ve `msol_` senkronizasyon parolaları ile token-signing sertifikalarını hasat etmek için geliştirilmiş kapsamlı powershell modülü. 14. ad fs, bulut ve hibrit kimlik aadinternals.md"
   },
   {
+    "id": "5e294a279c",
+    "title": "ADFSRelay",
+    "description": "Ağda yakalanan NTLM kimlik doğrulama isteklerini Active Directory Federasyon Servislerine (AD FS) relay ederek kurban kullanıcı adına meşru SAML belirteçleri (SAML Tokens) üreten ve federatif bulut kaynaklarına (Office 365, Azure AD, AWS SSO) sızmayı sağlayan federasyon relay aracı.",
+    "category": "14. AD FS, Bulut ve Hibrit Kimlik",
+    "path": "3-Red_Team/Modul_11_Arac_Ustaligi_ve_Komut_Notlari/Kategori_14_AD_FS_Bulut_ve_Hibrit_Kimlik/ADFSRelay.md",
+    "pillar_id": "red_team",
+    "module_id": "red_team_Modul_11_Arac_Ustaligi_ve_Komut_Notlari",
+    "is_readme": false,
+    "search_text": "adfsrelay ağda yakalanan ntlm kimlik doğrulama isteklerini active directory federasyon servislerine (ad fs) relay ederek kurban kullanıcı adına meşru saml belirteçleri (saml tokens) üreten ve federatif bulut kaynaklarına (office 365, azure ad, aws sso) sızmayı sağlayan federasyon relay aracı. 14. ad fs, bulut ve hibrit kimlik adfsrelay.md"
+  },
+  {
     "id": "b430a3bb73",
     "title": "ADFSpoof (Golden SAML)",
     "description": "Ele geçirilen AD FS Token-Signing özel anahtarını ve sertifikasını kullanarak, şirket içi sunuculara ihtiyaç duymaksızın herhangi bir kullanıcı adına sahte SAML 2.0 / 1.1 belirteçleri (Golden SAML) üreten ve bulutta parola/MFA olmaksızın oturum açan Python aracı.",
@@ -2539,6 +2649,17 @@
     "module_id": "blue_team_Modul_03_Kimlik_Bilgisi_Korumasi",
     "is_readme": false,
     "search_text": "03.4 — dpapi ve önbelleklenmiş kimlik bilgisi riski kimlik bilgisi yalnızca lsass belleğinde ([03.1](./03.1_credential_guard_ve_lsass_korumasi.md)) değil, **diskte de** durur: tarayıcı parolaları, kayıtlı rdp/kimlik bilgileri, wifi anahtarları, sertifi  03.4_dpapi_ve_onbelleklenmis_kimlik.md"
+  },
+  {
+    "id": "63499c1f7b",
+    "title": "03.5 — Linux Domain Sistem Güvenliği ve Keytab Sertleştirme",
+    "description": "Kurumsal şirketlerde Linux sunucular (veritabanı, Kubernetes worker'ları, CI/CD runner'ları) sıklıkla Active Directory etki alanına dahil edilir. Ancak savunma ekipleri güvenlik izleme ve sertleştirme",
+    "category": "Modül 03: Kimlik Bilgisi Korumasi",
+    "path": "2-Blue_Team/Modul_03_Kimlik_Bilgisi_Korumasi/03.5_Linux_Domain_Sistem_Guvenligi_ve_Keytab_Sertlestirme.md",
+    "pillar_id": "blue_team",
+    "module_id": "blue_team_Modul_03_Kimlik_Bilgisi_Korumasi",
+    "is_readme": false,
+    "search_text": "03.5 — linux domain sistem güvenliği ve keytab sertleştirme kurumsal şirketlerde linux sunucular (veritabanı, kubernetes worker'ları, ci/cd runner'ları) sıklıkla active directory etki alanına dahil edilir. ancak savunma ekipleri güvenlik izleme ve sertleştirme  03.5_linux_domain_sistem_guvenligi_ve_keytab_sertlestirme.md"
   },
   {
     "id": "f847c97b24",
@@ -3091,6 +3212,17 @@
     "search_text": "03.4 — özel hesaplar (msa/gmsa/dmsa) ve granüler parola politikaları (fgpp) i̇ki ayrı ama akraba problem:  03.4_gmsa_ve_fgpp.md"
   },
   {
+    "id": "79c92f04f8",
+    "title": "03.5 — Linux Sistemlerin Active Directory Entegrasyonu (SSSD ve Realm)",
+    "description": "Modern kurumsal ortamlarda kritik iş yükleri (PostgreSQL, Oracle, Nginx, Docker, Kubernetes worker düğümleri) ağırlıklı olarak Linux üzerinde barındırılır. Bu sistemlerin yerel `/etc/passwd` ve `/etc/",
+    "category": "Modül 03: Nesne ve Kimlik Yonetimi",
+    "path": "1-Sistem_Yoneticisi/Modul_03_Nesne_ve_Kimlik_Yonetimi/03.5_Linux_Sistemlerin_AD_Entegrasyonu_SSSD_ve_Realm.md",
+    "pillar_id": "sistem_yoneticisi",
+    "module_id": "sistem_yoneticisi_Modul_03_Nesne_ve_Kimlik_Yonetimi",
+    "is_readme": false,
+    "search_text": "03.5 — linux sistemlerin active directory entegrasyonu (sssd ve realm) modern kurumsal ortamlarda kritik iş yükleri (postgresql, oracle, nginx, docker, kubernetes worker düğümleri) ağırlıklı olarak linux üzerinde barındırılır. bu sistemlerin yerel `/etc/passwd` ve `/etc/  03.5_linux_sistemlerin_ad_entegrasyonu_sssd_ve_realm.md"
+  },
+  {
     "id": "6494bacde8",
     "title": "📋 Modül 04: Grup Ilkeleri GPO - Genel Bakış",
     "description": "Bir ayarın nerede saklandığını (GPC/GPT), hangi sırayla ve hangi istisnalarla uygulandığını (LSDOU/Enforced/Block), nasıl ince hedeflendiğini (Security/WMI/ILT), pratikte neyin yapıldığını (güvenlik/A",
@@ -3474,5 +3606,16 @@
     "module_id": "sistem_yoneticisi_Modul_10_Guvenlik_Yedekleme_ve_Kurtarma",
     "is_readme": false,
     "search_text": "10.4 — denetim ve uyumluluk: sacl, denetim politikaları ve standartlar hardening ([10.3](./10.3_hardening_temelleri.md)) saldırıyı **zorlaştırır**; denetim (auditing) ise olan biteni **görünür** kılar ve **kanıtlar**. i̇ki farklı ihtiyaç:  10.4_denetim_ve_uyumluluk.md"
+  },
+  {
+    "id": "8153746d2e",
+    "title": "10.5 — Güvenlik Test Laboratuvarı Kurulumu (GOAD ve Simülasyon Ortamları)",
+    "description": "Bir Active Directory altyapısını güvenli yönetmenin, tespit kurallarını doğrulamanın (Detection Engineering) ve sızma testleri gerçekleştirmenin ön şartı; **üretim ortamını riske atmadan gerçekçi sald",
+    "category": "Modül 10: Guvenlik Yedekleme ve Kurtarma",
+    "path": "1-Sistem_Yoneticisi/Modul_10_Guvenlik_Yedekleme_ve_Kurtarma/10.5_Guvenlik_Test_Laboratuvari_GOAD_ve_Simulasyon_Kurulumu.md",
+    "pillar_id": "sistem_yoneticisi",
+    "module_id": "sistem_yoneticisi_Modul_10_Guvenlik_Yedekleme_ve_Kurtarma",
+    "is_readme": false,
+    "search_text": "10.5 — güvenlik test laboratuvarı kurulumu (goad ve simülasyon ortamları) bir active directory altyapısını güvenli yönetmenin, tespit kurallarını doğrulamanın (detection engineering) ve sızma testleri gerçekleştirmenin ön şartı; **üretim ortamını riske atmadan gerçekçi sald  10.5_guvenlik_test_laboratuvari_goad_ve_simulasyon_kurulumu.md"
   }
 ]

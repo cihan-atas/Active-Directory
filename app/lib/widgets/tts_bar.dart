@@ -191,11 +191,12 @@ class _TtsMediaSheet extends StatelessWidget {
 
   void _showApiKeyDialog(BuildContext context, TtsService tts) {
     final controller = TextEditingController();
+    final regionController = TextEditingController(text: tts.azureRegion);
     showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: AppTheme.bgCard,
-        title: const Text('ElevenLabs API Key', style: TextStyle(fontSize: 16)),
+        title: const Text('Azure Speech API (500K/ay)', style: TextStyle(fontSize: 16)),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -204,17 +205,26 @@ class _TtsMediaSheet extends StatelessWidget {
               controller: controller,
               obscureText: true,
               decoration: const InputDecoration(
-                hintText: 'xi-... veya sk_...',
-                labelText: 'ElevenLabs API Key (Ücretsiz)',
+                hintText: 'Key 1...',
+                labelText: 'Azure Speech Key',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: regionController,
+              decoration: const InputDecoration(
+                hintText: 'westeurope, eastus, germanywestcentral...',
+                labelText: 'Bölge (Region)',
                 border: OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 10),
             OutlinedButton.icon(
               icon: const Icon(Icons.open_in_new, size: 16),
-              label: const Text('Ücretsiz Key Al (elevenlabs.io)'),
+              label: const Text('Ücretsiz Key Al (Azure Portal F0)'),
               onPressed: () => launchUrl(
-                Uri.parse('https://elevenlabs.io/app/settings/api-keys'),
+                Uri.parse('https://portal.azure.com/#create/Microsoft.CognitiveServicesSpeechServices'),
                 mode: LaunchMode.externalApplication,
               ),
             ),
@@ -224,7 +234,7 @@ class _TtsMediaSheet extends StatelessWidget {
           if (tts.hasOpenAiKey)
             TextButton(
               onPressed: () async {
-                await tts.setOpenAiKey(null);
+                await tts.setAzureConfig(null, regionController.text);
                 if (ctx.mounted) Navigator.pop(ctx);
               },
               child: const Text('Temizle', style: TextStyle(color: Colors.redAccent)),
@@ -235,7 +245,7 @@ class _TtsMediaSheet extends StatelessWidget {
           ),
           FilledButton(
             onPressed: () async {
-              await tts.setOpenAiKey(controller.text);
+              await tts.setAzureConfig(controller.text, regionController.text);
               if (ctx.mounted) Navigator.pop(ctx);
             },
             child: const Text('Kaydet'),
@@ -252,23 +262,41 @@ class _TtsMediaSheet extends StatelessWidget {
       builder: (context, _) {
         final speedMult = tts.speedMultiplier;
 
-        return SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // Üst Başlık & Alt Başlık
-                Text(
-                  tts.currentTitle ?? 'Sesli Okuma',
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppTheme.textPrimary,
+        return ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height * 0.75,
+          ),
+          child: SafeArea(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // Üst Başlık & Kapatma Butonu
+                  Row(
+                    children: [
+                      const SizedBox(width: 40),
+                      Expanded(
+                        child: Text(
+                          tts.currentTitle ?? 'Sesli Okuma',
+                          textAlign: TextAlign.center,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppTheme.textPrimary,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.close, size: 22, color: AppTheme.textMuted),
+                        tooltip: 'Paneli Kapat',
+                        onPressed: () => Navigator.of(context).pop(),
+                      ),
+                    ],
                   ),
-                ),
                 if (tts.currentSubtitle != null)
                   Padding(
                     padding: const EdgeInsets.only(top: 4),
@@ -486,12 +514,12 @@ class _TtsMediaSheet extends StatelessWidget {
                   ),
                 ),
 
-                // Hızlı Seçim Butonları (0.5x'ten 2.5x'e zengin seçenekler)
+                // Hızlı Seçim Butonları (0.25x'ten 2.5x'e zengin seçenekler)
                 Wrap(
                   spacing: 6,
                   runSpacing: 6,
                   alignment: WrapAlignment.center,
-                  children: [0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5].map((mult) {
+                  children: [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 2.5].map((mult) {
                     final isSel = (speedMult - mult).abs() < 0.06;
                     return InkWell(
                       onTap: () => tts.setSpeedMultiplier(mult),
@@ -528,10 +556,10 @@ class _TtsMediaSheet extends StatelessWidget {
                     trackHeight: 3,
                   ),
                   child: Slider(
-                    value: tts.speechRate.clamp(0.20, 1.00),
-                    min: 0.20,
-                    max: 1.00,
-                    divisions: 16,
+                    value: tts.speechRate.clamp(0.125, 1.25),
+                    min: 0.125,
+                    max: 1.25,
+                    divisions: 18,
                     label: '${(tts.speechRate * 2.0).toStringAsFixed(2)}x',
                     onChanged: (val) {
                       tts.setSpeechRate(val);
@@ -646,6 +674,7 @@ class _TtsMediaSheet extends StatelessWidget {
                 ),
               ],
             ),
+          ),
           ),
         );
       },
